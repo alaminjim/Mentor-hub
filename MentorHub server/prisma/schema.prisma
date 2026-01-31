@@ -9,17 +9,21 @@ datasource db {
 }
 
 model User {
-  id               String    @id
-  name             String
-  email            String
-  emailVerified    Boolean   @default(false)
-  image            String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  sessions         Session[]
-  accounts         Account[]
-  studentBookings  Booking[] @relation("StudentBookings")
-  reviews          Review[]
+  id              String        @id
+  name            String
+  email           String
+  emailVerified   Boolean       @default(false)
+  image           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  studentBookings Booking[]     @relation("StudentBookings")
+  reviews         Review[]
+  tutorProfile    TutorProfile?
+
+  role   String? @default("STUDENT")
+  status Status @default(ACTIVE)
 
   @@unique([email])
   @@map("user")
@@ -73,17 +77,19 @@ model Verification {
   @@map("verification")
 }
 
-
 model TutorProfile {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   bio       String?
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
   subjects  String[]
   price     Float
-  rating    Float     @default(0)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  bookings  Booking[] @relation("TutorBookings")
-  reviews   Review[]
+  rating    Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[] @relation("TutorBookings")
+  reviews  Review[]
 }
 
 model Category {
@@ -129,4 +135,5 @@ enum BookingStatus {
   COMPLETED
   CANCELLED
 }
+
 
