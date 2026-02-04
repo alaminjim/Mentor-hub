@@ -1,4 +1,5 @@
 import { Status } from "../../generated/prisma/enums";
+import { Role } from "./role";
 
 declare global {
   namespace Express {
@@ -7,7 +8,7 @@ declare global {
         id: string;
         name: string;
         email: string;
-        role: string;
+        role: Role;
         status: Status;
       };
     }

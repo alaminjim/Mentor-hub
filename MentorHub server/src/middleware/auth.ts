@@ -21,7 +21,7 @@ const auth = (...roles: Role[]) => {
         id: session.user.id,
         name: session.user.name,
         email: session.user.email,
-        role: session.user.role as string,
+        role: session.user.role as Role,
         status: session.user.status as Status,
       };
 
