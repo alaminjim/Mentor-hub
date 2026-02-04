@@ -14,7 +14,7 @@ app.use(
   }),
 );
 
-app.use("/api/auth", authRouter);
+app.use("/api", authRouter);
 
 app.all("/api/auth/*path", toNodeHandler(auth));
 
