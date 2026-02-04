@@ -118,6 +118,13 @@ const getAllTutorProfile = async (payload: {
         [payload.sortBy]: payload.sortOrder || "asc",
       },
     }),
+    include: {
+      _count: {
+        select: {
+          reviews: true,
+        },
+      },
+    },
   });
   return result;
 };
