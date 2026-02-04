@@ -5,11 +5,11 @@ import { Role } from "../../types/role";
 
 const router = express.Router();
 
-router.get("/AuthMe", auth(), authController.getMe);
+router.get("/authMe", auth(), authController.getMe);
 
 router.get("/admin/users", auth(Role.ADMIN), authController.getAll);
 
-router.put(
+router.patch(
   "/admin/user/:statusId",
   auth(Role.ADMIN),
   authController.updateStatus,
