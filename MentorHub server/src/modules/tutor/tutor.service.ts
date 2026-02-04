@@ -2,6 +2,7 @@ import { TutorProfile } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { Prisma } from "../../../generated/prisma/client";
 import { Role } from "../../types/role";
+import { TutorProfileWhereInput } from "../../../generated/prisma/models";
 
 const tutorProfile = async (
   data: Omit<TutorProfile, "id" | "createdAt" | "updatedAt">,
@@ -35,29 +36,94 @@ const tutorProfile = async (
 const updateTutorProfile = async (
   profileId: string,
   data: Partial<TutorProfile>,
+  currentUserId: string,
   role: Role,
 ) => {
   const exist = await prisma.tutorProfile.findUnique({
-    where: {
-      id: profileId,
-    },
+    where: { id: profileId },
   });
 
-  if (!exist) {
-    throw new Error("Can not Exists This Tutor Profile");
-  }
+  if (!exist) throw new Error("Tutor profile does not exist");
 
-  if (role !== "TUTOR") {
+  if (role !== Role.TUTOR)
     throw new Error("Only Tutor can update this profile");
-  }
+
+  if (exist.userId !== currentUserId)
+    throw new Error("This user cannot update others' tutor profile");
 
   const result = await prisma.tutorProfile.update({
-    where: {
-      id: profileId,
-    },
+    where: { id: profileId },
     data: {
       ...data,
       availability: data.availability ?? Prisma.DbNull,
+    },
+  });
+
+  return result;
+};
+
+type AvailabilitySlot = {
+  [day: string]: string[];
+};
+
+const updateModerateAvailability = async (
+  profileId: string,
+  data: { availability?: AvailabilitySlot },
+  currentUserId: string,
+  role: Role,
+) => {
+  const exist = await prisma.tutorProfile.findUnique({
+    where: { id: profileId },
+  });
+
+  if (!exist) throw new Error("Tutor profile does not exist");
+
+  if (role !== Role.TUTOR)
+    throw new Error("Only Tutor can update this profile");
+
+  if (exist.userId !== currentUserId)
+    throw new Error("This user cannot update others' tutor profile");
+
+  const result = await prisma.tutorProfile.update({
+    where: { id: profileId },
+    data: {
+      availability: data.availability ?? Prisma.DbNull,
+    },
+  });
+
+  return result;
+};
+
+const getAllTutorProfile = async (payload: {
+  subject: string[];
+  sortBy: string;
+  sortOrder: string;
+}) => {
+  const SearchAndFiltering: TutorProfileWhereInput[] = [];
+
+  if (payload.subject.length > 0) {
+    SearchAndFiltering.push({
+      subjects: {
+        hasSome: payload.subject as string[],
+      },
+    });
+  }
+
+  const result = await prisma.tutorProfile.findMany({
+    where: {
+      AND: SearchAndFiltering,
+    },
+    orderBy: {
+      [payload.sortBy]: payload.sortOrder,
+    },
+  });
+  return result;
+};
+
+const getAllTutorProfileOwn = async (tutorId: string) => {
+  const result = await prisma.tutorProfile.findUniqueOrThrow({
+    where: {
+      id: tutorId,
     },
   });
   return result;
@@ -66,4 +132,7 @@ const updateTutorProfile = async (
 export const tutorService = {
   tutorProfile,
   updateTutorProfile,
+  getAllTutorProfile,
+  getAllTutorProfileOwn,
+  updateModerateAvailability,
 };
