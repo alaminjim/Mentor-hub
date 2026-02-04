@@ -23,7 +23,7 @@ model User {
   tutorProfile    TutorProfile?
 
   role   String? @default("STUDENT")
-  status Status @default(ACTIVE)
+  status Status @default(UnBAN)
 
   @@unique([email])
   @@map("user")
@@ -78,18 +78,23 @@ model Verification {
 }
 
 model TutorProfile {
-  id        String   @id @default(uuid())
-  bio       String?
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  subjects  String[]
-  price     Float
-  rating    Float    @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  bio          String?
+  subjects     String[]
+  price        Float    
+  experience   Int      @default(0) 
+  rating       Float    @default(0)
+  totalReviews Int      @default(0)
+  availability Json?    
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  bookings Booking[] @relation("TutorBookings")
-  reviews  Review[]
+  bookings     Booking[] @relation("TutorBookings")
+  reviews      Review[]
 }
 
 model Category {
@@ -102,13 +107,22 @@ model Category {
 
 model Booking {
   id          String        @id @default(uuid())
+  
   studentId   String
-  student     User          @relation("StudentBookings", fields: [studentId], references: [id])
+  student     User          @relation("StudentBookings", fields: [studentId], references: [id], onDelete: Cascade)
+  
   tutorId     String
-  tutor       TutorProfile  @relation("TutorBookings", fields: [tutorId], references: [id])
+  tutor       TutorProfile  @relation("TutorBookings", fields: [tutorId], references: [id], onDelete: Cascade)
+  
   categoryId  String
   category    Category      @relation(fields: [categoryId], references: [id])
-  scheduledAt DateTime
+  
+  subject     String        
+  scheduledAt DateTime      
+  time        String?      
+  duration    Int           
+  totalPrice  Float        
+  
   status      BookingStatus @default(CONFIRMED)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
@@ -126,7 +140,7 @@ model Review {
 }
 
 enum Status {
-  ACTIVE
+  UnBAN
   BANNED
 }
 

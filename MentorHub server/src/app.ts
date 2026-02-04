@@ -1,10 +1,12 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
-import { auth } from "./lib/auth";
 import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
+import { authRouter } from "./modules/auth/auth.route";
 
 const app = express();
 
+app.use(express.json());
 app.use(
   cors({
     origin: process.env.APP_URL || "http://localhost:3000",
@@ -12,10 +14,12 @@ app.use(
   }),
 );
 
-app.all("/api/auth/*splat", toNodeHandler(auth));
+app.use("/api/auth", authRouter);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("API IS WORKING");
+app.all("/api/auth/*path", toNodeHandler(auth));
+
+app.get("/", (req, res) => {
+  res.json({ message: "SkillBridge API Running" });
 });
 
 export default app;
