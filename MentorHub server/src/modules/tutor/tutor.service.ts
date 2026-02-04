@@ -96,8 +96,8 @@ const updateModerateAvailability = async (
 
 const getAllTutorProfile = async (payload: {
   subject: string[];
-  sortBy: string;
-  sortOrder: string;
+  sortBy: string | undefined;
+  sortOrder: string | undefined;
 }) => {
   const SearchAndFiltering: TutorProfileWhereInput[] = [];
 
@@ -113,9 +113,11 @@ const getAllTutorProfile = async (payload: {
     where: {
       AND: SearchAndFiltering,
     },
-    orderBy: {
-      [payload.sortBy]: payload.sortOrder,
-    },
+    ...(payload.sortBy && {
+      orderBy: {
+        [payload.sortBy]: payload.sortOrder || "asc",
+      },
+    }),
   });
   return result;
 };

@@ -95,8 +95,8 @@ const getAllTutorProfile = async (req: Request, res: Response) => {
 
     const result = await tutorService.getAllTutorProfile({
       subject: searchBySubjects,
-      sortBy: (sortBy as string) || "",
-      sortOrder: (sortOrder as string) || "",
+      sortBy: (sortBy as string) || undefined,
+      sortOrder: (sortOrder as string) || undefined,
     });
     res.status(200).json({
       success: true,
