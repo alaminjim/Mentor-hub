@@ -7,4 +7,10 @@ const router = express.Router();
 
 router.post("/profile", auth(Role.TUTOR), tutorProfileController.tutorProfile);
 
+router.put(
+  "/update/:profileId",
+  auth(Role.TUTOR),
+  tutorProfileController.updateTutorProfile,
+);
+
 export const tutorRouter = router;

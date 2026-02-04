@@ -29,6 +29,35 @@ const tutorProfile = async (req: Request, res: Response) => {
   }
 };
 
+const updateTutorProfile = async (req: Request, res: Response) => {
+  try {
+    const { profileId } = req.params;
+    const user = req.user;
+
+    if (!user) {
+      return res.status(400).json({
+        error: "unAuthorized",
+      });
+    }
+
+    const result = await tutorService.updateTutorProfile(
+      profileId as string,
+      req.body,
+      user?.role as Role,
+    );
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update resource",
+    });
+  }
+};
+
 export const tutorProfileController = {
   tutorProfile,
+  updateTutorProfile,
 };

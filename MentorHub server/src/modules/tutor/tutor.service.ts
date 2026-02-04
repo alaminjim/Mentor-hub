@@ -32,6 +32,38 @@ const tutorProfile = async (
   return result;
 };
 
+const updateTutorProfile = async (
+  profileId: string,
+  data: Partial<TutorProfile>,
+  role: Role,
+) => {
+  const exist = await prisma.tutorProfile.findUnique({
+    where: {
+      id: profileId,
+    },
+  });
+
+  if (!exist) {
+    throw new Error("Can not Exists This Tutor Profile");
+  }
+
+  if (role !== "TUTOR") {
+    throw new Error("Only Tutor can update this profile");
+  }
+
+  const result = await prisma.tutorProfile.update({
+    where: {
+      id: profileId,
+    },
+    data: {
+      ...data,
+      availability: data.availability ?? Prisma.DbNull,
+    },
+  });
+  return result;
+};
+
 export const tutorService = {
   tutorProfile,
+  updateTutorProfile,
 };
