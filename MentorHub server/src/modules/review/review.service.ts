@@ -58,18 +58,23 @@ const createReview = async (payload: {
 };
 
 const updateReview = async (
+  userId: string,
   reviewId: string,
   role: Role,
   data: { comment: string; rating: number },
 ) => {
-  await prisma.review.findFirstOrThrow({
+  const exists = await prisma.review.findFirstOrThrow({
     where: {
       id: reviewId,
     },
   });
 
   if (role !== "STUDENT") {
-    throw new Error("Only student can update");
+    throw new Error("Only students can update reviews");
+  }
+
+  if (userId !== exists.studentId) {
+    throw new Error("You can only update your own reviews");
   }
 
   return await prisma.review.update({
@@ -80,7 +85,46 @@ const updateReview = async (
   });
 };
 
+const getReview = async (userId: string, role: Role) => {
+  if (role !== "STUDENT") {
+    throw new Error("Only students can get reviews");
+  }
+
+  return await prisma.review.findMany({
+    where: {
+      studentId: userId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+const deleteReview = async (userId: string, reviewId: string, role: Role) => {
+  const exists = await prisma.review.findFirstOrThrow({
+    where: {
+      id: reviewId,
+    },
+  });
+
+  if (role !== "STUDENT") {
+    throw new Error("Only students can Delete reviews");
+  }
+
+  if (userId !== exists.studentId) {
+    throw new Error("You can only delete your own reviews");
+  }
+
+  return await prisma.review.delete({
+    where: {
+      id: reviewId,
+    },
+  });
+};
+
 export const reviewService = {
   createReview,
   updateReview,
+  getReview,
+  deleteReview,
 };

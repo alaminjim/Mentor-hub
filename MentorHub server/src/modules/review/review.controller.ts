@@ -48,6 +48,7 @@ const updateReview = async (req: Request, res: Response) => {
     }
 
     const result = await reviewService.updateReview(
+      user?.id,
       reviewId as string,
       user?.role as Role,
       req.body,
@@ -65,7 +66,65 @@ const updateReview = async (req: Request, res: Response) => {
   }
 };
 
+const getReview = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await reviewService.getReview(user?.id, user?.role as Role);
+
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteReview = async (req: Request, res: Response) => {
+  try {
+    const { deleteId } = req.params;
+
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await reviewService.deleteReview(
+      user?.id,
+      deleteId as string,
+      user?.role as Role,
+    );
+
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const reviewController = {
   createReview,
   updateReview,
+  getReview,
+  deleteReview,
 };
