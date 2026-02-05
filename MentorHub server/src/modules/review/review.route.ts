@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.post("/create", auth(Role.STUDENT), reviewController.createReview);
 
+router.put("/:reviewId", auth(Role.STUDENT), reviewController.updateReview);
+
 export const reviewRouter = router;

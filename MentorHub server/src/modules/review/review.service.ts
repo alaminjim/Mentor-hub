@@ -1,5 +1,6 @@
 // review.service.ts
 import { prisma } from "../../lib/prisma";
+import { Role } from "../../types/role";
 
 const createReview = async (payload: {
   comment?: string;
@@ -56,6 +57,30 @@ const createReview = async (payload: {
   return result;
 };
 
+const updateReview = async (
+  reviewId: string,
+  role: Role,
+  data: { comment: string; rating: number },
+) => {
+  await prisma.review.findFirstOrThrow({
+    where: {
+      id: reviewId,
+    },
+  });
+
+  if (role !== "STUDENT") {
+    throw new Error("Only student can update");
+  }
+
+  return await prisma.review.update({
+    where: {
+      id: reviewId,
+    },
+    data,
+  });
+};
+
 export const reviewService = {
   createReview,
+  updateReview,
 };

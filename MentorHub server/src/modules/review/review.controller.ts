@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { reviewService } from "./review.service";
+import { Role } from "../../types/role";
 
 const createReview = async (req: Request, res: Response) => {
   try {
@@ -33,6 +34,38 @@ const createReview = async (req: Request, res: Response) => {
   }
 };
 
+const updateReview = async (req: Request, res: Response) => {
+  try {
+    const { reviewId } = req.params;
+
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await reviewService.updateReview(
+      reviewId as string,
+      user?.role as Role,
+      req.body,
+    );
+
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const reviewController = {
   createReview,
+  updateReview,
 };
