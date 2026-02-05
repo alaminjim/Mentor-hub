@@ -23,6 +23,10 @@ const createReview = async (payload: {
     throw new Error("Tutor not found");
   }
 
+  if (payload.rating >= 1 !== payload.rating <= 5) {
+    throw new Error("You Rating Will be 1-5");
+  }
+
   const result = await prisma.review.create({
     data: {
       studentId: payload.studentId,

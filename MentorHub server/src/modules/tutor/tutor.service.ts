@@ -119,11 +119,7 @@ const getAllTutorProfile = async (payload: {
       },
     }),
     include: {
-      _count: {
-        select: {
-          reviews: true,
-        },
-      },
+      reviews: true,
     },
   });
   return result;
@@ -133,6 +129,9 @@ const getAllTutorProfileOwn = async (tutorId: string) => {
   const result = await prisma.tutorProfile.findUniqueOrThrow({
     where: {
       id: tutorId,
+    },
+    include: {
+      reviews: true,
     },
   });
   return result;
