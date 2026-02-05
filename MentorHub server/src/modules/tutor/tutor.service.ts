@@ -131,7 +131,11 @@ const getAllTutorProfileOwn = async (tutorId: string) => {
       id: tutorId,
     },
     include: {
-      reviews: true,
+      reviews: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
   return result;

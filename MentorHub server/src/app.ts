@@ -5,7 +5,7 @@ import { auth } from "./lib/auth";
 import { authRouter } from "./modules/auth/auth.route";
 import { tutorRouter } from "./modules/tutor/tutor.route";
 import { reviewRouter } from "./modules/review/review.route";
-import { studentRouter } from "./modules/students/student.route";
+import { studentRouter } from "./modules/students-booking/student.route";
 
 const app = express();
 
