@@ -35,7 +35,13 @@ const tutorProfile = async (
 
 const updateTutorProfile = async (
   profileId: string,
-  data: Partial<TutorProfile>,
+  data: {
+    bio?: string;
+    price?: number;
+    experience?: number;
+    availability?: any;
+    categoryId?: string[];
+  },
   currentUserId: string,
   role: Role,
 ) => {
@@ -51,11 +57,24 @@ const updateTutorProfile = async (
   if (exist.userId !== currentUserId)
     throw new Error("This user cannot update others' tutor profile");
 
+  const { categoryId, ...profileData } = data;
+
+  const updateData: any = {
+    ...profileData,
+    availability: profileData.availability ?? Prisma.DbNull,
+  };
+
+  if (categoryId) {
+    updateData.categories = {
+      set: categoryId.map((id) => ({ id })),
+    };
+  }
+
   const result = await prisma.tutorProfile.update({
     where: { id: profileId },
-    data: {
-      ...data,
-      availability: data.availability ?? Prisma.DbNull,
+    data: updateData,
+    include: {
+      categories: true,
     },
   });
 

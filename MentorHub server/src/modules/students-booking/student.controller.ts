@@ -32,6 +32,36 @@ const manageProfile = async (req: Request, res: Response) => {
   }
 };
 
+const deleteProfile = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const user = req?.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await student_bookingService.deleteProfile(
+      studentId as string,
+      user.role as Role,
+    );
+
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const student_bookingController = {
   manageProfile,
+  deleteProfile,
 };

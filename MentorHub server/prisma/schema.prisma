@@ -81,15 +81,17 @@ model TutorProfile {
   id           String   @id @default(uuid())
   userId       String   @unique
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   bio          String?
-  subjects     String[]
-  price        Float    
-  experience   Int      @default(0) 
+  subjects     String[]      
+  price        Float
+  experience   Int      @default(0)
   rating       Float    @default(0)
   totalReviews Int      @default(0)
-  availability Json?    
-  
+  availability Json?
+
+  categories   Category[]  
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -98,10 +100,12 @@ model TutorProfile {
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tutors    TutorProfile[]
   bookings  Booking[]
 }
 

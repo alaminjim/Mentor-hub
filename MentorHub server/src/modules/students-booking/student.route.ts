@@ -11,4 +11,10 @@ router.put(
   student_bookingController.manageProfile,
 );
 
+router.delete(
+  "/remove/:studentId",
+  auth(Role.STUDENT, Role.ADMIN),
+  student_bookingController.deleteProfile,
+);
+
 export const studentRouter = router;

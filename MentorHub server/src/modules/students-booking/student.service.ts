@@ -39,6 +39,29 @@ const manageProfile = async (
   return updated;
 };
 
+const deleteProfile = async (studentId: string, role: Role) => {
+  const exists = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: studentId,
+    },
+  });
+
+  if (role !== Role.STUDENT) {
+    throw new Error("Only Student can Delete This profile");
+  }
+
+  if (studentId !== exists.id) {
+    throw new Error("You can only Delete your own Profile");
+  }
+
+  const updated = await prisma.user.delete({
+    where: { id: studentId },
+  });
+
+  return updated;
+};
+
 export const student_bookingService = {
   manageProfile,
+  deleteProfile,
 };
