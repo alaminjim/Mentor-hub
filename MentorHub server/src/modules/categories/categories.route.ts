@@ -15,4 +15,10 @@ router.put(
   categoryController.updateCategory,
 );
 
+router.delete(
+  "/delete/:deleteId",
+  auth(Role.ADMIN),
+  categoryController.deleteCategory,
+);
+
 export const categoryRouter = router;

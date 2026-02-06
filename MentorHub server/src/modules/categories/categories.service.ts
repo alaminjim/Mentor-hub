@@ -27,7 +27,7 @@ const updateCategory = async (createId: string, role: Role, data: Category) => {
   });
 
   if (role !== "ADMIN") {
-    throw new Error("Only Admin can create this category");
+    throw new Error("Only Admin can update this category");
   }
 
   return await prisma.category.update({
@@ -38,8 +38,27 @@ const updateCategory = async (createId: string, role: Role, data: Category) => {
   });
 };
 
+const deleteCategory = async (createId: string, role: Role) => {
+  await prisma.category.findUniqueOrThrow({
+    where: {
+      id: createId,
+    },
+  });
+
+  if (role !== "ADMIN") {
+    throw new Error("Only Admin can delete this category");
+  }
+
+  return await prisma.category.delete({
+    where: {
+      id: createId,
+    },
+  });
+};
+
 export const categoryService = {
   createCategory,
   getCategory,
   updateCategory,
+  deleteCategory,
 };

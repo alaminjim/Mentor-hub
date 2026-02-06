@@ -66,8 +66,35 @@ const updateCategory = async (req: Request, res: Response) => {
   }
 };
 
+const deleteCategory = async (req: Request, res: Response) => {
+  try {
+    const { deleteId } = req.params;
+    const user = req?.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    const result = await categoryService.deleteCategory(
+      deleteId as string,
+      user?.role,
+    );
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const categoryController = {
   createCategory,
   getCategory,
   updateCategory,
+  deleteCategory,
 };
