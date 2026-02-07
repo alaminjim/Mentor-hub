@@ -7,6 +7,7 @@ import { tutorRouter } from "./modules/tutor/tutor.route";
 import { reviewRouter } from "./modules/review/review.route";
 import { studentRouter } from "./modules/students/student.route";
 import { categoryRouter } from "./modules/categories/categories.route";
+import { bookingsRouter } from "./modules/bookings/bookings.route";
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use("/api/review", reviewRouter);
 app.use("/api/student", studentRouter);
 
 app.use("/api/category", categoryRouter);
+
+app.use("/api/booking", bookingsRouter);
 
 app.all("/api/auth/*path", toNodeHandler(auth));
 
