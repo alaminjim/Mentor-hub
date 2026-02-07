@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { bookingsService } from "./booking.service";
 
-const createBookings = async (req: Request, res: Response) => {
+const createBookings = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req?.user;
     if (!user) {
@@ -20,14 +24,11 @@ const createBookings = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getBookings = async (req: Request, res: Response) => {
+const getBookings = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req?.user;
     if (!user) {
@@ -50,14 +51,15 @@ const getBookings = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const moderateStatus = async (req: Request, res: Response) => {
+const moderateStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { statusId } = req.params;
     const user = req?.user;
@@ -77,14 +79,15 @@ const moderateStatus = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getBookingById = async (req: Request, res: Response) => {
+const getBookingById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
     if (!user) {
@@ -113,10 +116,7 @@ const getBookingById = async (req: Request, res: Response) => {
       data: booking,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 

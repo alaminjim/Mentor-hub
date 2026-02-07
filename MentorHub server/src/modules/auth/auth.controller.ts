@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { authService } from "./auth.service";
 import { auth } from "../../lib/auth";
 import { Role } from "../../types/role";
 
-const getMe = async (req: Request, res: Response) => {
+const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const session = await auth.api.getSession({
       headers: req.headers as Record<string, string>,
@@ -37,15 +37,11 @@ const getMe = async (req: Request, res: Response) => {
       data: user,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getAll = async (req: Request, res: Response) => {
+const getAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req?.user;
     const result = await authService.getAll(
@@ -57,15 +53,15 @@ const getAll = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const updateStatus = async (req: Request, res: Response) => {
+const updateStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { statusId } = req.params;
     const currentUser = req.user;
@@ -84,7 +80,7 @@ const updateStatus = async (req: Request, res: Response) => {
 
     res.status(200).json({ success: true, data: result });
   } catch (error: any) {
-    res.status(403).json({ success: false, message: error.message });
+    next(error);
   }
 };
 export const authController = {

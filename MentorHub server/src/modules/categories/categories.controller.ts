@@ -1,7 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { categoryService } from "./categories.service";
 
-const createCategory = async (req: Request, res: Response) => {
+const createCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req?.user;
 
@@ -17,14 +21,11 @@ const createCategory = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getCategory = async (req: Request, res: Response) => {
+const getCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await categoryService.getCategory();
     res.status(201).json({
@@ -32,14 +33,15 @@ const getCategory = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const updateCategory = async (req: Request, res: Response) => {
+const updateCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { createId } = req.params;
     const user = req?.user;
@@ -59,14 +61,15 @@ const updateCategory = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteCategory = async (req: Request, res: Response) => {
+const deleteCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { deleteId } = req.params;
     const user = req?.user;
@@ -85,10 +88,7 @@ const deleteCategory = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 

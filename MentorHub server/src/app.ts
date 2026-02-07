@@ -8,6 +8,8 @@ import { reviewRouter } from "./modules/review/review.route";
 import { studentRouter } from "./modules/students/student.route";
 import { categoryRouter } from "./modules/categories/categories.route";
 import { bookingsRouter } from "./modules/bookings/bookings.route";
+import { notFound } from "./middleware/notFound";
+import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 
@@ -32,6 +34,10 @@ app.use("/api/category", categoryRouter);
 app.use("/api/booking", bookingsRouter);
 
 app.all("/api/auth/*path", toNodeHandler(auth));
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.json({ message: "SkillBridge API Running" });

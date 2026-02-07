@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { tutorService } from "./tutor.service";
 import { Role } from "../../types/role";
 
-const tutorProfile = async (req: Request, res: Response) => {
+const tutorProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
 
@@ -22,14 +26,15 @@ const tutorProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Failed to create resource",
-    });
+    next(error);
   }
 };
 
-const updateTutorProfile = async (req: Request, res: Response) => {
+const updateTutorProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { profileId } = req.params;
     const user = req.user;
@@ -51,14 +56,15 @@ const updateTutorProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Failed to update resource",
-    });
+    next(error);
   }
 };
 
-const updateModerateAvailability = async (req: Request, res: Response) => {
+const updateModerateAvailability = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { tutorId } = req.params;
     const user = req.user;
@@ -80,14 +86,15 @@ const updateModerateAvailability = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Failed to update resource",
-    });
+    next(error);
   }
 };
 
-const getAllTutorProfileFilter = async (req: Request, res: Response) => {
+const getAllTutorProfileFilter = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { search, sortBy, sortOrder } = req.query;
 
@@ -103,15 +110,15 @@ const getAllTutorProfileFilter = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getAllTutorProfile = async (req: Request, res: Response) => {
+const getAllTutorProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const result = await tutorService.getAllTutorProfile();
     res.status(200).json({
@@ -119,15 +126,15 @@ const getAllTutorProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getAllTutorProfileOwn = async (req: Request, res: Response) => {
+const getAllTutorProfileOwn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { tutorId } = req.params;
     if (!tutorId) {
@@ -142,15 +149,15 @@ const getAllTutorProfileOwn = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-const getTutorDashboard = async (req: Request, res: Response) => {
+const getTutorDashboard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
     if (!user) {
@@ -174,10 +181,7 @@ const getTutorDashboard = async (req: Request, res: Response) => {
       data: dashboardData,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 

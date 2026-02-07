@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { student_bookingService } from "./student.service";
 import { Role } from "../../types/role";
 
-const manageProfile = async (req: Request, res: Response) => {
+const manageProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params;
     const user = req?.user;
@@ -25,14 +29,15 @@ const manageProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteProfile = async (req: Request, res: Response) => {
+const deleteProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { studentId } = req.params;
     const user = req?.user;
@@ -54,14 +59,15 @@ const deleteProfile = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getDashboardSummary = async (req: Request, res: Response) => {
+const getDashboardSummary = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
     if (!user) {
@@ -81,10 +87,7 @@ const getDashboardSummary = async (req: Request, res: Response) => {
       data: summary,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 

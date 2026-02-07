@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { reviewService } from "./review.service";
 import { Role } from "../../types/role";
 
-const createReview = async (req: Request, res: Response) => {
+const createReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const user = req.user;
 
@@ -27,14 +31,15 @@ const createReview = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const updateReview = async (req: Request, res: Response) => {
+const updateReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { reviewId } = req.params;
 
@@ -59,14 +64,11 @@ const updateReview = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getReview = async (req: Request, res: Response) => {
+const getReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user;
 
@@ -84,14 +86,15 @@ const getReview = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteReview = async (req: Request, res: Response) => {
+const deleteReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { deleteId } = req.params;
 
@@ -115,10 +118,7 @@ const deleteReview = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+    next(error);
   }
 };
 
