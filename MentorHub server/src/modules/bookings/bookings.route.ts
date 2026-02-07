@@ -11,6 +11,12 @@ router.get(
   bookingsController.getBookings,
 );
 
+router.get(
+  "/:id",
+  auth(Role.ADMIN, Role.STUDENT, Role.TUTOR),
+  bookingsController.getBookingById,
+);
+
 router.post("/create", auth(Role.STUDENT), bookingsController.createBookings);
 
 router.put(

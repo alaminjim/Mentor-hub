@@ -84,8 +84,45 @@ const moderateStatus = async (req: Request, res: Response) => {
   }
 };
 
+const getBookingById = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const bookingId = req.params.id;
+    if (!bookingId) {
+      return res.status(400).json({
+        success: false,
+        message: "Booking ID is required",
+      });
+    }
+
+    const booking = await bookingsService.getBookingById(
+      user.id,
+      user.role,
+      bookingId as string,
+    );
+
+    res.status(200).json({
+      success: true,
+      data: booking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const bookingsController = {
   createBookings,
   getBookings,
   moderateStatus,
+  getBookingById,
 };

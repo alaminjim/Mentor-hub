@@ -100,8 +100,34 @@ const moderateStatus = async (
   });
 };
 
+const getBookingById = async (
+  userId: string,
+  role: Role,
+  bookingId: string,
+) => {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: { tutor: true, category: true, student: true },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  if (role === "STUDENT" && booking.studentId !== userId) {
+    throw new Error("Access denied");
+  }
+
+  if (role === "TUTOR" && booking.tutor.userId !== userId) {
+    throw new Error("Access denied");
+  }
+
+  return booking;
+};
+
 export const bookingsService = {
   createBookings,
   getBookings,
   moderateStatus,
+  getBookingById,
 };
