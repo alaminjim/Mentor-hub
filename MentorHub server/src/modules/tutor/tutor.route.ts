@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/", tutorProfileController.getAllTutorProfile);
 
+router.get("/filter", tutorProfileController.getAllTutorProfileFilter);
+
 router.get(
   "/dashboard",
   auth(Role.TUTOR),

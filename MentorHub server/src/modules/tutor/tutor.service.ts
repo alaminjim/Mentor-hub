@@ -118,7 +118,7 @@ const updateModerateAvailability = async (
   return result;
 };
 
-const getAllTutorProfile = async (payload: {
+const getAllTutorProfileFilter = async (payload: {
   subject: string[];
   sortBy: string | undefined;
   sortOrder: string | undefined;
@@ -146,6 +146,11 @@ const getAllTutorProfile = async (payload: {
       reviews: true,
     },
   });
+  return result;
+};
+
+const getAllTutorProfile = async () => {
+  const result = await prisma.tutorProfile.findMany({});
   return result;
 };
 
@@ -218,4 +223,5 @@ export const tutorService = {
   getAllTutorProfileOwn,
   updateModerateAvailability,
   getTutorDashboard,
+  getAllTutorProfileFilter,
 };

@@ -87,17 +87,33 @@ const updateModerateAvailability = async (req: Request, res: Response) => {
   }
 };
 
-const getAllTutorProfile = async (req: Request, res: Response) => {
+const getAllTutorProfileFilter = async (req: Request, res: Response) => {
   try {
     const { search, sortBy, sortOrder } = req.query;
 
     const searchBySubjects = search ? (search as string).split(",") : [];
 
-    const result = await tutorService.getAllTutorProfile({
+    const result = await tutorService.getAllTutorProfileFilter({
       subject: searchBySubjects,
       sortBy: (sortBy as string) || undefined,
       sortOrder: (sortOrder as string) || undefined,
     });
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+const getAllTutorProfile = async (req: Request, res: Response) => {
+  try {
+    const result = await tutorService.getAllTutorProfile();
     res.status(200).json({
       success: true,
       data: result,
@@ -172,4 +188,5 @@ export const tutorProfileController = {
   getAllTutorProfileOwn,
   updateModerateAvailability,
   getTutorDashboard,
+  getAllTutorProfileFilter,
 };
