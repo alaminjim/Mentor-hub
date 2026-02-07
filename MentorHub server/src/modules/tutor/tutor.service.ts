@@ -165,10 +165,57 @@ const getAllTutorProfileOwn = async (tutorId: string) => {
   return result;
 };
 
+const getTutorDashboard = async (tutorUserId: string) => {
+  const now = new Date();
+
+  const tutorProfile = await prisma.tutorProfile.findUnique({
+    where: { userId: tutorUserId },
+  });
+
+  if (!tutorProfile) throw new Error("Tutor profile not found");
+
+  const tutorId = tutorProfile.id;
+
+  const totalSessions = await prisma.booking.count({ where: { tutorId } });
+  const upcomingSessions = await prisma.booking.count({
+    where: { tutorId, scheduledAt: { gt: now } },
+  });
+  const pastSessions = await prisma.booking.count({
+    where: { tutorId, scheduledAt: { lt: now }, status: "COMPLETED" },
+  });
+
+  const confirmedSessions = await prisma.booking.count({
+    where: { tutorId, status: "CONFIRMED" },
+  });
+  const completedSessions = pastSessions;
+  const cancelledSessions = await prisma.booking.count({
+    where: { tutorId, status: "CANCELLED" },
+  });
+
+  const completedPercentage = totalSessions
+    ? Math.round((completedSessions / totalSessions) * 100)
+    : 0;
+
+  return {
+    totalSessions,
+    upcomingSessions,
+    pastSessions,
+    statusBreakdown: {
+      confirmed: confirmedSessions,
+      completed: completedSessions,
+      cancelled: cancelledSessions,
+    },
+    quickStats: {
+      completedPercentage,
+    },
+  };
+};
+
 export const tutorService = {
   tutorProfile,
   updateTutorProfile,
   getAllTutorProfile,
   getAllTutorProfileOwn,
   updateModerateAvailability,
+  getTutorDashboard,
 };

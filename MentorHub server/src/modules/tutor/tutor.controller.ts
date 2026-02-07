@@ -134,10 +134,42 @@ const getAllTutorProfileOwn = async (req: Request, res: Response) => {
   }
 };
 
+const getTutorDashboard = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    if (user.role !== "TUTOR") {
+      return res.status(403).json({
+        success: false,
+        message: "Only tutors can access this dashboard",
+      });
+    }
+
+    const dashboardData = await tutorService.getTutorDashboard(user.id);
+
+    res.status(200).json({
+      success: true,
+      data: dashboardData,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const tutorProfileController = {
   tutorProfile,
   updateTutorProfile,
   getAllTutorProfile,
   getAllTutorProfileOwn,
   updateModerateAvailability,
+  getTutorDashboard,
 };

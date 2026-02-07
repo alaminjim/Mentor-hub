@@ -36,9 +36,41 @@ const getBookings = async (req: Request, res: Response) => {
         message: "Unauthorized",
       });
     }
+
+    const filter = req.query.filter as "upcoming" | "past" | undefined;
+
     const result = await bookingsService.getBookings(
-      user?.id as string,
+      user.id,
+      user.role,
+      filter,
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const moderateStatus = async (req: Request, res: Response) => {
+  try {
+    const { statusId } = req.params;
+    const user = req?.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+    const result = await bookingsService.moderateStatus(
+      req.body,
       user?.role,
+      statusId as string,
     );
     res.status(200).json({
       success: true,
@@ -55,4 +87,5 @@ const getBookings = async (req: Request, res: Response) => {
 export const bookingsController = {
   createBookings,
   getBookings,
+  moderateStatus,
 };

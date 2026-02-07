@@ -13,4 +13,10 @@ router.get(
 
 router.post("/create", auth(Role.STUDENT), bookingsController.createBookings);
 
+router.put(
+  "/status/:statusId",
+  auth(Role.TUTOR),
+  bookingsController.moderateStatus,
+);
+
 export const bookingsRouter = router;

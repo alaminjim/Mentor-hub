@@ -61,7 +61,43 @@ const deleteProfile = async (studentId: string, role: Role) => {
   return updated;
 };
 
+const getDashboardSummary = async (userId: string, role: Role) => {
+  if (role !== "STUDENT") {
+    throw new Error("Only Student can see that data");
+  }
+
+  const now = new Date();
+
+  const totalBookings = await prisma.booking.count({
+    where: { studentId: userId },
+  });
+  const upcomingSessions = await prisma.booking.count({
+    where: { studentId: userId, scheduledAt: { gt: now } },
+  });
+  const pastSessions = await prisma.booking.count({
+    where: { studentId: userId, scheduledAt: { lt: now }, status: "COMPLETED" },
+  });
+  const cancelledBookings = await prisma.booking.count({
+    where: { studentId: userId, status: "CANCELLED" },
+  });
+
+  const completedPercentage = totalBookings
+    ? Math.round((pastSessions / totalBookings) * 100)
+    : 0;
+
+  return {
+    totalBookings,
+    upcomingSessions,
+    pastSessions,
+    quickStats: {
+      completedPercentage,
+      cancelledBookings,
+    },
+  };
+};
+
 export const student_bookingService = {
   manageProfile,
+  getDashboardSummary,
   deleteProfile,
 };

@@ -5,6 +5,12 @@ import { Role } from "../../types/role";
 
 const router = express.Router();
 
+router.get(
+  "/dashboard",
+  auth(Role.STUDENT),
+  student_bookingController.getDashboardSummary,
+);
+
 router.put(
   "/profile/:studentId",
   auth(Role.STUDENT),

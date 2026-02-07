@@ -61,7 +61,35 @@ const deleteProfile = async (req: Request, res: Response) => {
   }
 };
 
+const getDashboardSummary = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const summary = await student_bookingService.getDashboardSummary(
+      user.id,
+      user.role,
+    );
+
+    res.status(200).json({
+      success: true,
+      data: summary,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const student_bookingController = {
   manageProfile,
   deleteProfile,
+  getDashboardSummary,
 };

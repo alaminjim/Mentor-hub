@@ -7,6 +7,12 @@ const router = express.Router();
 
 router.get("/", tutorProfileController.getAllTutorProfile);
 
+router.get(
+  "/dashboard",
+  auth(Role.TUTOR),
+  tutorProfileController.getTutorDashboard,
+);
+
 router.get("/:tutorId", tutorProfileController.getAllTutorProfileOwn);
 
 router.post("/profile", auth(Role.TUTOR), tutorProfileController.tutorProfile);
