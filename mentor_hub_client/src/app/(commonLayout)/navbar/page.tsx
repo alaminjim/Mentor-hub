@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Book, Menu, Sunset, Trees } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -41,6 +42,8 @@ interface NavbarProps {
 }
 
 const Navbar = ({ className }: NavbarProps) => {
+  const pathname = usePathname();
+
   const menu: MenuItem[] = [
     { title: "Home", url: "/" },
     {
@@ -84,26 +87,26 @@ const Navbar = ({ className }: NavbarProps) => {
         <nav className="hidden items-center justify-between lg:flex">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-indigo-600">
-              Mentor_<span className="text-gray-900">Hub</span>
+              Mentor<span className="text-gray-900">Hub</span>
             </span>
           </Link>
 
           <NavigationMenu>
             <NavigationMenuList>
-              {menu.map((item) => renderMenuItem(item))}
+              {menu.map((item) => renderMenuItem(item, pathname))}
             </NavigationMenuList>
           </NavigationMenu>
 
           <div className="flex gap-2">
             <Button asChild variant="ghost" size="sm">
-              <Link href="/signin">Login</Link>
+              <Link href="/login">Login</Link>
             </Button>
             <Button
               asChild
               size="sm"
               className="bg-indigo-600 hover:bg-indigo-700"
             >
-              <Link href="/signup">Sign up</Link>
+              <Link href="/register">Sign up</Link>
             </Button>
           </div>
         </nav>
@@ -130,7 +133,7 @@ const Navbar = ({ className }: NavbarProps) => {
 
               <div className="mt-6 flex flex-col gap-6">
                 <Accordion type="single" collapsible>
-                  {menu.map((item) => renderMobileMenuItem(item))}
+                  {menu.map((item) => renderMobileMenuItem(item, pathname))}
                 </Accordion>
 
                 <div className="flex flex-col gap-3">
@@ -150,11 +153,17 @@ const Navbar = ({ className }: NavbarProps) => {
   );
 };
 
-const renderMenuItem = (item: MenuItem) => {
+const renderMenuItem = (item: MenuItem, pathname: string) => {
+  const isActive = pathname === item.url;
+
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuTrigger
+          className={cn(isActive ? "text-indigo-600 font-semibold" : "")}
+        >
+          {item.title}
+        </NavigationMenuTrigger>
         <NavigationMenuContent className="bg-white">
           <div className="grid gap-1 p-2">
             {item.items.map((sub) => (
@@ -173,7 +182,12 @@ const renderMenuItem = (item: MenuItem) => {
       <NavigationMenuLink asChild>
         <Link
           href={item.url}
-          className="px-4 py-2 text-sm font-medium hover:text-indigo-600"
+          className={cn(
+            "px-4 py-2 text-sm font-medium transition-colors",
+            isActive
+              ? "text-indigo-600 font-semibold border-b-2 border-indigo-600"
+              : "hover:text-indigo-600",
+          )}
         >
           {item.title}
         </Link>
@@ -182,7 +196,9 @@ const renderMenuItem = (item: MenuItem) => {
   );
 };
 
-const renderMobileMenuItem = (item: MenuItem) => {
+const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
+  const isActive = pathname === item.url;
+
   if (item.items) {
     return (
       <AccordionItem
@@ -190,7 +206,9 @@ const renderMobileMenuItem = (item: MenuItem) => {
         value={item.title}
         className="border-none"
       >
-        <AccordionTrigger className="font-semibold">
+        <AccordionTrigger
+          className={cn("font-semibold", isActive && "text-indigo-600")}
+        >
           {item.title}
         </AccordionTrigger>
         <AccordionContent className="space-y-2">
@@ -203,7 +221,11 @@ const renderMobileMenuItem = (item: MenuItem) => {
   }
 
   return (
-    <Link key={item.title} href={item.url} className="block font-semibold">
+    <Link
+      key={item.title}
+      href={item.url}
+      className={cn("block font-semibold", isActive ? "text-indigo-600" : "")}
+    >
       {item.title}
     </Link>
   );
