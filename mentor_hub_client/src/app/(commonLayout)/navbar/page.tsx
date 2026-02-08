@@ -99,14 +99,14 @@ const Navbar = ({ className }: NavbarProps) => {
 
           <div className="flex gap-2">
             <Button asChild variant="ghost" size="sm">
-              <Link href="/login">Login</Link>
+              <Link href="/signin">Sign in</Link>
             </Button>
             <Button
               asChild
               size="sm"
               className="bg-indigo-600 hover:bg-indigo-700"
             >
-              <Link href="/register">Sign up</Link>
+              <Link href="/signup">Sign up</Link>
             </Button>
           </div>
         </nav>
