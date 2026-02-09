@@ -77,13 +77,13 @@ const Footer = ({
   ],
 }: Footer2Props) => {
   return (
-    <section className={cn("fixed bottom-0  w-full bg-background border-t")}>
+    <section className={cn("w-full bg-background border-t mt-auto", className)}>
       <div className="container py-16 lg:mx-auto ml-10">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center gap-2 lg:justify-start">
-                <h3 className="font-bold text-lg">MentorHub</h3>
+                <h3 className="font-bold text-lg">Mentor_Hub</h3>
               </div>
               <p className="mt-1 font-bold text-indigo-400">{tagline}</p>
             </div>
