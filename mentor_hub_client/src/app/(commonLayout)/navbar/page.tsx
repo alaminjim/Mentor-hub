@@ -139,7 +139,7 @@ const Navbar = ({ className }: NavbarProps) => {
             <SheetContent className="bg-white">
               <SheetHeader>
                 <SheetTitle className="text-indigo-600 font-bold">
-                  MentorHub
+                  Mentor_Hub
                 </SheetTitle>
               </SheetHeader>
 

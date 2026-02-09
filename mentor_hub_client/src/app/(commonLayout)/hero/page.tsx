@@ -3,10 +3,10 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import img_1 from "../../../../../public/image/img-1.jpg";
-import img_2 from "../../../../../public/image/img-2.jpg";
-import img_3 from "../../../../../public/image/img-3.jpg";
-import img_4 from "../../../../../public/image/img-4.jpg";
+import img_1 from "../../../../public/image/img-1.jpg";
+import img_2 from "../../../../public/image/img-2.jpg";
+import img_3 from "../../../../public/image/img-3.jpg";
+import img_4 from "../../../../public/image/img-4.jpg";
 
 const slides = [{ src: img_1 }, { src: img_2 }, { src: img_3 }, { src: img_4 }];
 
@@ -56,7 +56,7 @@ export default function HeroCarousel() {
               className="object-cover"
               priority={index === 0}
             />
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-black/10" />
           </div>
         ))}
       </Carousel>
