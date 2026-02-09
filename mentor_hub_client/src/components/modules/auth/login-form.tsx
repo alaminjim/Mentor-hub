@@ -18,10 +18,10 @@ export function LoginForm({
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">
-            <span className="text-indigo-500">Sign Up</span> to your account
+            <span className="text-indigo-500">Sign In</span> to your account
           </h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Enter your email below to signup to your account
+            Enter your email below to signin to your account
           </p>
         </div>
         <Field>

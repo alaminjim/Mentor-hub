@@ -5,7 +5,6 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -45,6 +44,10 @@ export function SignupForm({
         <Field>
           <Button className="bg-indigo-400 hover:bg-indigo-600" type="submit">
             Create Account
+          </Button>
+
+          <Button variant="outline" type="button">
+            <Link href={"/tutorSignup"}>Sign up with Tutor</Link>
           </Button>
         </Field>
         <Field>
