@@ -9,10 +9,15 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
-
 import { z } from "zod";
-
 import { useForm } from "@tanstack/react-form";
 import {
   Card,
@@ -26,9 +31,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(4, "This field is Required"),
+  name: z.string().min(4, "Name must be at least 4 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  role: z.enum(["STUDENT", "TUTOR"]),
 });
 
 export function SignupForm({ className }: React.ComponentProps<"form">) {
@@ -39,31 +45,38 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
       name: "",
       email: "",
       password: "",
+      role: "STUDENT" as "STUDENT" | "TUTOR",
     },
     validators: {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastId = toast.loading("Creating user...");
+      const toastId = toast.loading("Creating account...");
+
       try {
-        const { error } = await authClient.signUp.email(value);
+        console.log("📤 Submitting:", value);
+
+        const { error } = await authClient.signUp.email({
+          name: value.name,
+          email: value.email,
+          password: value.password,
+          role: value.role,
+        } as any);
 
         if (error) {
-          toast.error(error.message || "An error occurred", {
-            id: toastId,
-          });
+          console.error("❌ Signup error:", error);
+          toast.error(error.message || "An error occurred", { id: toastId });
           return;
         }
 
-        toast.success("User created successfully", {
-          id: toastId,
-        });
+        console.log("✅ Signup success");
+        toast.success("Account created successfully!", { id: toastId });
 
         router.push("/");
+        router.refresh(); // ✅ Session refresh
       } catch (err: any) {
-        toast.error(err.message || "Something went wrong", {
-          id: toastId,
-        });
+        console.error("❌ Exception:", err); // Debug
+        toast.error(err.message || "Something went wrong", { id: toastId });
       }
     },
   });
@@ -74,9 +87,8 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
         <CardTitle className="text-center text-2xl">
           Create an account
         </CardTitle>
-        <CardDescription>
-          Enter information & below to create{" "}
-          <span className="text-indigo-600 font-semibold">TUTOR</span> account
+        <CardDescription className="text-center">
+          Enter your information below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -87,6 +99,7 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
           }}
         >
           <FieldGroup>
+            {/* Name Field */}
             <form.Field
               name="name"
               children={(field) => {
@@ -94,12 +107,14 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                   field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
                   <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
                     <Input
                       id={field.name}
                       name={field.name}
+                      placeholder="John Doe"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
@@ -107,7 +122,9 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                   </Field>
                 );
               }}
-            ></form.Field>
+            />
+
+            {/* Email Field */}
             <form.Field
               name="email"
               children={(field) => {
@@ -119,8 +136,11 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                     <Input
                       id={field.name}
                       name={field.name}
+                      type="email"
+                      placeholder="you@example.com"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
@@ -128,7 +148,9 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                   </Field>
                 );
               }}
-            ></form.Field>
+            />
+
+            {/* Password Field */}
             <form.Field
               name="password"
               children={(field) => {
@@ -140,9 +162,11 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                     <Input
                       id={field.name}
                       name={field.name}
+                      type="password"
+                      placeholder="••••••••"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      type="password"
+                      onBlur={field.handleBlur}
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
@@ -150,15 +174,68 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                   </Field>
                 );
               }}
-            ></form.Field>
-            <Button className="bg-indigo-400 hover:bg-indigo-600">
-              Create an account
+            />
+
+            {/* Role Select Field */}
+            <form.Field
+              name="role"
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      Select your Role
+                    </FieldLabel>
+                    <Select
+                      value={field.state.value}
+                      onValueChange={(value) =>
+                        field.handleChange(value as "STUDENT" | "TUTOR")
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="STUDENT">
+                          <div className="flex flex-col items-start">
+                            <span className="font-semibold">Student</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="TUTOR">
+                          <div className="flex flex-col items-start">
+                            <span className="font-semibold text-indigo-600">
+                              Tutor
+                            </span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+            />
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+            >
+              Create Account
             </Button>
-            <Button variant="outline" type="button">
-              <Link href={"/tutorSignup"}>Sign Up with TUTOR</Link>
-            </Button>
-            <FieldDescription className="px-6 text-center">
-              Already have an account? <Link href="/signin">Sign in</Link>
+
+            {/* Sign In Link */}
+            <FieldDescription className="text-center">
+              Already have an account?{" "}
+              <Link
+                href="/signin"
+                className="text-indigo-600 hover:underline font-medium"
+              >
+                Sign in
+              </Link>
             </FieldDescription>
           </FieldGroup>
         </form>

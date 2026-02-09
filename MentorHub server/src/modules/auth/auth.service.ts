@@ -1,5 +1,6 @@
 import { User } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
+
 import { Role } from "../../types/role";
 
 const authGetMe = async (userId: string) => {

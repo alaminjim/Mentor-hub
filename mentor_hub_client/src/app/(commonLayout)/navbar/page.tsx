@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Book, Menu, Sunset, Trees } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
 
 import {
   Accordion,
@@ -43,6 +45,28 @@ interface NavbarProps {
 
 const Navbar = ({ className }: NavbarProps) => {
   const pathname = usePathname();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const res = await authClient.getSession();
+        if (res?.data?.user) {
+          setUser(res.data.user);
+        } else {
+          setUser(null);
+        }
+      } catch {
+        setUser(null);
+      }
+    };
+    fetchSession();
+  }, []);
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    setUser(null);
+  };
 
   const menu: MenuItem[] = [
     { title: "Home", url: "/" },
@@ -82,12 +106,12 @@ const Navbar = ({ className }: NavbarProps) => {
         className,
       )}
     >
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-6 py-4 ">
         {/* Desktop */}
         <nav className="hidden items-center justify-between lg:flex">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-indigo-600">
-              Mentor<span className="text-gray-900">Hub</span>
+              Mentor_<span className="text-gray-900">Hub</span>
             </span>
           </Link>
 
@@ -98,16 +122,28 @@ const Navbar = ({ className }: NavbarProps) => {
           </NavigationMenu>
 
           <div className="flex gap-2">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/signin">Sign in</Link>
-            </Button>
-            <Button
-              asChild
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-700"
-            >
-              <Link href="/signup">Sign up</Link>
-            </Button>
+            {!user ? (
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/signin">Sign in</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-700"
+                >
+                  <Link href="/signup">Sign up</Link>
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                className="bg-red-500 hover:bg-red-600"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </Button>
+            )}
           </div>
         </nav>
 
@@ -137,12 +173,26 @@ const Navbar = ({ className }: NavbarProps) => {
                 </Accordion>
 
                 <div className="flex flex-col gap-3">
-                  <Button asChild variant="outline">
-                    <Link href="/login">Login</Link>
-                  </Button>
-                  <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-                    <Link href="/register">Get Started</Link>
-                  </Button>
+                  {!user ? (
+                    <>
+                      <Button asChild variant="outline">
+                        <Link href="/login">Login</Link>
+                      </Button>
+                      <Button
+                        asChild
+                        className="bg-indigo-600 hover:bg-indigo-700"
+                      >
+                        <Link href="/register">Get Started</Link>
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      className="bg-red-600 hover:bg-red-700"
+                      onClick={handleSignOut}
+                    >
+                      Sign Out
+                    </Button>
+                  )}
                 </div>
               </div>
             </SheetContent>

@@ -22,7 +22,7 @@ model User {
   reviews         Review[]
   tutorProfile    TutorProfile?
 
-  role   String? @default("STUDENT")
+  role   String @default("STUDENT")
   status Status @default(UnBAN)
 
   @@unique([email])
@@ -144,6 +144,12 @@ model Review {
   createdAt DateTime     @default(now())
 }
 
+enum Role{
+  ADMIN
+  STUDENT
+  TUTOR
+}
+
 enum Status {
   UnBAN
   BANNED
@@ -154,5 +160,4 @@ enum BookingStatus {
   COMPLETED
   CANCELLED
 }
-
 

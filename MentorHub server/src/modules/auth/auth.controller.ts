@@ -83,6 +83,7 @@ const updateStatus = async (
     next(error);
   }
 };
+
 export const authController = {
   getMe,
   getAll,
