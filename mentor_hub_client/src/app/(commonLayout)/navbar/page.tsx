@@ -70,30 +70,6 @@ const Navbar = ({ className }: NavbarProps) => {
 
   const menu: MenuItem[] = [
     { title: "Home", url: "/" },
-    {
-      title: "Find Mentors",
-      url: "/mentors",
-      items: [
-        {
-          title: "Programming",
-          description: "Web, Mobile & Backend mentors",
-          icon: <Book className="size-5 text-indigo-600" />,
-          url: "/mentors/programming",
-        },
-        {
-          title: "Design",
-          description: "UI/UX & Graphic design mentors",
-          icon: <Sunset className="size-5 text-indigo-600" />,
-          url: "/mentors/design",
-        },
-        {
-          title: "Business",
-          description: "Career & startup guidance",
-          icon: <Trees className="size-5 text-indigo-600" />,
-          url: "/mentors/business",
-        },
-      ],
-    },
     { title: "Become a Mentor", url: "/become-mentor" },
     { title: "Pricing", url: "/pricing" },
     { title: "Blog", url: "/blog" },
@@ -167,7 +143,7 @@ const Navbar = ({ className }: NavbarProps) => {
                 </SheetTitle>
               </SheetHeader>
 
-              <div className="mt-6 flex flex-col gap-6">
+              <div className="mt-6 flex flex-col gap-6 ml-6 lg:ml-0 space-y-2">
                 <Accordion type="single" collapsible>
                   {menu.map((item) => renderMobileMenuItem(item, pathname))}
                 </Accordion>

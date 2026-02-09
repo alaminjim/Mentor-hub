@@ -54,8 +54,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
       const toastId = toast.loading("Creating account...");
 
       try {
-        console.log("📤 Submitting:", value);
-
         const { error } = await authClient.signUp.email({
           name: value.name,
           email: value.email,
@@ -64,18 +62,15 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
         } as any);
 
         if (error) {
-          console.error("❌ Signup error:", error);
           toast.error(error.message || "An error occurred", { id: toastId });
           return;
         }
 
-        console.log("✅ Signup success");
         toast.success("Account created successfully!", { id: toastId });
 
         router.push("/");
-        router.refresh(); // ✅ Session refresh
+        router.refresh();
       } catch (err: any) {
-        console.error("❌ Exception:", err); // Debug
         toast.error(err.message || "Something went wrong", { id: toastId });
       }
     },
@@ -99,7 +94,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
           }}
         >
           <FieldGroup>
-            {/* Name Field */}
             <form.Field
               name="name"
               children={(field) => {
@@ -124,7 +118,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
               }}
             />
 
-            {/* Email Field */}
             <form.Field
               name="email"
               children={(field) => {
@@ -150,7 +143,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
               }}
             />
 
-            {/* Password Field */}
             <form.Field
               name="password"
               children={(field) => {
@@ -163,7 +155,7 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
                       id={field.name}
                       name={field.name}
                       type="password"
-                      placeholder="••••••••"
+                      placeholder="*******"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
@@ -176,7 +168,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
               }}
             />
 
-            {/* Role Select Field */}
             <form.Field
               name="role"
               children={(field) => {
@@ -219,7 +210,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
               }}
             />
 
-            {/* Submit Button */}
             <Button
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-700"
@@ -227,7 +217,6 @@ export function SignupForm({ className }: React.ComponentProps<"form">) {
               Create Account
             </Button>
 
-            {/* Sign In Link */}
             <FieldDescription className="text-center">
               Already have an account?{" "}
               <Link
