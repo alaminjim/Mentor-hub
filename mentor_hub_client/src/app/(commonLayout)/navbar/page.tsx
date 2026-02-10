@@ -74,7 +74,7 @@ const Navbar = ({ className }: NavbarProps) => {
     { title: "Home", url: "/" },
     { title: "Browse Tutors", url: "/browse-tutors" },
     { title: "Pricing", url: "/pricing" },
-    { title: "Blog", url: "/blog" },
+    { title: "About", url: "/about" },
   ];
 
   return (

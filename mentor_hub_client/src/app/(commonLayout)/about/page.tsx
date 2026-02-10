@@ -1,6 +1,6 @@
 import WhyChooseUs from "./whyChooseUs";
 
-export default function BlogPage() {
+export default function AboutPage() {
   return (
     <main className="min-h-screen">
       <section className="py-16 sm:py-20 bg-gradient-to-b from-sky-50 to-white">
@@ -8,7 +8,7 @@ export default function BlogPage() {
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
             Welcome to Our{" "}
             <span className="bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent">
-              Blog
+              Mentor_Hub
             </span>
           </h1>
           <p className="text-gray-600 text-base sm:text-lg">
@@ -23,7 +23,7 @@ export default function BlogPage() {
         <div className="container mx-auto px-6 text-center">
           <div className="text-6xl mb-4">📝</div>
           <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-            Blog Posts Coming Soon
+            Tutor Posts Coming Soon
           </h2>
           <p className="text-gray-500">
             We're working on amazing content for you!
