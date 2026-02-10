@@ -85,15 +85,8 @@ const updateReview = async (
   });
 };
 
-const getReview = async (userId: string, role: Role) => {
-  if (role !== "STUDENT") {
-    throw new Error("Only students can get reviews");
-  }
-
+const getReview = async () => {
   return await prisma.review.findMany({
-    where: {
-      studentId: userId,
-    },
     orderBy: {
       createdAt: "desc",
     },

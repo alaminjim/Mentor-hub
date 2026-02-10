@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { TutorDataType } from "@/type/tutorDataTyp";
+import Link from "next/link";
 
 interface TutorCardProps {
   tutor: TutorDataType;
@@ -51,7 +52,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
     : "TU";
 
   return (
-    // h-full makes every card stretch to fill the grid row height
     <div
       className={cn(
         "relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300",
@@ -70,7 +70,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Top accent bar */}
       <div
         style={{
           height: 5,
@@ -82,12 +81,7 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
         }}
       />
 
-      {/* 
-        flex-1 on this inner div: it grows to fill all available space.
-        flex flex-col inside so the button always sits at the bottom. 
-      */}
       <div className="flex flex-1 flex-col gap-4 p-5">
-        {/* ── Header ── */}
         <div className="flex items-start gap-3">
           <div
             className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-[15px] font-extrabold text-white"
@@ -137,8 +131,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
             </span>
           </div>
         </div>
-
-        {/* Divider */}
         <div
           style={{
             height: 1,
@@ -148,7 +140,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
           }}
         />
 
-        {/* Bio — flex-1 so it stretches, line-clamp keeps it tidy */}
         <p
           className="line-clamp-2 text-[12.5px] leading-relaxed"
           style={{ color: "#4a7a90" }}
@@ -156,7 +147,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
           {tutor.bio}
         </p>
 
-        {/* Subjects */}
         {tutor.subjects?.length > 0 && (
           <div>
             <p
@@ -183,7 +173,6 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
           </div>
         )}
 
-        {/* Availability — flex-1 so short lists get stretched via mt-auto on button */}
         {tutor.availability && Object.keys(tutor.availability).length > 0 && (
           <div
             className="rounded-xl p-3"
@@ -225,26 +214,23 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
           </div>
         )}
 
-        {/* mt-auto pushes button to the bottom no matter how much content is above */}
-        <button
-          onClick={() => {
-            setBooked(true);
-            setTimeout(() => setBooked(false), 2500);
-          }}
-          className="mt-auto w-full rounded-xl py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-all duration-300 active:scale-95"
-          style={{
-            background: booked
-              ? "linear-gradient(135deg, #22a06b, #2ecc94)"
-              : hovered
-                ? "linear-gradient(135deg, #1a7fa8, #2196c4)"
-                : "linear-gradient(135deg, #2196c4, #42b8e0)",
-            boxShadow: booked
-              ? "0 4px 18px rgba(34,160,107,0.3)"
-              : "0 4px 18px rgba(33,150,196,0.25)",
-          }}
-        >
-          {booked ? "✓ Session Booked!" : "Book a Session"}
-        </button>
+        <Link href={`/tutorCard/${tutor.id}`}>
+          <button
+            className="mt-auto w-full rounded-xl py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-all duration-300 active:scale-95"
+            style={{
+              background: booked
+                ? "linear-gradient(135deg, #22a06b, #2ecc94)"
+                : hovered
+                  ? "linear-gradient(135deg, #1a7fa8, #2196c4)"
+                  : "linear-gradient(135deg, #2196c4, #42b8e0)",
+              boxShadow: booked
+                ? "0 4px 18px rgba(34,160,107,0.3)"
+                : "0 4px 18px rgba(33,150,196,0.25)",
+            }}
+          >
+            More Details
+          </button>
+        </Link>
       </div>
     </div>
   );

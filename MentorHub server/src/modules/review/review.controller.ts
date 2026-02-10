@@ -70,16 +70,7 @@ const updateReview = async (
 
 const getReview = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = req.user;
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
-
-    const result = await reviewService.getReview(user?.id, user?.role as Role);
+    const result = await reviewService.getReview();
 
     res.status(201).json({
       success: true,

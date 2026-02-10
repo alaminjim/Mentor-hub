@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Book, Menu, Sunset, Trees } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
@@ -30,6 +30,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import toast from "react-hot-toast";
 
 interface MenuItem {
   title: string;
@@ -66,6 +67,7 @@ const Navbar = ({ className }: NavbarProps) => {
   const handleSignOut = async () => {
     await authClient.signOut();
     setUser(null);
+    toast.success("Sign Out Successful");
   };
 
   const menu: MenuItem[] = [
@@ -78,16 +80,18 @@ const Navbar = ({ className }: NavbarProps) => {
   return (
     <section
       className={cn(
-        "sticky top-0 z-50 border-b bg-white/80 backdrop-blur",
+        "sticky top-0 z-50 border-b border-sky-100 bg-gradient-to-r from-white via-sky-50/30 to-cyan-50/30 backdrop-blur-md shadow-sm",
         className,
       )}
     >
-      <div className="container mx-auto px-6 py-4 ">
-        {/* Desktop */}
+      <div className="container mx-auto px-6 py-4">
         <nav className="hidden items-center justify-between lg:flex">
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-indigo-600">
-              Mentor_<span className="text-gray-900">Hub</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-lg">M</span>
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent">
+              Mentor_Hub
             </span>
           </Link>
 
@@ -100,13 +104,18 @@ const Navbar = ({ className }: NavbarProps) => {
           <div className="flex gap-2">
             {!user ? (
               <>
-                <Button asChild variant="ghost" size="sm">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="hover:bg-sky-50 hover:text-sky-600"
+                >
                   <Link href="/signin">Sign in</Link>
                 </Button>
                 <Button
                   asChild
                   size="sm"
-                  className="bg-indigo-600 hover:bg-indigo-700"
+                  className="bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white shadow-md"
                 >
                   <Link href="/signup">Sign up</Link>
                 </Button>
@@ -114,7 +123,7 @@ const Navbar = ({ className }: NavbarProps) => {
             ) : (
               <Button
                 size="sm"
-                className="bg-red-500 hover:bg-red-600"
+                className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white shadow-md"
                 onClick={handleSignOut}
               >
                 Sign Out
@@ -125,21 +134,35 @@ const Navbar = ({ className }: NavbarProps) => {
 
         {/* Mobile */}
         <div className="flex items-center justify-between lg:hidden">
-          <Link href="/" className="text-lg font-bold text-indigo-600">
-            MentorHub
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md">
+              <span className="text-white font-bold">M</span>
+            </div>
+            <span className="text-lg font-bold bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent">
+              Mentor_Hub
+            </span>
           </Link>
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Menu className="size-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="border-sky-200 hover:bg-sky-50"
+              >
+                <Menu className="size-4 text-sky-600" />
               </Button>
             </SheetTrigger>
 
-            <SheetContent className="bg-white">
+            <SheetContent className="bg-gradient-to-b from-white to-sky-50/30">
               <SheetHeader>
-                <SheetTitle className="text-indigo-600 font-bold">
-                  Mentor_Hub
+                <SheetTitle className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">M</span>
+                  </div>
+                  <span className="bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent font-bold">
+                    Mentor_Hub
+                  </span>
                 </SheetTitle>
               </SheetHeader>
 
@@ -151,19 +174,23 @@ const Navbar = ({ className }: NavbarProps) => {
                 <div className="flex flex-col gap-3">
                   {!user ? (
                     <>
-                      <Button asChild variant="outline">
-                        <Link href="/login">Login</Link>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="border-sky-200 hover:bg-sky-50 hover:text-sky-600"
+                      >
+                        <Link href="/signin">Sign in</Link>
                       </Button>
                       <Button
                         asChild
-                        className="bg-indigo-600 hover:bg-indigo-700"
+                        className="bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white shadow-md"
                       >
-                        <Link href="/register">Get Started</Link>
+                        <Link href="/signup">Get Started</Link>
                       </Button>
                     </>
                   ) : (
                     <Button
-                      className="bg-red-600 hover:bg-red-700"
+                      className="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white shadow-md"
                       onClick={handleSignOut}
                     >
                       Sign Out
@@ -178,7 +205,6 @@ const Navbar = ({ className }: NavbarProps) => {
     </section>
   );
 };
-
 const renderMenuItem = (item: MenuItem, pathname: string) => {
   const isActive = pathname === item.url;
 
@@ -186,11 +212,14 @@ const renderMenuItem = (item: MenuItem, pathname: string) => {
     return (
       <NavigationMenuItem key={item.title}>
         <NavigationMenuTrigger
-          className={cn(isActive ? "text-indigo-600 font-semibold" : "")}
+          className={cn(
+            "hover:text-sky-600 data-[state=open]:text-sky-600",
+            isActive ? "text-sky-600 font-semibold" : "",
+          )}
         >
           {item.title}
         </NavigationMenuTrigger>
-        <NavigationMenuContent className="bg-white">
+        <NavigationMenuContent className="bg-white border-sky-100">
           <div className="grid gap-1 p-2">
             {item.items.map((sub) => (
               <NavigationMenuLink asChild key={sub.title}>
@@ -205,19 +234,17 @@ const renderMenuItem = (item: MenuItem, pathname: string) => {
 
   return (
     <NavigationMenuItem key={item.title}>
-      <NavigationMenuLink asChild>
-        <Link
-          href={item.url}
-          className={cn(
-            "px-4 py-2 text-sm font-medium transition-colors",
-            isActive
-              ? "text-indigo-600 font-semibold border-b-2 border-indigo-600"
-              : "hover:text-indigo-600",
-          )}
-        >
-          {item.title}
-        </Link>
-      </NavigationMenuLink>
+      <Link
+        href={item.url}
+        className={cn(
+          "block px-4 py-2 text-sm font-medium transition-colors rounded-lg",
+          isActive
+            ? "text-sky-600 font-semibold bg-sky-100/80"
+            : "text-gray-700 hover:text-sky-600 hover:bg-sky-50/50",
+        )}
+      >
+        {item.title}
+      </Link>
     </NavigationMenuItem>
   );
 };
@@ -233,7 +260,10 @@ const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
         className="border-none"
       >
         <AccordionTrigger
-          className={cn("font-semibold", isActive && "text-indigo-600")}
+          className={cn(
+            "font-semibold hover:text-sky-600 hover:no-underline",
+            isActive && "text-sky-600",
+          )}
         >
           {item.title}
         </AccordionTrigger>
@@ -250,7 +280,12 @@ const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
     <Link
       key={item.title}
       href={item.url}
-      className={cn("block font-semibold", isActive ? "text-indigo-600" : "")}
+      className={cn(
+        "block font-semibold py-2 px-3 rounded-lg transition-colors",
+        isActive
+          ? "text-sky-600 bg-sky-100/80"
+          : "text-gray-700 hover:text-sky-600 hover:bg-sky-50/50",
+      )}
     >
       {item.title}
     </Link>
@@ -259,12 +294,17 @@ const renderMobileMenuItem = (item: MenuItem, pathname: string) => {
 
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
-    <Link href={item.url} className="flex gap-3 rounded-md p-3 hover:bg-muted">
+    <Link
+      href={item.url}
+      className="flex gap-3 rounded-lg p-3 hover:bg-sky-50 transition-colors"
+    >
       {item.icon}
       <div>
-        <p className="font-medium">{item.title}</p>
+        <p className="font-medium text-gray-900 hover:text-sky-600">
+          {item.title}
+        </p>
         {item.description && (
-          <p className="text-sm text-muted-foreground">{item.description}</p>
+          <p className="text-sm text-gray-500">{item.description}</p>
         )}
       </div>
     </Link>

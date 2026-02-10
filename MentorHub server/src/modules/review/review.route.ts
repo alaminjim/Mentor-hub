@@ -5,7 +5,7 @@ import { Role } from "../../types/role";
 
 const router = express.Router();
 
-router.get("/", auth(Role.STUDENT), reviewController.getReview);
+router.get("/", reviewController.getReview);
 
 router.post("/create", auth(Role.STUDENT), reviewController.createReview);
 
