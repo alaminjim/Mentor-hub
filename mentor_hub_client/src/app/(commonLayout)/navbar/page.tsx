@@ -185,7 +185,7 @@ const Navbar = ({ className }: NavbarProps) => {
                         asChild
                         className="bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 text-white shadow-md"
                       >
-                        <Link href="/signup">Get Started</Link>
+                        <Link href="/signup">Sign up</Link>
                       </Button>
                     </>
                   ) : (

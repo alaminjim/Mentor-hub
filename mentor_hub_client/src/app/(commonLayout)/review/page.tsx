@@ -14,7 +14,7 @@ export default async function ReviewsPage() {
     : [];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50/50 to-cyan-50/30 text-center mt-14">
+    <main className=" bg-gradient-to-b from-blue-50/50 to-cyan-50/30 text-center mt-14">
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
