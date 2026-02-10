@@ -70,7 +70,7 @@ const Navbar = ({ className }: NavbarProps) => {
 
   const menu: MenuItem[] = [
     { title: "Home", url: "/" },
-    { title: "Become a Mentor", url: "/become-mentor" },
+    { title: "Browse Tutors", url: "/browse-tutors" },
     { title: "Pricing", url: "/pricing" },
     { title: "Blog", url: "/blog" },
   ];
