@@ -96,8 +96,45 @@ const getDashboardSummary = async (userId: string, role: Role) => {
   };
 };
 
+const getStatsService = async () => {
+  try {
+    const totalTutors = await prisma.tutorProfile.count();
+
+    const totalStudents = await prisma.user.count({
+      where: {
+        role: "STUDENT",
+      },
+    });
+
+    const totalSessions = await prisma.booking.count({
+      where: {
+        status: "COMPLETED",
+      },
+    });
+
+    const ratingAggregate = await prisma.review.aggregate({
+      _avg: {
+        rating: true,
+      },
+    });
+
+    const averageRating = ratingAggregate._avg.rating || 0;
+
+    return {
+      totalTutors,
+      totalStudents,
+      totalSessions,
+      averageRating: parseFloat(averageRating.toFixed(2)),
+    };
+  } catch (error) {
+    console.error("getStatsService error:", error);
+    throw new Error("Failed to fetch stats from database");
+  }
+};
+
 export const student_bookingService = {
   manageProfile,
   getDashboardSummary,
   deleteProfile,
+  getStatsService,
 };

@@ -11,6 +11,8 @@ router.get(
   student_bookingController.getDashboardSummary,
 );
 
+router.get("/stats", student_bookingController.getStats);
+
 router.put(
   "/profile/:studentId",
   auth(Role.STUDENT),

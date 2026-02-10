@@ -91,8 +91,27 @@ const getDashboardSummary = async (
   }
 };
 
+const getStats = async (req: Request, res: Response) => {
+  try {
+    const stats = await student_bookingService.getStatsService();
+
+    return res.status(200).json({
+      success: true,
+      data: stats,
+      message: "Stats retrieved successfully",
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      data: null,
+      message: error.message || "Failed to retrieve stats",
+    });
+  }
+};
+
 export const student_bookingController = {
   manageProfile,
   deleteProfile,
   getDashboardSummary,
+  getStats,
 };
