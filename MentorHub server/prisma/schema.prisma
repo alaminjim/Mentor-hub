@@ -82,6 +82,7 @@ model TutorProfile {
   userId       String   @unique
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  name         String @default("Unknown Tutor")
   bio          String?
   subjects     String[]      
   price        Float

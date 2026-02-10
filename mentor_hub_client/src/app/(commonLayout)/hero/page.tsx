@@ -25,7 +25,7 @@ export default function HeroCarousel() {
           hasPrev && (
             <button
               onClick={clickHandler}
-              className="absolute left-2 sm:left-4 top-[35%] -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-all"
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-all"
               aria-label="Previous slide"
             >
               <ChevronLeft size={28} className="text-white" />
@@ -36,7 +36,7 @@ export default function HeroCarousel() {
           hasNext && (
             <button
               onClick={clickHandler}
-              className="absolute right-2 sm:right-4 top-[35%] -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-all"
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-all"
               aria-label="Next slide"
             >
               <ChevronRight size={28} className="text-white" />
