@@ -268,11 +268,9 @@ export default function DashboardShell({
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/dashboard/settings">
-                      <Settings className="size-4" />
-                      <span>Settings</span>
-                    </Link>
+                  <SidebarMenuButton>
+                    <Settings className="size-4" />
+                    <span>Settings</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>

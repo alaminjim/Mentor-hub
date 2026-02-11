@@ -111,9 +111,28 @@ const adminStatsService = async (): Promise<IAdminStats> => {
   }
 };
 
+const deleteUser = async (id: string, role: Role) => {
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+
+  if (role !== "ADMIN") {
+    throw new Error("Only admin can delete this");
+  }
+
+  return await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+};
+
 export const authService = {
   authGetMe,
   getAll,
   updateStatus,
   adminStatsService,
+  deleteUser,
 };

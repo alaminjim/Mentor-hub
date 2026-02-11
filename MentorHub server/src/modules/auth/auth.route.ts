@@ -17,4 +17,6 @@ router.patch(
   authController.updateStatus,
 );
 
+router.delete("/remove/:id", auth(Role.ADMIN), authController.deleteUser);
+
 export const authRouter = router;
