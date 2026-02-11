@@ -1,7 +1,7 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
 import { env } from "../../../env";
 
-const API_URL = env.API_URL;
+const API_URL = env.NEXT_PUBLIC_APP_URL;
 
 export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
@@ -43,6 +43,42 @@ export const tutorService = {
     } catch (error) {
       console.error("getTutorById error:", error);
       return { data: null };
+    }
+  },
+
+  createTutorProfile: async function (
+    profileData: any,
+  ): Promise<{ success: boolean; data?: any; error?: string }> {
+    try {
+      const res = await fetch(`${API_URL}/api/tutor/profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        cache: "no-store",
+        body: JSON.stringify(profileData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        return {
+          success: false,
+          error: errorData.message || "Failed to create tutor profile",
+        };
+      }
+
+      const result = await res.json();
+      return {
+        success: true,
+        data: result.data,
+      };
+    } catch (error) {
+      console.error("createTutorProfile error:", error);
+      return {
+        success: false,
+        error: "An error occurred while creating tutor profile",
+      };
     }
   },
 };
