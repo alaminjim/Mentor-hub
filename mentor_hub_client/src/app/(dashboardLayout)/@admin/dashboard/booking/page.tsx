@@ -19,11 +19,11 @@ const AllBookingsPage = async () => {
           <table className="w-full text-sm">
             <thead className="bg-sky-50 text-sky-700">
               <tr>
-                <th className="px-6 py-3 text-left font-semibold">Status</th>
-                <th className="px-6 py-3 text-left font-semibold">Duration</th>
                 <th className="px-6 py-3 text-left font-semibold">Subject</th>
+                <th className="px-6 py-3 text-left font-semibold">Duration</th>
                 <th className="px-6 py-3 text-left font-semibold">Time</th>
                 <th className="px-6 py-3 text-left font-semibold">Price</th>
+                <th className="px-6 py-3 text-left font-semibold">Status</th>
               </tr>
             </thead>
 
@@ -31,22 +31,24 @@ const AllBookingsPage = async () => {
               {Array.isArray(bookings) &&
                 bookings.map((booking: any) => (
                   <tr key={booking.id} className="hover:bg-sky-50 transition">
-                    <td className="px-6 py-4 font-medium text-gray-700">
-                      {booking.status}
+                    <td className="px-6 py-4 text-gray-600 font-semibold">
+                      {booking.subject}
                     </td>
 
                     <td className="px-6 py-4 text-gray-600">
                       {booking.duration}
                     </td>
 
-                    <td className="px-6 py-4 text-gray-600">
-                      {booking.subject}
-                    </td>
-
                     <td className="px-6 py-4 text-gray-600">{booking.time}</td>
 
                     <td className="px-6 py-4 text-sky-600 font-semibold">
-                      ৳ {booking.totalPrice}
+                      {booking.totalPrice}$
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="inline-block px-3 py-1 text-sm font-medium text-white bg-sky-500 rounded-full">
+                        {booking.status}
+                      </span>
                     </td>
                   </tr>
                 ))}
