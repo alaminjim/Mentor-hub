@@ -14,3 +14,11 @@ declare global {
     }
   }
 }
+
+export interface IAdminStats {
+  totalUsers: number;
+  totalTutors: number;
+  totalBookings: number;
+  cancelledBookings: number;
+  averageRating: number;
+}

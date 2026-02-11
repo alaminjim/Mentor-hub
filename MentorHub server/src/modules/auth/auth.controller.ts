@@ -84,8 +84,22 @@ const updateStatus = async (
   }
 };
 
+const getAdminStats = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const stats = await authService.adminStatsService();
+    res.status(200).json({ success: true, data: stats });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const authController = {
   getMe,
   getAll,
   updateStatus,
+  getAdminStats,
 };
