@@ -3,12 +3,16 @@ export interface StatsDataType {
   totalTutors?: number;
   totalStudents?: number;
   totalBookings?: number;
-  totalReviews?: number;
-  pendingBookings?: number;
-  confirmedBookings?: number;
-  completedBookings?: number;
+  totalSessions?: number;
   cancelledBookings?: number;
   averageRating?: number;
-  totalRevenue?: number;
-  monthlyRevenue?: number;
+  recentActivities?: IRecentActivity[];
+}
+
+export interface IRecentActivity {
+  id: string;
+  type: "booking" | "user" | "review";
+  message: string;
+  time: string;
+  createdAt: Date;
 }

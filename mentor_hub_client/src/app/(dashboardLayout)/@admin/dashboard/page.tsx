@@ -248,15 +248,21 @@ const AdminDashboard = () => {
                 + Add New User
               </button>
             </Link>
-            <button className="w-full bg-sky-50 text-sky-700 rounded-lg p-4 font-medium hover:bg-sky-100 transition-colors border border-sky-200">
-              View All Bookings
-            </button>
-            <button className="w-full bg-cyan-50 text-cyan-700 rounded-lg p-4 font-medium hover:bg-cyan-100 transition-colors border border-cyan-200">
-              Manage Tutors
-            </button>
-            <button className="w-full bg-blue-50 text-blue-700 rounded-lg p-4 font-medium hover:bg-blue-100 transition-colors border border-blue-200">
-              View Reports
-            </button>
+            <Link href={"/dashboard/booking"}>
+              <button className="w-full mt-3 bg-sky-50 text-sky-700 rounded-lg p-4 font-medium hover:bg-sky-100 transition-colors border border-sky-200">
+                View All Bookings
+              </button>
+            </Link>
+            <Link href={"/dashboard/user"}>
+              <button className="w-full bg-cyan-50 mt-3 text-cyan-700 rounded-lg p-4 font-medium hover:bg-cyan-100 transition-colors border border-cyan-200">
+                View Users
+              </button>
+            </Link>
+            <Link href={"/dashboard/category"}>
+              <button className="w-full mt-3 bg-blue-50 text-blue-700 rounded-lg p-4 font-medium hover:bg-blue-100 transition-colors border border-blue-200">
+                View Category
+              </button>
+            </Link>
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-200">

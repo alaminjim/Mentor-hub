@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { GraduationCap, Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
@@ -87,8 +87,8 @@ const Navbar = ({ className }: NavbarProps) => {
       <div className="container mx-auto px-6 py-4">
         <nav className="hidden items-center justify-between lg:flex">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-lg">M</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+              <GraduationCap className="size-6 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent">
               Mentor_Hub

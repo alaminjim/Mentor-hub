@@ -122,8 +122,8 @@ export default async function WhyChooseUs() {
         <div className="mt-16 sm:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <div className="text-center p-6 bg-gradient-to-br from-sky-50 to-cyan-50/50 rounded-2xl border border-sky-100">
             <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-              {statsData.totalTutors > 0
-                ? `${statsData.totalTutors.toLocaleString()}+`
+              {(statsData?.totalTutors || 0) > 0
+                ? `${(statsData.totalTutors || 0).toLocaleString()}+`
                 : "0"}
             </div>
             <div className="text-sm sm:text-base text-gray-600 font-medium">
@@ -133,8 +133,8 @@ export default async function WhyChooseUs() {
 
           <div className="text-center p-6 bg-gradient-to-br from-cyan-50 to-teal-50/50 rounded-2xl border border-cyan-100">
             <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent mb-2">
-              {statsData.totalStudents > 0
-                ? `${statsData.totalStudents.toLocaleString()}+`
+              {(statsData?.totalStudents || 0) > 0
+                ? `${(statsData.totalStudents || 0).toLocaleString()}+`
                 : "0"}
             </div>
             <div className="text-sm sm:text-base text-gray-600 font-medium">
@@ -144,8 +144,8 @@ export default async function WhyChooseUs() {
 
           <div className="text-center p-6 bg-gradient-to-br from-teal-50 to-emerald-50/50 rounded-2xl border border-teal-100">
             <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent mb-2">
-              {statsData.totalSessions > 0
-                ? `${statsData.totalSessions.toLocaleString()}+`
+              {(statsData?.totalSessions || 0) > 0
+                ? `${(statsData.totalSessions || 0).toLocaleString()}+`
                 : "0"}
             </div>
             <div className="text-sm sm:text-base text-gray-600 font-medium">
@@ -155,8 +155,8 @@ export default async function WhyChooseUs() {
 
           <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-green-50/50 rounded-2xl border border-emerald-100">
             <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent mb-2">
-              {statsData.averageRating > 0
-                ? `${statsData.averageRating.toFixed(1)}/5`
+              {(statsData?.averageRating || 0) > 0
+                ? `${(statsData.averageRating || 0).toFixed(1)}/5`
                 : "0/5"}
             </div>
             <div className="text-sm sm:text-base text-gray-600 font-medium">

@@ -2,6 +2,8 @@ import { tutorService } from "@/components/service/tutor.service";
 import { TutorDataType } from "@/type/tutorDataTyp";
 import { TutorCard } from "../tutorCard/tutorsCard";
 
+export const dynamic = "force-dynamic";
+
 const BrowseTutor = async () => {
   const { data } = await tutorService.getTutors();
 
