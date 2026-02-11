@@ -4,7 +4,7 @@ import { Footer } from "./footer/page";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div>
+    <div suppressHydrationWarning>
       <Navbar />
       <div>{children}</div>
       <Footer />

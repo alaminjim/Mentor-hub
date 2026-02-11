@@ -73,8 +73,8 @@ const Navbar = ({ className }: NavbarProps) => {
   const menu: MenuItem[] = [
     { title: "Home", url: "/" },
     { title: "Browse Tutors", url: "/browse-tutors" },
-    { title: "Pricing", url: "/pricing" },
     { title: "About", url: "/about" },
+    { title: "Dashboard", url: "/dashboard" },
   ];
 
   return (
