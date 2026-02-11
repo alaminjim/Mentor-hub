@@ -38,7 +38,7 @@ export async function getMyBookings(): Promise<{
   error?: string;
 }> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     const res = await fetch(`${API_URL}/api/booking`, {
       method: "GET",
@@ -53,7 +53,10 @@ export async function getMyBookings(): Promise<{
     }
 
     const result = await res.json();
-    return { data: result.data || [], error: undefined };
+
+    return {
+      data: Array.isArray(result.data) ? result.data : [],
+    };
   } catch (error) {
     console.error("getMyBookings error:", error);
     return { data: null, error: "Network error" };

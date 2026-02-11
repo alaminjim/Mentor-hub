@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 export const adminStatsService = {
   getAdminStats: async (): Promise<{ data: StatsDataType | null }> => {
     try {
-      const res = await fetch(`${API_URL}/api/admin/stats`, {
+      const res = await fetch(`${API_URL}/api/auth/admin/stats`, {
         method: "GET",
         cache: "no-store",
         headers: {

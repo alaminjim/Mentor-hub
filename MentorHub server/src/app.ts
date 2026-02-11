@@ -21,7 +21,7 @@ app.use(
   }),
 );
 
-app.use("/api", authRouter);
+app.use("/api/auth", authRouter);
 
 app.use("/api/tutor", tutorRouter);
 

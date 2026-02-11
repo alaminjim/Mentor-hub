@@ -73,12 +73,12 @@ const navDataByRole: Record<Role, NavGroup[]> = {
     {
       title: "Overview",
       items: [
-        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard/admin" },
-        { label: "All Users", icon: Users, href: "/dashboard/admin/users" },
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "All Users", icon: Users, href: "/dashboard/user" },
         {
           label: "All Bookings",
           icon: ClipboardList,
-          href: "/dashboard/admin/bookings",
+          href: "/dashboard/booking",
         },
         { label: "All Reviews", icon: Star, href: "/dashboard/admin/reviews" },
         {
