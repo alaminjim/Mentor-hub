@@ -111,4 +111,77 @@ export const tutorService = {
       };
     }
   },
+
+  updateOwnProfile: async (
+    tutorId: string,
+    profileData: Partial<TutorDataType>,
+  ): Promise<{ success: boolean; data?: any; error?: string }> => {
+    try {
+      const res = await fetch(
+        `${API_URL}/api/tutor/profile/update/${tutorId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          cache: "no-store",
+          body: JSON.stringify(profileData),
+        },
+      );
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        return {
+          success: false,
+          error: errorData.message || "Failed to update profile",
+        };
+      }
+
+      const result = await res.json();
+      return {
+        success: true,
+        data: result.data,
+      };
+    } catch (error) {
+      console.error("updateOwnProfile error:", error);
+      return {
+        success: false,
+        error: "An error occurred while updating profile",
+      };
+    }
+  },
+
+  // Delete own tutor profile
+  deleteOwnProfile: async (
+    tutorId: string,
+  ): Promise<{ success: boolean; message?: string; error?: string }> => {
+    try {
+      const res = await fetch(`${API_URL}/api/tutor/own/profile/${tutorId}`, {
+        method: "DELETE",
+        credentials: "include",
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        return {
+          success: false,
+          error: errorData.message || "Failed to delete profile",
+        };
+      }
+
+      const result = await res.json();
+      return {
+        success: true,
+        message: result.message || "Profile deleted successfully",
+      };
+    } catch (error) {
+      console.error("deleteOwnProfile error:", error);
+      return {
+        success: false,
+        error: "An error occurred while deleting profile",
+      };
+    }
+  },
 };

@@ -1,8 +1,11 @@
 export type TutorDataType = {
+  _id: string;
   id: string;
   userId: string;
   name: string;
   bio: string | null;
+  phone: string;
+  email: string;
   subjects: string[];
   price: number;
   experience: number;

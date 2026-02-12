@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
   bio: z.string().min(10, "Bio must be at least 10 characters"),
   subjects: z.string().min(1, "At least one subject is required"),
   experience: z.number().min(0, "Experience must be 0 or greater"),
@@ -39,6 +41,8 @@ export default function CreateTutorProfileForm() {
   const form = useForm({
     defaultValues: {
       name: "",
+      email: "",
+      phone: "",
       bio: "",
       subjects: "",
       experience: 0,
@@ -84,6 +88,8 @@ export default function CreateTutorProfileForm() {
 
         const profilePayload = {
           name: value.name,
+          email: value.email,
+          phone: value.phone,
           bio: value.bio,
           subjects: subjectsArray,
           price: rate,
@@ -188,6 +194,61 @@ export default function CreateTutorProfileForm() {
                 );
               }}
             />
+
+            {/* Email & Phone */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form.Field
+                name="email"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        Email <span className="text-red-500">*</span>
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="email"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="your.email@example.com"
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              />
+
+              <form.Field
+                name="phone"
+                children={(field) => {
+                  const isInvalid =
+                    field.state.meta.isTouched && !field.state.meta.isValid;
+                  return (
+                    <Field data-invalid={isInvalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        Phone Number <span className="text-red-500">*</span>
+                      </FieldLabel>
+                      <Input
+                        id={field.name}
+                        name={field.name}
+                        type="tel"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="01712345678"
+                      />
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                  );
+                }}
+              />
+            </div>
 
             {/* Bio */}
             <form.Field

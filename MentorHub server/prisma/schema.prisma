@@ -82,8 +82,10 @@ model TutorProfile {
   userId       String   @unique
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  name         String @default("Unknown Tutor")
+  name         String  
   bio          String?
+  phone        String? 
+  email        String?  
   subjects     String[]      
   price        Float
   experience   Int      @default(0)
@@ -102,11 +104,11 @@ model TutorProfile {
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  description String @default("Unknown")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String   @unique
+  description  String? 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   tutors    TutorProfile[]
   bookings  Booking[]
@@ -122,7 +124,7 @@ model Booking {
   tutor       TutorProfile  @relation("TutorBookings", fields: [tutorId], references: [id], onDelete: Cascade)
   
   categoryId  String
-  category    Category      @relation(fields: [categoryId], references: [id])
+  category    Category      @relation(fields: [categoryId], references: [id],onDelete: Cascade)
   
   subject     String        
   scheduledAt DateTime      
@@ -138,9 +140,9 @@ model Booking {
 model Review {
   id        String       @id @default(uuid())
   studentId String
-  student   User         @relation(fields: [studentId], references: [id])
+  student   User         @relation(fields: [studentId], references: [id] ,onDelete: Cascade)
   tutorId   String
-  tutor     TutorProfile @relation(fields: [tutorId], references: [id])
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id] ,onDelete: Cascade )
   rating    Int
   comment   String?
   createdAt DateTime     @default(now())
