@@ -216,6 +216,18 @@ const getTutorDashboard = async (tutorUserId: string) => {
   };
 };
 
+const ownProfile = async (id: string, role: Role) => {
+  if (role !== "TUTOR") {
+    throw new Error("Only This can see own Profile");
+  }
+
+  return await prisma.tutorProfile.findUniqueOrThrow({
+    where: {
+      userId: id,
+    },
+  });
+};
+
 export const tutorService = {
   tutorProfile,
   updateTutorProfile,
@@ -224,4 +236,5 @@ export const tutorService = {
   updateModerateAvailability,
   getTutorDashboard,
   getAllTutorProfileFilter,
+  ownProfile,
 };

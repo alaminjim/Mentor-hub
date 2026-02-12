@@ -17,6 +17,8 @@ router.get(
 
 router.get("/:tutorId", tutorProfileController.getAllTutorProfileOwn);
 
+router.get("/own/profile", auth(Role.TUTOR), tutorProfileController.ownProfile);
+
 router.post("/profile", auth(Role.TUTOR), tutorProfileController.tutorProfile);
 
 router.put(

@@ -185,6 +185,27 @@ const getTutorDashboard = async (
   }
 };
 
+const ownProfile = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req?.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await tutorService.ownProfile(user?.id, user?.role);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const tutorProfileController = {
   tutorProfile,
   updateTutorProfile,
@@ -193,4 +214,5 @@ export const tutorProfileController = {
   updateModerateAvailability,
   getTutorDashboard,
   getAllTutorProfileFilter,
+  ownProfile,
 };
