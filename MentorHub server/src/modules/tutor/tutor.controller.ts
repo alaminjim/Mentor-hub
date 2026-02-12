@@ -206,6 +206,65 @@ const ownProfile = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const ownProfileDelete = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const user = req?.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await tutorService.ownProfileDelete(
+      id as string,
+      user?.role,
+    );
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+const ownProfileUpdate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const user = req?.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await tutorService.ownProfileUpdate(
+      id as string,
+      user?.role,
+      req.body,
+    );
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const tutorProfileController = {
   tutorProfile,
   updateTutorProfile,
@@ -215,4 +274,6 @@ export const tutorProfileController = {
   getTutorDashboard,
   getAllTutorProfileFilter,
   ownProfile,
+  ownProfileDelete,
+  ownProfileUpdate,
 };

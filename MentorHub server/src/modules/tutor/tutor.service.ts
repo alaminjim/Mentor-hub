@@ -150,7 +150,15 @@ const getAllTutorProfileFilter = async (payload: {
 };
 
 const getAllTutorProfile = async () => {
-  const result = await prisma.tutorProfile.findMany({});
+  const result = await prisma.tutorProfile.findMany({
+    include: {
+      reviews: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
   return result;
 };
 
@@ -225,6 +233,41 @@ const ownProfile = async (id: string, role: Role) => {
     where: {
       userId: id,
     },
+    include: {
+      reviews: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+};
+
+const ownProfileDelete = async (id: string, role: Role) => {
+  if (role !== "TUTOR") {
+    throw new Error("Only This can delete own Profile");
+  }
+
+  return await prisma.tutorProfile.delete({
+    where: {
+      id,
+    },
+  });
+};
+
+const ownProfileUpdate = async (id: string, role: Role, data: TutorProfile) => {
+  if (role !== "TUTOR") {
+    throw new Error("Only This can update own Profile");
+  }
+
+  return await prisma.tutorProfile.update({
+    where: {
+      id,
+    },
+    data: {
+      ...data,
+      availability: data.availability ?? Prisma.DbNull,
+    },
   });
 };
 
@@ -237,4 +280,6 @@ export const tutorService = {
   getTutorDashboard,
   getAllTutorProfileFilter,
   ownProfile,
+  ownProfileDelete,
+  ownProfileUpdate,
 };

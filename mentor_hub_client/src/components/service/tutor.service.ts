@@ -81,4 +81,34 @@ export const tutorService = {
       };
     }
   },
+
+  getOwnProfile: async (): Promise<{
+    data: TutorDataType | null;
+    error?: string;
+  }> => {
+    try {
+      const res = await fetch(`${API_URL}/api/tutor/own/profile`, {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        return {
+          data: null,
+          error: errorData.message || "Failed to fetch profile",
+        };
+      }
+
+      const result = await res.json();
+      return { data: result.data || null };
+    } catch (error) {
+      console.error("getOwnProfile error:", error);
+      return {
+        data: null,
+        error: "An error occurred while fetching profile",
+      };
+    }
+  },
 };

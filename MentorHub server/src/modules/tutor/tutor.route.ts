@@ -19,6 +19,18 @@ router.get("/:tutorId", tutorProfileController.getAllTutorProfileOwn);
 
 router.get("/own/profile", auth(Role.TUTOR), tutorProfileController.ownProfile);
 
+router.delete(
+  "/own/profile/:id",
+  auth(Role.TUTOR),
+  tutorProfileController.ownProfileDelete,
+);
+
+router.patch(
+  "/profile/update/:id",
+  auth(Role.TUTOR),
+  tutorProfileController.ownProfileUpdate,
+);
+
 router.post("/profile", auth(Role.TUTOR), tutorProfileController.tutorProfile);
 
 router.put(
