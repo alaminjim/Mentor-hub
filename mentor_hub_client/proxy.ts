@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import toast from "react-hot-toast";
 
 export const Role = {
   admin: "admin",
@@ -41,8 +42,8 @@ export default async function proxy(request: NextRequest) {
         role = data.user.role.toLowerCase() as UserRole;
       }
     }
-  } catch (error) {
-    console.log("[proxy] Session fetch error:", error);
+  } catch (error: any) {
+    toast.error(error);
   }
 
   if (!isAuthenticated || !role) {

@@ -61,8 +61,6 @@ export async function getAllBookings() {
 
 export async function updateBookingStatus(bookingId: string, status: string) {
   try {
-    console.log("🔍 Updating booking:", { bookingId, status });
-
     if (!bookingId || bookingId === "undefined") {
       return {
         success: false,

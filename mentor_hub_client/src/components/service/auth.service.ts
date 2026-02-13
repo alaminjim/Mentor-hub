@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import toast from "react-hot-toast";
 
 const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL;
 
@@ -17,8 +18,8 @@ export const getSession = async () => {
 
     const session = await res.json();
     return { data: session };
-  } catch (error) {
-    console.log("getSession error:", error);
+  } catch (error: any) {
+    toast.error(error);
     return { data: null };
   }
 };

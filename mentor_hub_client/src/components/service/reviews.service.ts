@@ -1,6 +1,7 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
+import { env } from "../../../env";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export const reviewService = {
   getReviews: async function (
@@ -27,6 +28,42 @@ export const reviewService = {
     }
   },
 
+  getOwnReviews: async function (): Promise<{
+    success: boolean;
+    data?: ReviewDataType[];
+    error?: string;
+  }> {
+    try {
+      const response = await fetch(`${API_URL}/api/review/own`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        cache: "no-store",
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: result.message || "Failed to fetch reviews",
+        };
+      }
+
+      return {
+        success: true,
+        data: result.data || [],
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.message || "Network error",
+      };
+    }
+  },
+
   createReview: async function (
     reviewData: CreateReviewData,
   ): Promise<{ success: boolean; data?: any; error?: string }> {
@@ -48,6 +85,7 @@ export const reviewService = {
           error: "Rating must be between 1 and 5",
         };
       }
+
       const payload = {
         tutorId: reviewData.tutorId,
         rating: Number(reviewData.rating),
@@ -88,3 +126,4 @@ export const reviewService = {
 };
 
 export const CreateReview = reviewService.createReview;
+export const GetOwnReviews = reviewService.getOwnReviews;

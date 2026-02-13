@@ -169,7 +169,6 @@ export default function CreateTutorProfileForm() {
           }}
         >
           <FieldGroup>
-            {/* Name */}
             <form.Field
               name="name"
               children={(field) => {
@@ -195,7 +194,6 @@ export default function CreateTutorProfileForm() {
               }}
             />
 
-            {/* Email & Phone */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <form.Field
                 name="email"
@@ -250,7 +248,6 @@ export default function CreateTutorProfileForm() {
               />
             </div>
 
-            {/* Bio */}
             <form.Field
               name="bio"
               children={(field) => {
@@ -278,7 +275,6 @@ export default function CreateTutorProfileForm() {
               }}
             />
 
-            {/* Subjects */}
             <form.Field
               name="subjects"
               children={(field) => {
@@ -308,7 +304,6 @@ export default function CreateTutorProfileForm() {
               }}
             />
 
-            {/* Experience & Hourly Rate */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <form.Field
                 name="experience"
@@ -367,7 +362,6 @@ export default function CreateTutorProfileForm() {
               />
             </div>
 
-            {/* Availability */}
             <div>
               <FieldLabel>
                 Availability <span className="text-red-500">*</span>
@@ -437,7 +431,6 @@ export default function CreateTutorProfileForm() {
               </Button>
             </div>
 
-            {/* Submit Buttons */}
             <div className="flex gap-4 pt-4">
               <form.Subscribe
                 selector={(state) => ({

@@ -132,7 +132,6 @@ const Navbar = ({ className }: NavbarProps) => {
           </div>
         </nav>
 
-        {/* Mobile */}
         <div className="flex items-center justify-between lg:hidden">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md">
