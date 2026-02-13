@@ -95,7 +95,7 @@ const navDataByRole: Record<Role, NavGroup[]> = {
         {
           label: "Dashboard",
           icon: LayoutDashboard,
-          href: "/dashboard/student",
+          href: "/dashboard",
         },
         {
           label: "Find Tutor",
