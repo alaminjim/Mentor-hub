@@ -132,7 +132,6 @@ export default function CategoriesPage() {
         )}
       </div>
 
-      {/* Create/Edit Form */}
       {(isCreating || editingId) && (
         <div className="bg-white border border-gray-200 shadow-md rounded-lg p-6 mb-6">
           <h2 className="text-xl font-semibold text-sky-600 mb-4">
@@ -213,14 +212,12 @@ export default function CategoriesPage() {
         </div>
       )}
 
-      {/* Error Display */}
       {error && !isCreating && !editingId && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
           {error}
         </div>
       )}
 
-      {/* Categories Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
           <thead className="bg-sky-200 text-sky-900">

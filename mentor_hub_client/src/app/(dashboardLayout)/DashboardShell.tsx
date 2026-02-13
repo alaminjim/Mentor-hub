@@ -130,7 +130,6 @@ const navDataByRole: Record<Role, NavGroup[]> = {
           icon: BookOpen,
           href: "/dashboard/tutor/bookings",
         },
-        { label: "My Reviews", icon: Star, href: "/dashboard/tutor/reviews" },
       ],
     },
   ],

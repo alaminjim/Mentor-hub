@@ -1,7 +1,7 @@
 import { ReviewDataType } from "@/type/reviewType";
 import { env } from "../../../env";
 
-const API_URL = env.API_URL || "http://localhost:5000";
+const API_URL = env.API_URL;
 
 export const reviewService = {
   getReviews: async function (

@@ -21,7 +21,6 @@ export interface UpdateCategoryData {
   description?: string;
 }
 
-// Get all categories
 export const getCategories = async (): Promise<Category[]> => {
   try {
     const res = await fetch(`${API_URL}/api/category`, {
@@ -38,7 +37,6 @@ export const getCategories = async (): Promise<Category[]> => {
   }
 };
 
-// Create category (Admin only)
 export const createCategory = async (
   data: CreateCategoryData,
 ): Promise<Category> => {
@@ -60,7 +58,6 @@ export const createCategory = async (
   return json.data;
 };
 
-// Update category (Admin only)
 export const updateCategory = async (
   id: number,
   data: UpdateCategoryData,
@@ -83,7 +80,6 @@ export const updateCategory = async (
   return json.data;
 };
 
-// Delete category (Admin only)
 export const deleteCategory = async (id: number): Promise<void> => {
   const res = await fetch(`${API_URL}/api/category/delete/${id}`, {
     method: "DELETE",
