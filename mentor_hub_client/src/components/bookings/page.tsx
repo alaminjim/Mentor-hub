@@ -19,6 +19,27 @@ interface BookingFormProps {
   categories: Category[];
 }
 
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 8; hour <= 20; hour++) {
+    const startTime = hour;
+    const endTime = hour + 1;
+
+    const startPeriod = startTime >= 12 ? "PM" : "AM";
+    const endPeriod = endTime >= 12 ? "PM" : "AM";
+
+    const startHour =
+      startTime > 12 ? startTime - 12 : startTime === 0 ? 12 : startTime;
+    const endHour = endTime > 12 ? endTime - 12 : endTime === 0 ? 12 : endTime;
+
+    const label = `${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`;
+    const value = `${String(startTime).padStart(2, "0")}:00`;
+
+    slots.push({ label, value });
+  }
+  return slots;
+};
+
 export default function BookingForm({
   tutorId,
   tutorName,
@@ -39,6 +60,7 @@ export default function BookingForm({
 
   const totalPrice = formData.duration * hourlyRate;
   const isStudent = userRole === "STUDENT";
+  const timeSlots = generateTimeSlots();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +72,11 @@ export default function BookingForm({
 
     if (!formData.categoryId) {
       toast.error("Please select a category!");
+      return;
+    }
+
+    if (!formData.time) {
+      toast.error("Please select a time slot!");
       return;
     }
 
@@ -105,6 +132,7 @@ export default function BookingForm({
       <h3 className="text-2xl font-bold text-gray-900 mb-6">
         Book a Session with <span className="text-sky-600">{tutorName}</span>
       </h3>
+
       {!isStudent && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
           <p className="text-red-600 text-sm font-medium text-center">
@@ -185,17 +213,23 @@ export default function BookingForm({
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             <span className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-sky-600" /> Time
+              <Clock className="w-4 h-4 text-sky-600" /> Time Slot
             </span>
           </label>
-          <input
-            type="time"
+          <select
             value={formData.time}
             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             required
             disabled={!isStudent}
-            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
-          />
+            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+          >
+            <option value="">Select a time slot</option>
+            {timeSlots.map((slot) => (
+              <option key={slot.value} value={slot.value}>
+                {slot.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
@@ -243,7 +277,9 @@ export default function BookingForm({
 
         <button
           type="submit"
-          disabled={!isStudent || loading || !formData.categoryId}
+          disabled={
+            !isStudent || loading || !formData.categoryId || !formData.time
+          }
           className="w-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
         >
           {loading
