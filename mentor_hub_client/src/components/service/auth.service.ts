@@ -2,8 +2,9 @@
 
 import { cookies } from "next/headers";
 import toast from "react-hot-toast";
+import { env } from "../../../env";
 
-const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL;
+const AUTH_URL = env.NEXT_PUBLIC_AUTH_URL;
 
 export const getSession = async () => {
   try {

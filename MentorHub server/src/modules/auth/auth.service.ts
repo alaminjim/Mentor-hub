@@ -63,7 +63,6 @@ const updateStatus = async (
 
 const adminStatsService = async (): Promise<IAdminStats> => {
   try {
-    // Parallel queries for better performance
     const [
       totalUsers,
       totalTutors,
@@ -71,23 +70,18 @@ const adminStatsService = async (): Promise<IAdminStats> => {
       cancelledBookings,
       averageRatingResult,
     ] = await Promise.all([
-      // Total users count
       prisma.user.count(),
 
-      // Total tutors count
       prisma.user.count({
         where: { role: "TUTOR" },
       }),
 
-      // Total bookings count
       prisma.booking.count(),
 
-      // Cancelled bookings count
       prisma.booking.count({
         where: { status: "CANCELLED" },
       }),
 
-      // Average rating calculation
       prisma.review.aggregate({
         _avg: {
           rating: true,
@@ -95,7 +89,6 @@ const adminStatsService = async (): Promise<IAdminStats> => {
       }),
     ]);
 
-    // Calculate average rating
     const averageRating = averageRatingResult._avg.rating || 0;
 
     return {
@@ -111,9 +104,28 @@ const adminStatsService = async (): Promise<IAdminStats> => {
   }
 };
 
+const userDelete = async (userId: string, role: string) => {
+  await prisma.user.findUniqueOrThrow({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (role !== "ADMIN") {
+    throw new Error("Only admin can delete this user");
+  }
+
+  return await prisma.user.delete({
+    where: {
+      id: userId,
+    },
+  });
+};
+
 export const authService = {
   authGetMe,
   getAll,
   updateStatus,
   adminStatsService,
+  userDelete,
 };

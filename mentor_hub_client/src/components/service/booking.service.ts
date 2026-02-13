@@ -28,7 +28,6 @@ export async function createBooking(bookingData: CreateBookingInput) {
     const result = await res.json();
     return { data: result.data || null, error: undefined };
   } catch (err) {
-    console.error("Create booking error:", err);
     return { data: null, error: "Network error" };
   }
 }

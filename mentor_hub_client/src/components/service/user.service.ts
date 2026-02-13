@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { env } from "../../../env";
 import toast from "react-hot-toast";
 
-const BASE_URL = env.NEXT_PUBLIC_AUTH_URL || "http://localhost:5000/api";
+const BASE_URL = env.NEXT_PUBLIC_AUTH_URL;
 
 export const getAllUsers = async () => {
   try {

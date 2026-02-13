@@ -1,6 +1,7 @@
 import { StatsDataType } from "@/type/statsType";
+import { env } from "../../../env";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = env.NEXT_PUBLIC_APP_URL;
 
 export const adminStatsService = {
   getAdminStats: async (): Promise<{ data: StatsDataType | null }> => {

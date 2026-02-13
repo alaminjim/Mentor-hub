@@ -1,6 +1,7 @@
 import { StatsDataType } from "@/type/statsType";
+import { env } from "../../../env";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = env.NEXT_PUBLIC_APP_URL;
 
 export const statsService = {
   getStats: async (): Promise<{ data: StatsDataType | null }> => {
@@ -11,14 +12,12 @@ export const statsService = {
       });
 
       if (!res.ok) {
-        console.error("getStats HTTP error:", res.status);
         return { data: null };
       }
 
       const result = await res.json();
       return { data: result.data || null };
     } catch (error) {
-      console.error("getStats error:", error);
       return { data: null };
     }
   },

@@ -28,7 +28,6 @@ export const getStudentStats = async (): Promise<StudentStats | null> => {
     const json: StudentStatsResponse = await res.json();
     return json.data || null;
   } catch (err) {
-    console.error("getStudentStats error:", err);
     return null;
   }
 };

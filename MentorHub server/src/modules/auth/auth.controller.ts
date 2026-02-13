@@ -97,9 +97,24 @@ const getAdminStats = async (
   }
 };
 
+const userDelete = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const user = req?.user;
+    const result = await authService.userDelete(
+      id as string,
+      user?.role as Role,
+    );
+    res.status(200).json({ success: true, data: result });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const authController = {
   getMe,
   getAll,
   updateStatus,
   getAdminStats,
+  userDelete,
 };

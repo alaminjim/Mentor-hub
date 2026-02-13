@@ -1,5 +1,6 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
 import { env } from "../../../env";
+import toast from "react-hot-toast";
 
 const API_URL = env.NEXT_PUBLIC_APP_URL;
 
@@ -18,8 +19,8 @@ export const tutorService = {
       const result = await res.json();
 
       return { data: result.data || [] };
-    } catch (error) {
-      console.error("getTutors error:", error);
+    } catch (error: any) {
+      toast.error(error);
       return { data: [] };
     }
   },
@@ -34,14 +35,12 @@ export const tutorService = {
       });
 
       if (!res.ok) {
-        console.error("getTutorById HTTP error:", res.status);
         return { data: null };
       }
 
       const result = await res.json();
       return { data: result.data || null };
     } catch (error) {
-      console.error("getTutorById error:", error);
       return { data: null };
     }
   },
@@ -74,7 +73,6 @@ export const tutorService = {
         data: result.data,
       };
     } catch (error) {
-      console.error("createTutorProfile error:", error);
       return {
         success: false,
         error: "An error occurred while creating tutor profile",
@@ -104,7 +102,6 @@ export const tutorService = {
       const result = await res.json();
       return { data: result.data || null };
     } catch (error) {
-      console.error("getOwnProfile error:", error);
       return {
         data: null,
         error: "An error occurred while fetching profile",
@@ -144,7 +141,6 @@ export const tutorService = {
         data: result.data,
       };
     } catch (error) {
-      console.error("updateOwnProfile error:", error);
       return {
         success: false,
         error: "An error occurred while updating profile",
@@ -152,7 +148,6 @@ export const tutorService = {
     }
   },
 
-  // Delete own tutor profile
   deleteOwnProfile: async (
     tutorId: string,
   ): Promise<{ success: boolean; message?: string; error?: string }> => {
@@ -177,7 +172,6 @@ export const tutorService = {
         message: result.message || "Profile deleted successfully",
       };
     } catch (error) {
-      console.error("deleteOwnProfile error:", error);
       return {
         success: false,
         error: "An error occurred while deleting profile",
