@@ -116,7 +116,7 @@ export default function StudentDashboard() {
               {user && user.name ? (
                 <div className="mt-3">
                   <p className="text-xl text-gray-700 font-semibold">
-                    Welcome, {user.name}! 👋
+                    Welcome, {user.name}!
                   </p>
                   <p className="text-gray-600 mt-1">
                     📧 {user.email || "No email"}

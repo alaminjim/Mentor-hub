@@ -1,10 +1,15 @@
-export type ReviewDataType = {
+export interface CreateReviewData {
+  tutorId: string; // Required
+  rating: number; // Required (1-5)
+  comment?: string; // Optional
+  bookingId?: string; // Optional - যদি লাগে future এ
+}
+
+export interface ReviewDataType {
   id: string;
-  tutorId: string;
   studentId: string;
-  studentName: string;
+  tutorId: string;
   rating: number;
-  comment: string;
+  comment?: string;
   createdAt: string;
-  updatedAt: string;
-};
+}

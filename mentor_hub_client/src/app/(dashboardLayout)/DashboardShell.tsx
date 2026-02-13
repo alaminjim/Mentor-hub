@@ -98,16 +98,11 @@ const navDataByRole: Record<Role, NavGroup[]> = {
           href: "/dashboard",
         },
         {
-          label: "Find Tutor",
-          icon: Search,
-          href: "/dashboard/student/find-tutor",
-        },
-        {
           label: "My Bookings",
           icon: ClipboardList,
-          href: "/dashboard/student/bookings",
+          href: "/dashboard/bookings",
         },
-        { label: "My Reviews", icon: Star, href: "/dashboard/student/reviews" },
+        { label: "My Reviews", icon: Star, href: "/dashboard/bookings/review" },
       ],
     },
   ],
