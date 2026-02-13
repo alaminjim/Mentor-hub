@@ -1,5 +1,6 @@
 import { getAllUsers } from "@/components/service/user.service";
 import { Trash2, Shield, User } from "lucide-react";
+import DeleteUserButton from "./userDelete";
 
 const AllUsersPage = async () => {
   const { data: users } = await getAllUsers();
@@ -21,11 +22,12 @@ const AllUsersPage = async () => {
                 <th className="px-6 py-3 text-left font-semibold">Name</th>
                 <th className="px-6 py-3 text-left font-semibold">Email</th>
                 <th className="px-6 py-3 text-left font-semibold">Role</th>
+                <th className="px-6 py-3 text-center font-semibold">Actions</th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-sky-50">
-              {Array.isArray(users) &&
+              {Array.isArray(users) && users.length > 0 ? (
                 users.map((user: any) => (
                   <tr key={user.id} className="hover:bg-sky-50 transition">
                     <td className="px-6 py-4 font-medium text-gray-700">
@@ -36,18 +38,37 @@ const AllUsersPage = async () => {
 
                     <td className="px-6 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium
+                        className={`px-3 py-1 rounded-full text-xs font-medium inline-flex items-center gap-1
                         ${
                           user.role === "ADMIN"
                             ? "bg-sky-100 text-sky-700"
                             : "bg-gray-100 text-gray-600"
                         }`}
                       >
+                        {user.role === "ADMIN" && <Shield size={12} />}
                         {user.role}
                       </span>
                     </td>
+
+                    <td className="px-6 py-4 text-center">
+                      <DeleteUserButton
+                        userId={user.id}
+                        userName={user.name}
+                        userRole={user.role}
+                      />
+                    </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-6 py-12 text-center text-gray-500"
+                  >
+                    No users found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
