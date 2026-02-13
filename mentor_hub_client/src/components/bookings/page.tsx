@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Calendar, Clock, DollarSign } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-// ✅ Category type
 interface Category {
   id: string;
   name: string;
@@ -17,7 +16,7 @@ interface BookingFormProps {
   subjects: string[];
   userRole: string;
   userId: string;
-  categories: Category[]; // ✅ যোগ করা হয়েছে
+  categories: Category[];
 }
 
 export default function BookingForm({
@@ -32,7 +31,7 @@ export default function BookingForm({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     subject: subjects[0] || "",
-    categoryId: categories[0]?.id || "", // ✅ প্রথম category default
+    categoryId: categories[0]?.id || "",
     scheduledAt: "",
     time: "",
     duration: 1,
@@ -62,7 +61,7 @@ export default function BookingForm({
       const bookingData = {
         tutorId,
         studentId: userId,
-        categoryId: formData.categoryId, // ✅ real categoryId
+        categoryId: formData.categoryId,
         subject: formData.subject,
         scheduledAt: new Date(scheduledDateTime).toISOString(),
         duration: formData.duration,
@@ -78,7 +77,6 @@ export default function BookingForm({
       const result = await res.json();
 
       if (!res.ok || result.success === false) {
-        // ✅ error object থেকে string message বের করো
         const errorMessage =
           typeof result.error === "string"
             ? result.error
@@ -107,9 +105,15 @@ export default function BookingForm({
       <h3 className="text-2xl font-bold text-gray-900 mb-6">
         Book a Session with <span className="text-sky-600">{tutorName}</span>
       </h3>
+      {!isStudent && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+          <p className="text-red-600 text-sm font-medium text-center">
+            Only students can make bookings. Please login as a student.
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Subject Selection */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Subject
@@ -120,7 +124,8 @@ export default function BookingForm({
               setFormData({ ...formData, subject: e.target.value })
             }
             required
-            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+            disabled={!isStudent}
+            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
             {subjects.map((subject) => (
               <option key={subject} value={subject}>
@@ -130,7 +135,6 @@ export default function BookingForm({
           </select>
         </div>
 
-        {/* ✅ Category Selection */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Category
@@ -142,7 +146,8 @@ export default function BookingForm({
                 setFormData({ ...formData, categoryId: e.target.value })
               }
               required
-              className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+              disabled={!isStudent}
+              className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
             >
               <option value="">Select a category</option>
               {categories.map((cat) => (
@@ -158,7 +163,6 @@ export default function BookingForm({
           )}
         </div>
 
-        {/* Date */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             <span className="flex items-center gap-2">
@@ -173,11 +177,11 @@ export default function BookingForm({
             }
             min={new Date().toISOString().split("T")[0]}
             required
-            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            disabled={!isStudent}
+            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
 
-        {/* Time */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             <span className="flex items-center gap-2">
@@ -189,11 +193,11 @@ export default function BookingForm({
             value={formData.time}
             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
             required
-            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            disabled={!isStudent}
+            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
           />
         </div>
 
-        {/* Duration */}
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Duration (hours)
@@ -204,7 +208,8 @@ export default function BookingForm({
               setFormData({ ...formData, duration: parseInt(e.target.value) })
             }
             required
-            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+            disabled={!isStudent}
+            className="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
           >
             {[1, 2, 3, 4, 5].map((hour) => (
               <option key={hour} value={hour}>
@@ -214,7 +219,6 @@ export default function BookingForm({
           </select>
         </div>
 
-        {/* Total Price */}
         <div className="bg-gradient-to-br from-sky-50 to-cyan-50/50 rounded-xl p-5 border border-sky-100">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-600">Hourly Rate:</span>
@@ -237,20 +241,17 @@ export default function BookingForm({
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={!isStudent || loading || !formData.categoryId}
           className="w-full bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
         >
-          {loading ? "Booking..." : "Confirm Booking"}
+          {loading
+            ? "Booking..."
+            : isStudent
+              ? "Confirm Booking"
+              : "Student Login Required"}
         </button>
-
-        {!isStudent && (
-          <p className="text-red-500 text-sm text-center mt-2">
-            Only students can make bookings.
-          </p>
-        )}
       </form>
     </div>
   );

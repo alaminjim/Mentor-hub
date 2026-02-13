@@ -55,7 +55,6 @@ export default function TutorProfileDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-cyan-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-500 rounded-xl flex items-center justify-center">
@@ -67,15 +66,11 @@ export default function TutorProfileDashboard() {
           </div>
         </div>
 
-        {/* Main Profile Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
-          {/* Cover with gradient */}
           <div className="h-32 sm:h-48 bg-gradient-to-r from-sky-400 via-blue-500 to-cyan-500 relative"></div>
 
-          {/* Profile Info Section */}
           <div className="relative px-6 pb-6">
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-16 sm:-mt-20">
-              {/* Profile Avatar */}
               <div className="relative">
                 <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-white bg-gradient-to-br from-sky-300 to-blue-400 flex items-center justify-center shadow-2xl">
                   <span className="text-5xl sm:text-6xl font-bold text-white">
@@ -84,7 +79,6 @@ export default function TutorProfileDashboard() {
                 </div>
               </div>
 
-              {/* Name and Info */}
               <div className="flex-1 text-center sm:text-left sm:mb-4">
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
                   {profile.name || "Tutor Name"}
@@ -107,9 +101,7 @@ export default function TutorProfileDashboard() {
           </div>
         </div>
 
-        {/* Stats Cards - Only 3 cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          {/* Experience Card */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-gradient-to-br from-sky-100 to-blue-100 rounded-lg flex items-center justify-center">
@@ -125,7 +117,6 @@ export default function TutorProfileDashboard() {
             <p className="text-sm text-gray-600">Years Teaching</p>
           </div>
 
-          {/* Rating Card */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-gradient-to-br from-yellow-100 to-amber-100 rounded-lg flex items-center justify-center">
@@ -139,7 +130,6 @@ export default function TutorProfileDashboard() {
             <p className="text-sm text-gray-600">Average Score</p>
           </div>
 
-          {/* Rate Card */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between mb-3">
               <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-violet-100 rounded-lg flex items-center justify-center">
@@ -154,9 +144,7 @@ export default function TutorProfileDashboard() {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Bio Section */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <h2 className="text-xl font-bold text-gray-800 mb-4">About Me</h2>
             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -164,7 +152,6 @@ export default function TutorProfileDashboard() {
             </p>
           </div>
 
-          {/* Availability Section */}
           <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
             <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">

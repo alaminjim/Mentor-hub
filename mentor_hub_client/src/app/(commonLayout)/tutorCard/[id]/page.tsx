@@ -6,7 +6,6 @@ import { env } from "../../../../../env";
 
 const api_url = env.NEXT_PUBLIC_APP_URL;
 
-// ✅ Category type
 interface Category {
   id: string;
   name: string;
@@ -37,14 +36,12 @@ const TutorDetailsPage = async ({
   let userRole = "GUEST";
   let userId = "";
 
-  // ✅ Categories fetch করো
   let categories: Category[] = [];
 
   try {
     const cookieStore = await cookies();
 
-    // User auth check
-    const res = await fetch(`${api_url}/api/authMe`, {
+    const res = await fetch(`${api_url}/api/auth/authMe`, {
       headers: {
         Cookie: cookieStore.toString(),
       },
@@ -59,14 +56,13 @@ const TutorDetailsPage = async ({
       }
     }
 
-    // ✅ Categories fetch
     const catRes = await fetch(`${api_url}/api/category`, {
       cache: "no-store",
     });
 
     if (catRes.ok) {
       const catData = await catRes.json();
-      // backend এর response structure অনুযায়ী adjust করো
+
       categories = catData.data || catData || [];
     }
   } catch (error) {
@@ -77,9 +73,7 @@ const TutorDetailsPage = async ({
     <main className="min-h-screen bg-gradient-to-b from-blue-50/50 to-cyan-50/30">
       <div className="container mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {/* Left Column - Tutor Details */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Header Section */}
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
               <div className="flex items-center gap-4">
                 <div className="w-20 h-20 rounded-2xl bg-cyan-500 flex items-center justify-center text-white text-3xl font-bold shadow-md flex-shrink-0">
@@ -115,7 +109,6 @@ const TutorDetailsPage = async ({
               </div>
             </div>
 
-            {/* About Section */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
               <h2 className="text-lg font-semibold text-gray-900 mb-3">
                 About
@@ -125,7 +118,6 @@ const TutorDetailsPage = async ({
               </p>
             </div>
 
-            {/* Subjects Section */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
               <h2 className="text-xs uppercase tracking-wider text-gray-500 mb-3">
                 Subjects
@@ -142,7 +134,6 @@ const TutorDetailsPage = async ({
               </div>
             </div>
 
-            {/* Availability Section */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
               <h2 className="text-xs uppercase tracking-wider text-gray-500 mb-3">
                 Availability
@@ -178,7 +169,6 @@ const TutorDetailsPage = async ({
               )}
             </div>
 
-            {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                 <p className="text-sm text-gray-500 mb-1">Hourly Rate</p>
@@ -201,7 +191,6 @@ const TutorDetailsPage = async ({
             </div>
           </div>
 
-          {/* Right Column - Booking Form */}
           <div className="lg:col-span-1">
             <div className="sticky top-6">
               <BookingForm
@@ -211,7 +200,7 @@ const TutorDetailsPage = async ({
                 subjects={data.subjects}
                 userRole={userRole}
                 userId={userId}
-                categories={categories} // ✅ categories পাঠাচ্ছি
+                categories={categories}
               />
             </div>
           </div>

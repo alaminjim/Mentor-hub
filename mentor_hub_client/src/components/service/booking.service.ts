@@ -1,15 +1,15 @@
-// app/components/service/booking.service.ts
+// src/app/actions/booking.actions.ts
 "use server";
 
 import { cookies } from "next/headers";
-import { CreateBookingInput, BookingDataType } from "@/type/bookingType";
+import { CreateBookingInput } from "@/type/bookingType";
 import { env } from "../../../env";
 
 const API_URL = env.BACKEND_URL;
 
 export async function createBooking(bookingData: CreateBookingInput) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     const res = await fetch(`${API_URL}/api/booking/create`, {
       method: "POST",
@@ -33,32 +33,64 @@ export async function createBooking(bookingData: CreateBookingInput) {
   }
 }
 
-export async function getMyBookings(): Promise<{
-  data: BookingDataType[] | null;
-  error?: string;
-}> {
+export async function getAllBookings() {
   try {
     const cookieStore = await cookies();
 
-    const res = await fetch(`${API_URL}/api/booking`, {
+    const response = await fetch(`${API_URL}/api/booking`, {
       method: "GET",
       headers: {
+        "Content-Type": "application/json",
         Cookie: cookieStore.toString(),
       },
       cache: "no-store",
     });
 
-    if (!res.ok) {
-      return { data: null, error: "Failed to fetch bookings" };
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch bookings");
     }
 
-    const result = await res.json();
+    const data = await response.json();
 
-    return {
-      data: Array.isArray(result.data) ? result.data : [],
-    };
-  } catch (error) {
-    console.error("getMyBookings error:", error);
-    return { data: null, error: "Network error" };
+    return { success: true, data: data.data || data };
+  } catch (error: any) {
+    return { success: false, error: error.message, data: null };
+  }
+}
+
+export async function updateBookingStatus(bookingId: string, status: string) {
+  try {
+    console.log("🔍 Updating booking:", { bookingId, status });
+
+    if (!bookingId || bookingId === "undefined") {
+      return {
+        success: false,
+        error: "Invalid booking ID",
+      };
+    }
+
+    const cookieStore = await cookies();
+
+    const response = await fetch(`${API_URL}/api/booking/status/${bookingId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify({ status }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+
+      throw new Error(errorData.message || "Failed to update booking status");
+    }
+
+    const data = await response.json();
+
+    return { success: true, data };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
