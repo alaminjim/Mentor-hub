@@ -81,6 +81,32 @@ const getReview = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getOwnReview = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = req?.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const result = await reviewService.getOwnReview(user?.id, user?.role);
+
+    res.status(201).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 const deleteReview = async (
   req: Request,
   res: Response,
@@ -118,4 +144,5 @@ export const reviewController = {
   updateReview,
   getReview,
   deleteReview,
+  getOwnReview,
 };

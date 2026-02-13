@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/", reviewController.getReview);
 
+router.get("/own", auth(Role.STUDENT), reviewController.getOwnReview);
+
 router.post("/create", auth(Role.STUDENT), reviewController.createReview);
 
 router.put("/:reviewId", auth(Role.STUDENT), reviewController.updateReview);

@@ -93,6 +93,21 @@ const getReview = async () => {
   });
 };
 
+const getOwnReview = async (id: string, role: Role) => {
+  if (role !== "STUDENT") {
+    throw new Error("Only this student can see this review");
+  }
+
+  return await prisma.review.findMany({
+    where: {
+      studentId: id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 const deleteReview = async (userId: string, reviewId: string, role: Role) => {
   const exists = await prisma.review.findFirstOrThrow({
     where: {
@@ -120,4 +135,5 @@ export const reviewService = {
   updateReview,
   getReview,
   deleteReview,
+  getOwnReview,
 };
