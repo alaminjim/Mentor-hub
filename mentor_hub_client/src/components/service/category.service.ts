@@ -1,4 +1,3 @@
-// src/services/category.service.ts
 import { env } from "../../../env";
 
 const API_URL = env.NEXT_PUBLIC_APP_URL;

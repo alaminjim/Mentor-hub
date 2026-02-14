@@ -35,12 +35,12 @@ app.use("/api/booking", bookingsRouter);
 
 app.all("/api/auth/*path", toNodeHandler(auth));
 
+app.get("/", (req, res) => {
+  res.send({ message: "SkillBridge API Running" });
+});
+
 app.use(notFound);
 
 app.use(errorHandler);
-
-app.get("/", (req, res) => {
-  res.json({ message: "SkillBridge API Running" });
-});
 
 export default app;

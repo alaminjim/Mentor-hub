@@ -1,4 +1,3 @@
-// src/app/actions/booking.actions.ts
 "use server";
 
 import { cookies } from "next/headers";
