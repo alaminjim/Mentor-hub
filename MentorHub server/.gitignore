@@ -6,3 +6,5 @@ node_modules
 
 # compiled output
 dist/
+
+.vercel
