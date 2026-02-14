@@ -10,6 +10,7 @@ import {
   Search,
   Settings,
   Star,
+  User,
   UserCheck,
   Users,
 } from "lucide-react";
@@ -103,6 +104,11 @@ const navDataByRole: Record<Role, NavGroup[]> = {
           href: "/dashboard/bookings",
         },
         { label: "My Reviews", icon: Star, href: "/dashboard/bookings/review" },
+        {
+          label: "Manage Profile",
+          icon: User,
+          href: "/dashboard/profile",
+        },
       ],
     },
   ],
