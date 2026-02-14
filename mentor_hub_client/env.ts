@@ -12,7 +12,7 @@ export const env = createEnv({
     NEXT_PUBLIC_FRONTEND_URL: z.string().url(),
     NEXT_PUBLIC_AUTH_URL: z.string().url(),
     NEXT_PUBLIC_APP_URL: z.string().url(),
-    NEXT_PUBLIC_BACKEND_URL: z.string().url(), // ✅ যোগ করুন
+    NEXT_PUBLIC_BACKEND_URL: z.string().url(),
   },
 
   runtimeEnv: {
@@ -23,6 +23,6 @@ export const env = createEnv({
     NEXT_PUBLIC_FRONTEND_URL: process.env.NEXT_PUBLIC_FRONTEND_URL,
     NEXT_PUBLIC_AUTH_URL: process.env.NEXT_PUBLIC_AUTH_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL, // ✅ যোগ করুন
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
 });
