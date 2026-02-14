@@ -1,6 +1,5 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
 import { env } from "../../../env";
-import toast from "react-hot-toast";
 
 const API_URL = env.NEXT_PUBLIC_APP_URL;
 
@@ -20,7 +19,7 @@ export const tutorService = {
 
       return { data: result.data || [] };
     } catch (error: any) {
-      toast.error(error);
+      console.log(error);
       return { data: [] };
     }
   },

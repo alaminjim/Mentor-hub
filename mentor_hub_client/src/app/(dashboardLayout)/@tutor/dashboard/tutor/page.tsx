@@ -7,6 +7,8 @@ import { TutorDataType } from "@/type/tutorDataTyp";
 import { Clock, DollarSign, BookOpen, Star, Calendar } from "lucide-react";
 import { tutorService } from "@/components/service/tutor.service";
 
+export const dynamic = "force-dynamic";
+
 export default function TutorProfileDashboard() {
   const [profile, setProfile] = useState<TutorDataType | null>(null);
   const [loading, setLoading] = useState(true);

@@ -2,6 +2,8 @@ import { getSession } from "@/components/service/auth.service";
 import { redirect } from "next/navigation";
 import DashboardShell from "./DashboardShell";
 
+export const dynamic = "force-dynamic";
+
 type Role = "admin" | "student" | "tutor";
 
 interface DashboardLayoutProps {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { TutorDataType } from "@/type/tutorDataTyp";
 import Link from "next/link";
-
+export const dynamic = "force-dynamic";
 interface TutorCardProps {
   tutor: TutorDataType;
   className?: string;

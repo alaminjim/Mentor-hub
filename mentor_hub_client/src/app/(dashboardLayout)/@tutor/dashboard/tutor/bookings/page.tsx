@@ -15,11 +15,14 @@ import {
   X,
 } from "lucide-react";
 import toast from "react-hot-toast";
+
 import {
   getAllBookings,
   updateBookingStatus,
 } from "@/components/service/booking.service";
 import { BookingDataType, BookingStatus } from "@/type/bookingType";
+
+export const dynamic = "force-dynamic";
 
 interface ConfirmationModalProps {
   isOpen: boolean;

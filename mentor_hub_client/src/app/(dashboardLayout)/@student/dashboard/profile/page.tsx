@@ -11,6 +11,8 @@ import {
   type StudentProfile,
 } from "@/components/service/student.service";
 
+export const dynamic = "force-dynamic";
+
 export default function StudentProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState<StudentProfile | null>(null);

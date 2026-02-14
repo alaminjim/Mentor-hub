@@ -1,7 +1,7 @@
 import { tutorService } from "@/components/service/tutor.service";
 import { TutorCard } from "./tutorsCard";
 import { TutorDataType } from "@/type/tutorDataTyp";
-
+export const dynamic = "force-dynamic";
 const TutorPage = async () => {
   const { data } = await tutorService.getTutors();
 

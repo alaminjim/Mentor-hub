@@ -3,7 +3,7 @@ import { tutorService } from "@/components/service/tutor.service";
 import { TutorDataType } from "@/type/tutorDataTyp";
 import { cookies } from "next/headers";
 import { env } from "../../../../../env";
-
+export const dynamic = "force-dynamic";
 const api_url = env.NEXT_PUBLIC_APP_URL;
 
 interface Category {
