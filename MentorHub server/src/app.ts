@@ -33,7 +33,7 @@ app.use("/api/category", categoryRouter);
 
 app.use("/api/booking", bookingsRouter);
 
-app.all(/^\/api\/auth\/.*/, toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.get("/", (req, res) => {
   res.send({ message: "SkillBridge API Running" });
