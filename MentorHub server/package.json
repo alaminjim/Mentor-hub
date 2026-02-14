@@ -7,13 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tsx watch ./src/server.ts",
     "seed:admin": "npx tsx ./src/scripts/seedAdmin.ts",
-    "build": "prisma generate && tsup src/index.ts --format esm --platform node --target node20 --outDir api --external pg-native",
     "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
