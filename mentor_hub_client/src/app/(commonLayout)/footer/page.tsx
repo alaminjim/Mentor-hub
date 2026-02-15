@@ -199,13 +199,13 @@ const Footer = ({
                 Privacy Policy
               </Link>
               <Link
-                href="/terms"
+                href="#"
                 className="text-gray-600 hover:text-sky-600 transition-colors text-sm font-medium"
               >
                 Terms of Service
               </Link>
               <Link
-                href="/cookies"
+                href="#"
                 className="text-gray-600 hover:text-sky-600 transition-colors text-sm font-medium"
               >
                 Cookie Policy
