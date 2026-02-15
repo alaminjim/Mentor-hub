@@ -2,15 +2,12 @@
 
 import { cookies } from "next/headers";
 import { CreateBookingInput } from "@/type/bookingType";
-import { env } from "../../../env";
-
-const API_URL = env.BACKEND_URL;
 
 export async function createBooking(bookingData: CreateBookingInput) {
   try {
     const cookieStore = await cookies();
 
-    const res = await fetch(`${API_URL}/api/booking/create`, {
+    const res = await fetch(`/api/booking/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +32,7 @@ export async function getAllBookings() {
   try {
     const cookieStore = await cookies();
 
-    const response = await fetch(`${API_URL}/api/booking`, {
+    const response = await fetch(`/api/booking`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +47,6 @@ export async function getAllBookings() {
     }
 
     const data = await response.json();
-
     return { success: true, data: data.data || data };
   } catch (error: any) {
     return { success: false, error: error.message, data: null };
@@ -68,7 +64,7 @@ export async function updateBookingStatus(bookingId: string, status: string) {
 
     const cookieStore = await cookies();
 
-    const response = await fetch(`${API_URL}/api/booking/status/${bookingId}`, {
+    const response = await fetch(`/api/booking/status/${bookingId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -79,12 +75,10 @@ export async function updateBookingStatus(bookingId: string, status: string) {
 
     if (!response.ok) {
       const errorData = await response.json();
-
       throw new Error(errorData.message || "Failed to update booking status");
     }
 
     const data = await response.json();
-
     return { success: true, data };
   } catch (error: any) {
     return { success: false, error: error.message };

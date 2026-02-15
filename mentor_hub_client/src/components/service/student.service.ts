@@ -1,7 +1,3 @@
-import { env } from "../../../env";
-
-const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
-
 export interface StudentProfile {
   id: string;
   name: string;
@@ -48,7 +44,7 @@ export interface StudentStatsResponse {
 
 export const getAuthMe = async (): Promise<StudentProfile | null> => {
   try {
-    const res = await fetch(`${API_URL}/api/auth/authMe`, {
+    const res = await fetch(`/api/auth/authMe`, {
       cache: "no-store",
       credentials: "include",
     });
@@ -68,7 +64,7 @@ export const updateStudentProfile = async (
   data: UpdateProfileData,
 ): Promise<ApiResponse> => {
   try {
-    const res = await fetch(`${API_URL}/api/student/profile/${studentId}`, {
+    const res = await fetch(`/api/student/profile/${studentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +92,7 @@ export const deleteStudentProfile = async (
   studentId: string,
 ): Promise<ApiResponse> => {
   try {
-    const res = await fetch(`${API_URL}/api/student/remove/${studentId}`, {
+    const res = await fetch(`/api/student/remove/${studentId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -118,7 +114,7 @@ export const deleteStudentProfile = async (
 
 export const getStudentStats = async (): Promise<StudentStats | null> => {
   try {
-    const res = await fetch(`${API_URL}/api/student/stats`, {
+    const res = await fetch(`/api/student/stats`, {
       cache: "no-store",
       credentials: "include",
     });

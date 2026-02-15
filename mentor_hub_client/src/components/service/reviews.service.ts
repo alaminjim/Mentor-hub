@@ -1,19 +1,15 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
-import { env } from "../../../env";
-
-const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export const reviewService = {
   getReviews: async function (
     tutorId?: string,
   ): Promise<{ data: ReviewDataType[] | null }> {
     try {
-      const url = tutorId
-        ? `${API_URL}/api/review?tutorId=${tutorId}`
-        : `${API_URL}/api/review`;
+      const url = tutorId ? `/api/review?tutorId=${tutorId}` : `/api/review`;
 
       const res = await fetch(url, {
         method: "GET",
+        credentials: "include",
         cache: "no-store",
       });
 
@@ -34,7 +30,7 @@ export const reviewService = {
     error?: string;
   }> {
     try {
-      const response = await fetch(`${API_URL}/api/review/own`, {
+      const response = await fetch(`/api/review/own`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +90,7 @@ export const reviewService = {
         }),
       };
 
-      const response = await fetch(`${API_URL}/api/review/create`, {
+      const response = await fetch(`/api/review/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

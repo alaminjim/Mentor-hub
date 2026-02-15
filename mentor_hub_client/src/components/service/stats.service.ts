@@ -1,13 +1,11 @@
 import { StatsDataType } from "@/type/statsType";
-import { env } from "../../../env";
-
-const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export const statsService = {
   getStats: async (): Promise<{ data: StatsDataType | null }> => {
     try {
-      const res = await fetch(`${API_URL}/api/student/stats`, {
+      const res = await fetch(`/api/student/stats`, {
         method: "GET",
+        credentials: "include",
         cache: "no-store",
       });
 
