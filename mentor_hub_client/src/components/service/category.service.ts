@@ -23,7 +23,6 @@ export interface UpdateCategoryData {
 export const getCategories = async (): Promise<Category[]> => {
   try {
     const res = await fetch(`${API_URL}/api/category`, {
-      credentials: "include",
       cache: "no-store",
     });
 
