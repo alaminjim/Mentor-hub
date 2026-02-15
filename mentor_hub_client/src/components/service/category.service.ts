@@ -1,7 +1,3 @@
-import { env } from "../../../env";
-
-const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
-
 export interface Category {
   id: string;
   name: string;
@@ -22,7 +18,8 @@ export interface UpdateCategoryData {
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
-    const res = await fetch(`${API_URL}/api/category`, {
+    const res = await fetch(`/api/category`, {
+      credentials: "include",
       cache: "no-store",
     });
 
@@ -39,7 +36,7 @@ export const getCategories = async (): Promise<Category[]> => {
 export const createCategory = async (
   data: CreateCategoryData,
 ): Promise<Category> => {
-  const res = await fetch(`${API_URL}/api/category/create`, {
+  const res = await fetch(`/api/category/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -61,7 +58,7 @@ export const updateCategory = async (
   id: string,
   data: UpdateCategoryData,
 ): Promise<Category> => {
-  const res = await fetch(`${API_URL}/api/category/update/${id}`, {
+  const res = await fetch(`/api/category/update/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -80,7 +77,7 @@ export const updateCategory = async (
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {
-  const res = await fetch(`${API_URL}/api/category/delete/${id}`, {
+  const res = await fetch(`/api/category/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
