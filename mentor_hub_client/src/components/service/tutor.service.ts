@@ -1,9 +1,12 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
+import { env } from "../../../env";
+
+const app_url = env.NEXT_PUBLIC_BACKEND_URL;
 
 export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
     try {
-      const res = await fetch(`/api/tutor`, {
+      const res = await fetch(`${app_url}/api/tutor`, {
         method: "GET",
         cache: "no-store",
       });
@@ -24,7 +27,7 @@ export const tutorService = {
     tutorId: string,
   ): Promise<{ data: TutorDataType | null }> {
     try {
-      const res = await fetch(`/api/tutor/${tutorId}`, {
+      const res = await fetch(`${app_url}/api/tutor/${tutorId}`, {
         method: "GET",
         cache: "no-store",
       });
@@ -45,7 +48,6 @@ export const tutorService = {
   ): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
       const res = await fetch(`/api/tutor/profile`, {
-        // ✅
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +84,6 @@ export const tutorService = {
   }> => {
     try {
       const res = await fetch(`/api/tutor/own/profile`, {
-        // ✅
         method: "GET",
         credentials: "include",
         cache: "no-store",
@@ -112,7 +113,6 @@ export const tutorService = {
   ): Promise<{ success: boolean; data?: any; error?: string }> => {
     try {
       const res = await fetch(`/api/tutor/profile/update/${tutorId}`, {
-        // ✅
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,6 @@ export const tutorService = {
   ): Promise<{ success: boolean; message?: string; error?: string }> => {
     try {
       const res = await fetch(`/api/tutor/own/profile/${tutorId}`, {
-        // ✅
         method: "DELETE",
         credentials: "include",
         cache: "no-store",
