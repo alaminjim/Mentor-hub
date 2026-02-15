@@ -1,8 +1,8 @@
 export interface CreateReviewData {
-  tutorId: string; // Required
-  rating: number; // Required (1-5)
-  comment?: string; // Optional
-  bookingId?: string; // Optional - যদি লাগে future এ
+  tutorId: string;
+  rating: number;
+  comment?: string;
+  bookingId?: string;
 }
 
 export interface ReviewDataType {

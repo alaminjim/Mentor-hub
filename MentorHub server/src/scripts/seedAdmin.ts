@@ -25,12 +25,12 @@ async function seedingAdmin() {
     }
 
     const createAdminData = await fetch(
-      "http://localhost:5000/api/auth/sign-up/email",
+      "https://mentor-hub-server.vercel.app/api/auth/sign-up/email",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Origin: "http://localhost:3000",
+          Origin: "https://mentor-hub-client-seven.vercel.app",
         },
         body: JSON.stringify(storeDataAmin),
       },

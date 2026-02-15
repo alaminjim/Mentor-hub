@@ -1,4 +1,3 @@
-// review.service.ts
 import { prisma } from "../../lib/prisma";
 import { Role } from "../../types/role";
 

@@ -1,5 +1,3 @@
-// src/type/bookingType.ts
-
 export type BookingStatus = "CONFIRMED" | "COMPLETED" | "CANCELLED";
 
 export interface BookingDataType {
