@@ -21,7 +21,6 @@ export default function DeleteUserButton({
   const [showConfirm, setShowConfirm] = useState(false);
   const router = useRouter();
 
-  // Admin delete করা যাবে না
   if (userRole === "ADMIN") {
     return (
       <button

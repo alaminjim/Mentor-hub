@@ -328,9 +328,7 @@ export default function DashboardShell({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href={`/dashboard/${role}`}>
-                  Dashboard
-                </BreadcrumbLink>
+                <BreadcrumbLink href={`/dashboard`}>Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

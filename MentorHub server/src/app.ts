@@ -15,13 +15,11 @@ import session from "express-session";
 const app = express();
 app.use(express.json());
 
+// Configure CORS to allow both production and Vercel preview deployments
 const allowedOrigins = [
   process.env.APP_URL || "http://localhost:3000",
   process.env.PROD_APP_URL, // Production frontend URL
-  "http://localhost:3000",
-  "http://localhost:4000",
-  "http://localhost:5000",
-].filter(Boolean);
+].filter(Boolean); // Remove undefined values
 
 app.use(
   cors({

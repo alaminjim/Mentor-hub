@@ -18,6 +18,7 @@ export const getSession = async () => {
     });
 
     const session = await res.json();
+    console.log(session);
     return { data: session };
   } catch (error: any) {
     console.log(error);
