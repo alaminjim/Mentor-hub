@@ -111,7 +111,7 @@ export default function EditProfilePage() {
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <Link
-            href="dashboard/student/profile"
+            href={"/student/profile"}
             className="text-sky-600 hover:text-sky-700 flex items-center gap-2 mb-6"
           >
             <svg
@@ -202,7 +202,7 @@ export default function EditProfilePage() {
                 {saving ? "Saving..." : "Save Changes"}
               </button>
               <Link
-                href="dashboard/student/profile"
+                href={"/student/profile"}
                 className="px-6 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 font-medium text-center"
               >
                 Cancel
