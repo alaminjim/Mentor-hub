@@ -14,14 +14,14 @@ import { useEffect, useState } from "react";
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isCreating, setIsCreating] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<CreateCategoryData>({
     name: "",
     description: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -80,7 +80,7 @@ export default function CategoriesPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     setLoading(true);
     setError("");
 

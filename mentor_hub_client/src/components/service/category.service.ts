@@ -3,7 +3,7 @@ import { env } from "../../../env";
 const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export interface Category {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   createdAt: string;
@@ -23,6 +23,7 @@ export interface UpdateCategoryData {
 export const getCategories = async (): Promise<Category[]> => {
   try {
     const res = await fetch(`${API_URL}/api/category`, {
+      credentials: "include",
       cache: "no-store",
     });
 
@@ -58,7 +59,7 @@ export const createCategory = async (
 };
 
 export const updateCategory = async (
-  id: number,
+  id: string,
   data: UpdateCategoryData,
 ): Promise<Category> => {
   const res = await fetch(`${API_URL}/api/category/update/${id}`, {
@@ -79,7 +80,7 @@ export const updateCategory = async (
   return json.data;
 };
 
-export const deleteCategory = async (id: number): Promise<void> => {
+export const deleteCategory = async (id: string): Promise<void> => {
   const res = await fetch(`${API_URL}/api/category/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
