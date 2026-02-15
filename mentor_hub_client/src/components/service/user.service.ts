@@ -1,12 +1,15 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { env } from "../../../env";
+
+const BASE_URL = env.NEXT_PUBLIC_AUTH_URL;
 
 export const getAllUsers = async () => {
   try {
     const cookieStore = await cookies();
 
-    const res = await fetch(`/api/auth/admin/users`, {
+    const res = await fetch(`${BASE_URL}/admin/users`, {
       method: "GET",
       headers: {
         Cookie: cookieStore.toString(),
@@ -15,6 +18,7 @@ export const getAllUsers = async () => {
     });
 
     const result = await res.json();
+
     return { data: result.data || [] };
   } catch (error: any) {
     console.error("getAllUsers error:", error);
@@ -26,7 +30,7 @@ export const deleteUser = async (userId: string) => {
   try {
     const cookieStore = await cookies();
 
-    const res = await fetch(`/api/auth/admin/remove/${userId}`, {
+    const res = await fetch(`${BASE_URL}/admin/remove/${userId}`, {
       method: "DELETE",
       headers: {
         Cookie: cookieStore.toString(),
