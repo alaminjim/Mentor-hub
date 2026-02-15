@@ -33,28 +33,28 @@ const Footer = ({
     {
       title: "Quick Links",
       links: [
-        { text: "Find a Tutor", url: "/find-tutor" },
-        { text: "Become a Tutor", url: "/become-tutor" },
-        { text: "How It Works", url: "/how-it-works" },
-        { text: "Subjects", url: "/subjects" },
+        { text: "Find a Tutor", url: "#" },
+        { text: "Become a Tutor", url: "#" },
+        { text: "How It Works", url: "#" },
+        { text: "Subjects", url: "#" },
       ],
     },
     {
       title: "Company",
       links: [
-        { text: "About Us", url: "/about" },
-        { text: "Contact", url: "/contact" },
-        { text: "Careers", url: "/careers" },
-        { text: "Blog", url: "/blog" },
+        { text: "About Us", url: "#" },
+        { text: "Contact", url: "#" },
+        { text: "Careers", url: "#" },
+        { text: "Blog", url: "#" },
       ],
     },
     {
       title: "Support",
       links: [
-        { text: "Help Center", url: "/help" },
-        { text: "FAQs", url: "/faq" },
-        { text: "Privacy Policy", url: "/privacy" },
-        { text: "Terms of Service", url: "/terms" },
+        { text: "Help Center", url: "#" },
+        { text: "FAQs", url: "#" },
+        { text: "Privacy Policy", url: "#" },
+        { text: "Terms of Service", url: "#" },
       ],
     },
   ],
@@ -193,7 +193,7 @@ const Footer = ({
             <p className="text-gray-600 text-sm">{copyright}</p>
             <div className="flex gap-6">
               <Link
-                href="/privacy"
+                href="#"
                 className="text-gray-600 hover:text-sky-600 transition-colors text-sm font-medium"
               >
                 Privacy Policy
