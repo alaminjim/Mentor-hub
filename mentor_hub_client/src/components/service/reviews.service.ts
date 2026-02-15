@@ -10,7 +10,7 @@ export const reviewService = {
     try {
       const url = tutorId
         ? `${app_url}/api/review?tutorId=${tutorId}`
-        : `/api/review`;
+        : `${app_url}/api/review`;
 
       const res = await fetch(url, {
         method: "GET",
