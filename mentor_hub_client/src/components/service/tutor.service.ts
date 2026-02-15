@@ -4,9 +4,7 @@ export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
     try {
       const res = await fetch(`/api/tutor`, {
-        // ✅
         method: "GET",
-        credentials: "include", // ✅
         cache: "no-store",
       });
 
@@ -27,9 +25,7 @@ export const tutorService = {
   ): Promise<{ data: TutorDataType | null }> {
     try {
       const res = await fetch(`/api/tutor/${tutorId}`, {
-        // ✅
         method: "GET",
-        credentials: "include", // ✅
         cache: "no-store",
       });
 
