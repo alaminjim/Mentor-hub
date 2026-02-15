@@ -1,12 +1,16 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
 import { env } from "../../../env";
 
+const app_url = env.NEXT_PUBLIC_BACKEND_URL;
+
 export const reviewService = {
   getReviews: async function (
     tutorId?: string,
   ): Promise<{ data: ReviewDataType[] | null }> {
     try {
-      const url = tutorId ? `/api/review?tutorId=${tutorId}` : `/api/review`;
+      const url = tutorId
+        ? `${app_url}/api/review?tutorId=${tutorId}`
+        : `/api/review`;
 
       const res = await fetch(url, {
         method: "GET",
