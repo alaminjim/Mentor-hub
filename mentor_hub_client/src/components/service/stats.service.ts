@@ -1,7 +1,7 @@
 import { StatsDataType } from "@/type/statsType";
 import { env } from "../../../env";
 
-const API_URL = env.NEXT_PUBLIC_APP_URL;
+const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export const statsService = {
   getStats: async (): Promise<{ data: StatsDataType | null }> => {

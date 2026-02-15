@@ -1,6 +1,6 @@
 import { env } from "../../../env";
 
-const API_URL = env.NEXT_PUBLIC_APP_URL;
+const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 export interface StudentProfile {
   id: string;

@@ -4,7 +4,7 @@ import { TutorDataType } from "@/type/tutorDataTyp";
 import { cookies } from "next/headers";
 import { env } from "../../../../../env";
 export const dynamic = "force-dynamic";
-const api_url = env.NEXT_PUBLIC_APP_URL;
+const api_url = env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Category {
   id: string;

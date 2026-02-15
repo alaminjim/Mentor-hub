@@ -10,18 +10,18 @@ import { categoryRouter } from "./modules/categories/categories.route";
 import { bookingsRouter } from "./modules/bookings/bookings.route";
 import { notFound } from "./middleware/notFound";
 import errorHandler from "./middleware/errorHandler";
+import session from "express-session";
 
 const app = express();
-
 app.use(express.json());
-// Configure CORS to allow both production and Vercel preview deployments
+
 const allowedOrigins = [
-  process.env.APP_URL || "http://localhost:4000",
+  process.env.APP_URL || "http://localhost:3000",
   process.env.PROD_APP_URL, // Production frontend URL
   "http://localhost:3000",
   "http://localhost:4000",
   "http://localhost:5000",
-].filter(Boolean); // Remove undefined values
+].filter(Boolean);
 
 app.use(
   cors({
