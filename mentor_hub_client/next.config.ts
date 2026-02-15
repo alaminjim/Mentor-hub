@@ -19,14 +19,6 @@ const config: NextConfig = {
         source: "/api/category/:path*",
         destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/category/:path*`,
       },
-      {
-        source: "/api/review/:path*",
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/review/:path*`,
-      },
-      {
-        source: "/api/student/:path*",
-        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/student/:path*`,
-      },
     ];
   },
 };
