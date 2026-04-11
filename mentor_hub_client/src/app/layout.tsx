@@ -30,7 +30,7 @@ export default function RootLayout({
         className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-white text-gray-900 selection:bg-sky-100 selection:text-sky-900`}
       >
         {children}
-        <Toaster position="bottom-right" />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

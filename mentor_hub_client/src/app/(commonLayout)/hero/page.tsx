@@ -99,7 +99,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <section ref={containerRef} className="relative min-h-screen flex items-center overflow-hidden">
       {/* 3D background visual */}
       <div className="absolute right-[-10vw] top-[10vh] w-[60vw] h-[80vh] pointer-events-none z-0">
         <Canvas>

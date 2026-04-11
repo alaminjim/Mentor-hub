@@ -13,11 +13,17 @@ import { blogRouter } from "./modules/blog/blog.route";
 import { bookmarkRouter } from "./modules/bookmark/bookmark.route";
 import { statsRouter } from "./modules/stats/stats.route";
 import { contactRouter } from "./modules/contact/contact.route";
+import { aiRouter } from "./modules/ai/ai.route";
 import { notFound } from "./middleware/notFound";
 import errorHandler from "./middleware/errorHandler";
 import session from "express-session";
 
 const app = express();
+
+// Stripe webhook needs raw body, so we put it BEFORE express.json()
+import { PricingController } from "./modules/pricing/pricing.controller";
+app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), PricingController.stripeWebhook);
+
 app.use(express.json());
 
 // Configure CORS to allow both production and Vercel preview deployments
@@ -72,6 +78,8 @@ app.use("/api/pricing", pricingRouter);
 app.use("/api/stats", statsRouter);
 
 app.use("/api/contact", contactRouter);
+
+app.use("/api/ai", aiRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

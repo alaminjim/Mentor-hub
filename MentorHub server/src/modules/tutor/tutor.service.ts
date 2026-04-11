@@ -1,8 +1,5 @@
-import { TutorProfile } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { Prisma } from "../../../generated/prisma/client";
-import { Role } from "../../types/role";
-import { TutorProfileWhereInput } from "../../../generated/prisma/models";
+import { Prisma, TutorProfile, Role } from "@prisma/client";
 
 const tutorProfile = async (
   data: Omit<TutorProfile, "id" | "createdAt" | "updatedAt">,
@@ -27,7 +24,7 @@ const tutorProfile = async (
     data: {
       ...data,
       userId,
-      availability: data.availability ?? Prisma.DbNull,
+      availability: data.availability ?? (Prisma.DbNull as any),
     },
   });
   return result;
@@ -64,7 +61,7 @@ const updateTutorProfile = async (
   };
 
   if (availability !== undefined) {
-    updateData.availability = availability ?? Prisma.DbNull;
+    updateData.availability = availability ?? (Prisma.DbNull as any);
   }
 
   if (categoryId) {
@@ -111,7 +108,7 @@ const updateModerateAvailability = async (
   const result = await prisma.tutorProfile.update({
     where: { id: profileId },
     data: {
-      availability: data.availability ?? Prisma.DbNull,
+      availability: data.availability ?? (Prisma.DbNull as any),
     },
   });
 
@@ -123,7 +120,7 @@ const getAllTutorProfileFilter = async (payload: {
   sortBy: string | undefined;
   sortOrder: string | undefined;
 }) => {
-  const SearchAndFiltering: TutorProfileWhereInput[] = [];
+  const SearchAndFiltering: Prisma.TutorProfileWhereInput[] = [];
 
   if (payload.subject.length > 0) {
     SearchAndFiltering.push({
@@ -143,7 +140,18 @@ const getAllTutorProfileFilter = async (payload: {
       },
     }),
     include: {
-      reviews: true,
+      user: {
+        select: {
+          image: true,
+          name: true,
+        }
+      },
+      categories: true,
+      reviews: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
   return result;
@@ -152,6 +160,13 @@ const getAllTutorProfileFilter = async (payload: {
 const getAllTutorProfile = async () => {
   const result = await prisma.tutorProfile.findMany({
     include: {
+      user: {
+        select: {
+          image: true,
+          name: true,
+        }
+      },
+      categories: true,
       reviews: {
         orderBy: {
           createdAt: "desc",
@@ -266,7 +281,7 @@ const ownProfileUpdate = async (id: string, role: Role, data: TutorProfile) => {
     },
     data: {
       ...data,
-      availability: data.availability ?? Prisma.DbNull,
+      availability: data.availability ?? (Prisma.DbNull as any),
     },
   });
 };

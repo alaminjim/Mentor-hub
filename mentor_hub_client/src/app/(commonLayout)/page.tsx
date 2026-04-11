@@ -1,6 +1,6 @@
 import Hero from "./hero/page";
 import ReviewsPage from "./review/page";
-import TutorPage from "./tutorCard/page";
+import TutorPage from "./tutors/page";
 import Categories from "@/components/home/Categories";
 import Stats from "@/components/home/Stats";
 import Benefits from "@/components/home/Benefits";
@@ -31,7 +31,7 @@ const Page = () => {
               top-rated. <span className="text-gradient">mentors.</span>
             </h2>
           </RevealItem>
-          <TutorPage />
+          <TutorPage isFeatured={true} />
         </div>
       </ScrollReveal>
       

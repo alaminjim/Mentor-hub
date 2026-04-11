@@ -1,87 +1,84 @@
-import { Category } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { Role } from "../../types/role";
 
-const createCategory = async (
-  role: Role,
-  data: Omit<Category, "id" | "createdAt" | "updatedAt">,
-) => {
-  if (role !== "ADMIN") {
-    throw new Error("Only Admin can create this category");
-  }
-
+const createCategory = async (role: string, payload: any) => {
+  if (role !== "ADMIN") throw new Error("Only admins can create categories");
   return await prisma.category.create({
-    data,
+    data: {
+      name: payload.name,
+      description: payload.description,
+    },
   });
 };
 
 const getCategory = async () => {
-  const dbCategories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: { tutors: true }
+  const categories = await prisma.category.findMany();
+  const tutors = await prisma.tutorProfile.findMany({ select: { subjects: true } });
+
+  return categories.map(cat => {
+    let count = 0;
+    const catName = cat.name.toLowerCase();
+    tutors.forEach(tutor => {
+      const subjects = tutor.subjects.map(s => s.toLowerCase());
+      if (subjects.includes(catName)) {
+        count++;
       }
-    }
-  });
+    });
 
-  if (dbCategories.length > 0) {
-    return dbCategories.map(cat => ({
+    return {
       ...cat,
-      count: `${cat._count.tutors + 120}+ mentors`
-    }));
-  }
-
-  // Fallback for landing page if no categories in DB yet
-  return [
-    { name: "mathematics", count: "1,200+ mentors", color: "text-blue-500", grid: "md:col-span-2 lg:col-span-2" },
-    { name: "science", count: "800+ mentors", color: "text-emerald-500", grid: "md:col-span-2 lg:col-span-1" },
-    { name: "coding", count: "1,500+ mentors", color: "text-sky-500", grid: "md:col-span-2 lg:col-span-3" },
-    { name: "languages", count: "2,000+ mentors", color: "text-amber-500", grid: "md:col-span-2 lg:col-span-3" },
-    { name: "music", count: "400+ mentors", color: "text-rose-500", grid: "md:col-span-2 lg:col-span-1" },
-    { name: "humanities", count: "500+ mentors", color: "text-orange-500", grid: "md:col-span-2 lg:col-span-2" },
-  ];
+      count: `${count} mentors`
+    };
+  });
 };
 
-const updateCategory = async (createId: string, role: Role, data: Category) => {
-  await prisma.category.findUniqueOrThrow({
-    where: {
-      id: createId,
-    },
-  });
-
-  if (role !== "ADMIN") {
-    throw new Error("Only Admin can update this category");
-  }
-
+const updateCategory = async (id: string, role: string, payload: any) => {
+  if (role !== "ADMIN") throw new Error("Only admins can update categories");
   return await prisma.category.update({
-    where: {
-      id: createId,
+    where: { id },
+    data: {
+      name: payload.name,
+      description: payload.description,
     },
-    data,
   });
 };
 
-const deleteCategory = async (createId: string, role: Role) => {
-  await prisma.category.findUniqueOrThrow({
-    where: {
-      id: createId,
-    },
-  });
-
-  if (role !== "ADMIN") {
-    throw new Error("Only Admin can delete this category");
-  }
-
+const deleteCategory = async (id: string, role: string) => {
+  if (role !== "ADMIN") throw new Error("Only admins can delete categories");
   return await prisma.category.delete({
-    where: {
-      id: createId,
-    },
+    where: { id },
   });
 };
 
+const getAllCategories = async () => {
+  const categories = await prisma.category.findMany();
+  const tutors = await prisma.tutorProfile.findMany({ select: { subjects: true } });
+
+  return categories.map(cat => {
+    let count = 0;
+    const catName = cat.name.toLowerCase();
+    tutors.forEach(tutor => {
+      const subjects = tutor.subjects.map(s => s.toLowerCase());
+      if (subjects.includes(catName)) {
+        count++;
+      }
+    });
+
+    return {
+      ...cat,
+      count: `${count} mentors`
+    };
+  });
+};
+
+// Named to match controller import
 export const categoryService = {
   createCategory,
   getCategory,
   updateCategory,
   deleteCategory,
+};
+
+// Keep old export to avoid breaking other imports
+export const categoriesService = {
+  getAllCategories,
 };

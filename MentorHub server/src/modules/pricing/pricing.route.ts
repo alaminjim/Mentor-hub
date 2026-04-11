@@ -36,4 +36,10 @@ router.post(
   PricingController.createCheckoutSession
 );
 
+router.post(
+  "/confirm-subscription",
+  auth(),
+  PricingController.confirmSubscription
+);
+
 export const pricingRouter = router;

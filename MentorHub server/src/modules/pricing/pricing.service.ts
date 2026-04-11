@@ -33,10 +33,36 @@ const deletePricingTier = async (id: string) => {
   });
 };
 
+const updateUserSubscription = async (userId: string, tierName: string) => {
+  // Fetch the tier first to get the discount percentage
+  const tier = await prisma.pricingTier.findUnique({
+    where: { name: tierName }
+  });
+
+  // Calculate discount percentage with hardcoded fallbacks for reliability
+  let discountPercentage = tier?.discountPercentage || 0;
+  
+  if (discountPercentage === 0) {
+    if (tierName.toLowerCase().includes("professional")) discountPercentage = 50;
+    else if (tierName.toLowerCase().includes("master")) discountPercentage = 25;
+    else if (tierName.toLowerCase().includes("essential")) discountPercentage = 10;
+  }
+
+  return await prisma.user.update({
+    where: { id: userId },
+    data: {
+      isSubscribed: true,
+      subscriptionType: tierName.toUpperCase(),
+      discountPercentage: discountPercentage,
+    },
+  });
+};
+
 export const PricingService = {
   createPricingTier,
   getAllPricingTiers,
   getPricingTierById,
   updatePricingTier,
   deletePricingTier,
+  updateUserSubscription,
 };

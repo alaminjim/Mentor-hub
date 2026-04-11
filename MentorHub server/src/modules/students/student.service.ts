@@ -1,140 +1,86 @@
-import { Status } from "../../../generated/prisma/client";
+import { Status } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import { Role } from "../../types/role";
 
-const manageProfile = async (
-  studentId: string,
-  role: Role,
-  data: {
-    name?: string;
-    email?: string;
-    image?: string;
-    role?: Role;
-    status?: Status;
-    emailVerified?: boolean;
-  },
-) => {
-  const exists = await prisma.user.findUniqueOrThrow({
-    where: {
-      id: studentId,
+const getAllStudents = async () => {
+  return await prisma.user.findMany({
+    where: { role: "STUDENT" },
+  });
+};
+
+const moderateStudentStatus = async (id: string, status: Status) => {
+  return await prisma.user.update({
+    where: { id },
+    data: { status },
+  });
+};
+
+const manageProfile = async (studentId: string, role: Role, payload: any) => {
+  if (role !== "STUDENT" && role !== "ADMIN") {
+    throw new Error("Access denied");
+  }
+
+  return await prisma.user.update({
+    where: { id: studentId },
+    data: {
+      name: payload.name,
+      image: payload.image ?? payload.profilePhoto, // schema uses `image`
     },
   });
-
-  if (role !== Role.STUDENT) {
-    throw new Error("Only Student can manage This profile");
-  }
-
-  if (studentId !== exists.id) {
-    throw new Error("You can only Manage your own Profile");
-  }
-
-  delete data.role;
-  delete data.status;
-
-  const updated = await prisma.user.update({
-    where: { id: studentId },
-    data,
-  });
-
-  return updated;
 };
 
 const deleteProfile = async (studentId: string, role: Role) => {
-  const exists = await prisma.user.findUniqueOrThrow({
-    where: {
-      id: studentId,
-    },
-  });
-
-  if (role !== Role.STUDENT) {
-    throw new Error("Only Student can Delete This profile");
+  if (role !== "STUDENT" && role !== "ADMIN") {
+    throw new Error("Access denied");
   }
 
-  if (studentId !== exists.id) {
-    throw new Error("You can only Delete your own Profile");
-  }
-
-  const updated = await prisma.user.delete({
+  return await prisma.user.delete({
     where: { id: studentId },
   });
-
-  return updated;
 };
 
-const getDashboardSummary = async (userId: string, role: Role) => {
+const getDashboardSummary = async (userId: string, role: string) => {
   if (role !== "STUDENT") {
-    throw new Error("Only Student can see that data");
+    throw new Error("Only students can access dashboard summary");
   }
 
-  const now = new Date();
+  const [totalBookings, upcomingBookings, pastBookings] = await Promise.all([
+    prisma.booking.count({ where: { studentId: userId } }),
+    prisma.booking.count({
+      where: { studentId: userId, scheduledAt: { gt: new Date() } },
+    }),
+    prisma.booking.count({
+      where: { studentId: userId, scheduledAt: { lt: new Date() } },
+    }),
+  ]);
 
-  const totalBookings = await prisma.booking.count({
+  const recentBookings = await prisma.booking.findMany({
     where: { studentId: userId },
-  });
-  const upcomingSessions = await prisma.booking.count({
-    where: { studentId: userId, scheduledAt: { gt: now } },
-  });
-  const pastSessions = await prisma.booking.count({
-    where: { studentId: userId, scheduledAt: { lt: now }, status: "COMPLETED" },
-  });
-  const cancelledBookings = await prisma.booking.count({
-    where: { studentId: userId, status: "CANCELLED" },
+    include: { tutor: true, category: true },
+    orderBy: { scheduledAt: "desc" },
+    take: 5,
   });
 
-  const completedPercentage = totalBookings
-    ? Math.round((pastSessions / totalBookings) * 100)
-    : 0;
-
-  return {
-    totalBookings,
-    upcomingSessions,
-    pastSessions,
-    quickStats: {
-      completedPercentage,
-      cancelledBookings,
-    },
-  };
+  return { totalBookings, upcomingBookings, pastBookings, recentBookings };
 };
 
 const getStatsService = async () => {
-  try {
-    const totalTutors = await prisma.tutorProfile.count();
+  const [totalStudents, activeStudents] = await Promise.all([
+    prisma.user.count({ where: { role: "STUDENT" } }),
+    prisma.user.count({ where: { role: "STUDENT", status: "UnBAN" } }),
+  ]);
 
-    const totalStudents = await prisma.user.count({
-      where: {
-        role: "STUDENT",
-      },
-    });
+  return { totalStudents, activeStudents };
+};
 
-    const totalSessions = await prisma.booking.count({
-      where: {
-        status: "COMPLETED",
-      },
-    });
-
-    const ratingAggregate = await prisma.review.aggregate({
-      _avg: {
-        rating: true,
-      },
-    });
-
-    const averageRating = ratingAggregate._avg.rating || 0;
-
-    return {
-      totalTutors,
-      totalStudents,
-      totalSessions,
-      averageRating: parseFloat(averageRating.toFixed(2)),
-    };
-  } catch (error) {
-    console.error("getStatsService error:", error);
-    throw new Error("Failed to fetch stats from database");
-  }
+export const studentService = {
+  getAllStudents,
+  moderateStudentStatus,
 };
 
 export const student_bookingService = {
   manageProfile,
-  getDashboardSummary,
   deleteProfile,
+  getDashboardSummary,
   getStatsService,
 };

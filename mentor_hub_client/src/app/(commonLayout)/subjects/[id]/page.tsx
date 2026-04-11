@@ -77,7 +77,7 @@ export default function SubjectDetailPage() {
   }, [allTutors, searchTerm]);
 
   return (
-    <div className="min-h-screen pt-32 pb-24 px-6 md:px-12 lg:px-24">
+    <div className="min-h-screen pb-24 px-6 md:px-12 lg:px-24">
       <ScrollReveal>
         {/* Header */}
         <div className="max-w-6xl mx-auto mb-20">

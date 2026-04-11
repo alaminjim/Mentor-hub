@@ -5,7 +5,7 @@ export const pricingService = {
     });
     return res.json();
   },
-  createCheckoutSession: async (priceId: string) => {
+  createCheckoutSession: async (tierId: string) => {
     const res = await fetch(`/api/pricing/create-checkout-session`, {
       method: "POST",
       headers: {
@@ -13,8 +13,8 @@ export const pricingService = {
       },
       credentials: "include",
       body: JSON.stringify({
-        priceId,
-        successUrl: `${window.location.origin}/dashboard/billing?success=true`,
+        tierId,
+        successUrl: `${window.location.origin}/dashboard?success=true`,
         cancelUrl: `${window.location.origin}/pricing?canceled=true`,
       }),
     });

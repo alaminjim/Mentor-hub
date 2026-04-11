@@ -196,7 +196,7 @@ export default function BlogPage() {
   }, [allPosts, selectedCategory, searchTerm]);
 
   return (
-    <div className="min-h-screen pt-32 pb-24 px-6 md:px-12 lg:px-24">
+    <div className="min-h-screen pb-24 px-6 md:px-12 lg:px-24">
       {/* Hero */}
       <div className="max-w-4xl mb-24">
         <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 lowercase leading-tight">

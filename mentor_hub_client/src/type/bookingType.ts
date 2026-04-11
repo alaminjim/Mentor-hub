@@ -28,6 +28,7 @@ export interface BookingDataType {
       };
   subject: string;
   scheduledAt: string;
+  time?: string;
   duration: number;
   totalPrice: number;
   status: BookingStatus;
@@ -41,6 +42,7 @@ export interface CreateBookingInput {
   categoryId: string;
   subject: string;
   scheduledAt: string;
+  time: string;
   duration: number;
   totalPrice: number;
 }

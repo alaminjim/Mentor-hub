@@ -54,7 +54,7 @@ export default function StudentDashboard() {
     { label: "total tutors", value: stats?.totalTutors || 0, icon: <Users className="size-5 text-blue-400" />, trend: "+12%" },
     { label: "total students", value: stats?.totalStudents || 0, icon: <Sparkles className="size-5 text-primary" />, trend: "+5%" },
     { label: "total sessions", value: stats?.totalSessions || 0, icon: <Calendar className="size-5 text-emerald-400" />, trend: "8 new" },
-    { label: "avg. rating", value: stats?.averageRating.toFixed(1) || 0, icon: <Star className="size-5 text-amber-400" />, trend: "top tier" },
+    { label: "avg. rating", value: stats?.averageRating?.toFixed(1) || 0, icon: <Star className="size-5 text-amber-400" />, trend: "top tier" },
   ];
 
   return (

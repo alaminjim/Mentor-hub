@@ -5,13 +5,17 @@ const BACKEND_URL =
 
 const config: NextConfig = {
   images: {
+    unoptimized: true, // Force disable optimization to resolve 404 on local dev
     remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "plus.unsplash.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "**" },
-      { protocol: "http", hostname: "**" }, // support localhost images
+      { protocol: "http", hostname: "**" },
     ],
   },
 
-  // Proxy /api/* → backend (used for auth-related server-side calls only)
+  // Proxy /api/* → backend
   async rewrites() {
     return [
       {

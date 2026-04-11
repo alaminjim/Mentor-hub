@@ -1,6 +1,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  // output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -25,6 +26,10 @@ model User {
 
   role   String @default("STUDENT")
   status Status @default(UnBAN)
+
+  isSubscribed     Boolean  @default(false)
+  subscriptionType String?  // e.g. "Monthly", "Annual"
+  discountPercentage Float   @default(0)
 
   @@unique([email])
   @@map("user")
@@ -93,7 +98,7 @@ model TutorProfile {
   rating       Float    @default(0)
   totalReviews Int      @default(0)
   availability Json?
-  hourlyRate  Float
+  hourlyRate   Float
 
   categories   Category[]  
 
@@ -134,7 +139,12 @@ model Booking {
   duration    Int           
   totalPrice  Float        
   
-  status      BookingStatus @default(CONFIRMED)
+  status      BookingStatus @default(PENDING)
+  
+  isDiscountApplied      Boolean @default(false)
+  tutorDiscountApproved  Boolean @default(false)
+  discountPercentage     Float   @default(0)
+
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
@@ -186,6 +196,7 @@ model PricingTier {
   features      String[]
   stripePriceId String?
   isPopular     Boolean  @default(false)
+  discountPercentage Float @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -204,6 +215,7 @@ enum Status {
 }
 
 enum BookingStatus {
+  PENDING
   CONFIRMED
   COMPLETED
   CANCELLED

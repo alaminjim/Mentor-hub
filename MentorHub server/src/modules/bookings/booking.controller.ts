@@ -24,7 +24,12 @@ const createBookings = async (
       data: result,
     });
   } catch (error: any) {
-    next(error);
+    console.error("Booking Creation Error:", error);
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to create booking",
+      error: error
+    });
   }
 };
 
@@ -120,9 +125,41 @@ const getBookingById = async (
   }
 };
 
+const getPaymentUrl = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user;
+    if (!user) return res.status(401).json({ success: false, message: "Unauthorized" });
+
+    const { bookingId } = req.params;
+    const url = await bookingsService.getPaymentUrl(user.id, bookingId as string);
+
+    res.status(200).json({
+      success: true,
+      data: { url },
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+const getBookedSlots = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { tutorId, date } = req.query;
+    const result = await bookingsService.getBookedSlots(tutorId as string, date as string);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 export const bookingsController = {
   createBookings,
   getBookings,
   moderateStatus,
   getBookingById,
+  getPaymentUrl,
+  getBookedSlots,
 };

@@ -33,4 +33,7 @@ router.put(
   bookingsController.moderateStatus,
 );
 
+router.get("/pay/:bookingId", auth(Role.STUDENT), bookingsController.getPaymentUrl);
+router.get("/booked-slots", bookingsController.getBookedSlots);
+
 export const bookingsRouter = router;
