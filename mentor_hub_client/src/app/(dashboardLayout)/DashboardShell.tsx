@@ -19,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -154,178 +155,145 @@ export default function DashboardShell({
   children,
 }: DashboardShellProps) {
   const pathname = usePathname();
-
   const role = rawRole.toLowerCase() as Role;
-
   const navGroups = navDataByRole[role] || [];
-
-  if (!role || !navGroups || navGroups.length === 0) {
-    console.error("Invalid role or no navigation groups:", {
-      rawRole,
-      role,
-      user,
-    });
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-2">
-            Error Loading Dashboard
-          </h1>
-          <p className="text-gray-600">Invalid role: {rawRole}</p>
-          <Link
-            href="/signin"
-            className="text-blue-600 hover:underline mt-4 inline-block"
-          >
-            Back to Sign In
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const segments = pathname.split("/").filter(Boolean);
-  const currentPage = segments[segments.length - 1] ?? "dashboard";
-  const formattedPage =
-    currentPage.charAt(0).toUpperCase() +
-    currentPage.slice(1).replace(/-/g, " ");
-
   const [userData, setUserData] = useState<any>(null);
-
   const router = useRouter();
 
   useEffect(() => {
     const fetchSession = async () => {
       try {
         const res = await authClient.getSession();
-        if (res?.data?.user) {
-          setUserData(res.data.user);
-        } else {
-          setUserData(null);
-        }
-      } catch {
-        setUserData(null);
-      }
+        if (res?.data?.user) setUserData(res.data.user);
+      } catch { setUserData(null); }
     };
     fetchSession();
   }, []);
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    setUserData(null);
+    toast.success("signed out successfully");
     router.push("/signin");
     router.refresh();
-    toast.success("Sign Out Successful");
   };
 
+  const segments = pathname.split("/").filter(Boolean);
+  const currentPage = segments[segments.length - 1] ?? "dashboard";
+  const formattedPage = currentPage.toLowerCase().replace(/-/g, " ");
+
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton size="lg" asChild>
-                <Link href={`/`}>
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center shadow-md shrink-0">
-                    <span className="text-white font-bold text-base">M</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">Mentor_Hub</span>
-                    <span className="text-xs text-muted-foreground">
-                      Learning Platform
-                    </span>
-                  </div>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
-
-        <SidebarContent>
-          {navGroups.map((group) => (
-            <SidebarGroup key={group.title}>
-              <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {group.items.map((item) => {
-                    const isActive = pathname === item.href;
-                    return (
-                      <SidebarMenuItem key={item.label}>
-                        <SidebarMenuButton asChild isActive={isActive}>
-                          <Link href={item.href}>
-                            <item.icon className="size-4" />
-                            <span>{item.label}</span>
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    );
-                  })}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
-        </SidebarContent>
-
-        <SidebarFooter>
-          <SidebarGroup>
-            <SidebarGroupLabel>Support</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton onClick={handleSignOut}>
-                    <LogOut className="size-4" />
-                    <span>Logout</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-
-          <div className="flex items-center gap-3 px-2 py-3 border-t">
-            <Avatar className="size-9">
-              <AvatarImage src={user.image ?? ""} alt={user.name} />
-              <AvatarFallback className="bg-gradient-to-br from-sky-400 to-cyan-500 text-white font-semibold">
-                {user.name?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col gap-1 overflow-hidden">
-              <span className="text-sm font-medium truncate">{user.name}</span>
-              <span
-                className={cn(
-                  "text-xs px-2 py-0.5 rounded-full w-fit font-medium",
-                  roleBadge[role],
-                )}
-              >
-                {role.charAt(0).toUpperCase() + role.slice(1)}
+    <SidebarProvider className="dark">
+      <div className="flex min-h-screen w-full bg-[#050505] text-neutral-200">
+        <Sidebar className="border-r border-white/5 bg-black/60 backdrop-blur-3xl">
+          <SidebarHeader className="p-6">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                <BarChart3 className="size-5 text-white" />
+              </div>
+              <span className="text-xl font-black tracking-tighter lowercase leading-tight">
+                hub.<br />
+                <span className="text-primary">workspace.</span>
               </span>
+            </Link>
+          </SidebarHeader>
+
+          <SidebarContent className="px-4 py-8">
+            {navGroups.map((group) => (
+              <SidebarGroup key={group.title} className="mb-8">
+                <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mb-4 px-4">
+                  {group.title}.
+                </SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu className="gap-2">
+                    {group.items.map((item) => {
+                      const isActive = pathname === item.href;
+                      return (
+                        <SidebarMenuItem key={item.label}>
+                          <SidebarMenuButton 
+                            asChild 
+                            isActive={isActive}
+                            className={cn(
+                              "h-12 px-4 rounded-2xl transition-all duration-300 border border-transparent",
+                              isActive 
+                                ? "bg-primary/10 border-primary/20 text-white shadow-lg" 
+                                : "hover:bg-white/5 hover:border-white/10 text-neutral-400 hover:text-white"
+                            )}
+                          >
+                            <Link href={item.href} className="flex items-center gap-3">
+                              <item.icon className={cn("size-4 transition-transform group-hover:scale-110", isActive ? "text-primary" : "")} />
+                              <span className="text-xs font-black uppercase tracking-widest leading-none mt-0.5">{item.label}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            ))}
+          </SidebarContent>
+
+          <SidebarFooter className="p-6 space-y-6">
+            <div className="p-4 rounded-3xl bg-white/5 border border-white/10">
+              <div className="flex items-center gap-3 mb-4">
+                 <Avatar className="size-10 border border-white/20">
+                    <AvatarImage src={user.image} />
+                    <AvatarFallback className="bg-primary text-white font-black uppercase text-xs">
+                      {user.name?.[0]}
+                    </AvatarFallback>
+                 </Avatar>
+                 <div className="overflow-hidden">
+                    <p className="text-xs font-black uppercase tracking-tight truncate lowercase">{user.name}</p>
+                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest">{role}</p>
+                 </div>
+              </div>
+              <button 
+                onClick={handleSignOut}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white transition-all duration-300 text-[10px] font-black uppercase tracking-widest"
+              >
+                <LogOut className="size-3" /> sign out.
+              </button>
             </div>
-          </div>
-        </SidebarFooter>
+          </SidebarFooter>
+        </Sidebar>
 
-        <SidebarRail />
-      </Sidebar>
+        <SidebarInset className="bg-[#050505] flex-1">
+          <header className="flex h-20 items-center justify-between px-8 border-b border-white/5 sticky top-0 bg-[#050505]/80 backdrop-blur-xl z-10">
+            <div className="flex items-center gap-6">
+               <SidebarTrigger className="hover:bg-white/5 p-2 rounded-xl transition-colors" />
+               <div className="h-6 w-px bg-white/10 hidden md:block" />
+               <Breadcrumb>
+                 <BreadcrumbList>
+                    <BreadcrumbItem className="hidden md:block">
+                      <BreadcrumbLink href="/dashboard" className="text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">workspace</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden md:block opacity-20" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="text-xs font-black uppercase tracking-[0.2em] text-white underline decoration-primary decoration-2 underline-offset-8">
+                        {formattedPage}.
+                      </BreadcrumbPage>
+                    </BreadcrumbItem>
+                 </BreadcrumbList>
+               </Breadcrumb>
+            </div>
+            
+            <div className="flex items-center gap-4">
+               <button className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
+                  <Search className="size-4" />
+               </button>
+               <button className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                  <Settings className="size-4 text-primary" />
+               </button>
+            </div>
+          </header>
 
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href={`/dashboard`}>Dashboard</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{formattedPage}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-
-        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
-      </SidebarInset>
+          <main className="p-8">
+            <ScrollReveal>
+              {children}
+            </ScrollReveal>
+          </main>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

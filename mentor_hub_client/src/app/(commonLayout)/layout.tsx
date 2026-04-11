@@ -1,15 +1,17 @@
 import { ReactNode } from "react";
 import Navbar from "./navbar/page";
-import { Footer } from "./footer/page";
+import Footer from "./footer/page";
+import Background3D from "@/components/animations/Background3D";
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div suppressHydrationWarning>
+    <div suppressHydrationWarning className="flex flex-col min-h-screen relative overflow-x-hidden">
+      <Background3D />
       <Navbar />
-      <div>{children}</div>
+      <main className="flex-grow relative z-10">{children}</main>
       <Footer />
     </div>
   );
 };
 
-export default layout;
+export default Layout;

@@ -1,47 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { TutorDataType } from "@/type/tutorDataTyp";
 import Link from "next/link";
+import { Star, Share2, Bookmark } from "lucide-react";
+import toast from "react-hot-toast";
+
 export const dynamic = "force-dynamic";
+
 interface TutorCardProps {
   tutor: TutorDataType;
+  initialBookmarked?: boolean;
   className?: string;
 }
 
-const DAY_LABELS: Record<string, string> = {
-  sat: "SAT",
-  sun: "SUN",
-  mon: "MON",
-  tue: "TUE",
-  wed: "WED",
-  thu: "THU",
-  fri: "FRI",
-};
+export const TutorCard = ({ className, tutor, initialBookmarked = false }: TutorCardProps) => {
+  const [mounted, setMounted] = useState(false);
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
+  const [isToggling, setIsToggling] = useState(false);
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((s) => (
-        <svg key={s} width="12" height="12" viewBox="0 0 12 12">
-          <polygon
-            points="6,1 7.8,4.2 11.4,4.6 8.9,7 9.7,10.6 6,8.6 2.3,10.6 3.1,7 0.6,4.6 4.2,4.2"
-            fill={s <= Math.round(rating) ? "#2196c4" : "#c8e6f4"}
-          />
-        </svg>
-      ))}
-      <span className="ml-1 text-[11px] font-semibold text-[#2196c4]">
-        {Number(rating).toFixed(1)}
-      </span>
-    </div>
-  );
-}
+  // Sync state if prop changes (e.g. data re-fetches)
+  useEffect(() => {
+    setBookmarked(initialBookmarked);
+  }, [initialBookmarked]);
 
-const TutorCard = ({ className, tutor }: TutorCardProps) => {
-  const [booked, setBooked] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const handleBookmark = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isToggling) return;
+    
+    setIsToggling(true);
+    // Optimistic UI update
+    setBookmarked((prev) => !prev);
+    
+    import("@/components/service/bookmark.service").then(({ bookmarkService }) => {
+      bookmarkService.toggleBookmark(tutor.id || (tutor as any)._id).then((res) => {
+        if (!res.success) {
+           // Revert on failure
+           setBookmarked((prev) => !prev);
+           toast.error(res.message || "please signin to bookmark tutors");
+        } else {
+           if (res.data?.bookmarked) {
+             toast.success(`${tutor.name} added to bookmarks!`, {
+               icon: '🔖',
+               style: { borderRadius: '10px', background: '#333', color: '#fff' }
+             });
+           } else {
+             toast("removed from bookmarks", {
+               icon: '🗑️',
+               style: { borderRadius: '10px', background: '#333', color: '#fff' }
+             });
+           }
+        }
+        setIsToggling(false);
+      });
+    });
+  };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Generate initials for avatar
   const initials = tutor?.name
     ? tutor.name
         .split(" ")
@@ -54,186 +74,94 @@ const TutorCard = ({ className, tutor }: TutorCardProps) => {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-300",
+        "relative group p-8 rounded-[2.5rem] bg-gradient-to-br from-primary/5 via-background to-transparent border border-primary/10 dark:border-white/10 backdrop-blur-sm hover:border-primary/30 transition-all duration-500 overflow-hidden",
         className,
       )}
-      style={{
-        background: "#ffffff",
-        border: hovered ? "1.5px solid #90cce8" : "1.5px solid #daeef8",
-        boxShadow: hovered
-          ? "0 16px 48px rgba(33,150,196,0.14)"
-          : "0 2px 16px rgba(33,150,196,0.07)",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        transition: "all 0.3s ease",
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
-      <div
-        style={{
-          height: 5,
-          flexShrink: 0,
-          background: hovered
-            ? "linear-gradient(90deg, #1a7fa8 0%, #42b8e0 50%, #1a7fa8 100%)"
-            : "linear-gradient(90deg, #2196c4 0%, #7fd3ef 100%)",
-          transition: "background 0.3s ease",
-        }}
-      />
+      {/* Background glow effect on hover */}
+      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-700" />
 
-      <div className="flex flex-1 flex-col gap-4 p-5">
-        <div className="flex items-start gap-3">
-          <div
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-[15px] font-extrabold text-white"
-            style={{
-              background: "linear-gradient(135deg, #2196c4 0%, #56c8ea 100%)",
-              boxShadow: "0 6px 18px rgba(33,150,196,0.28)",
-              transform: hovered
-                ? "rotate(-4deg) scale(1.06)"
-                : "rotate(0deg) scale(1)",
-              transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1)",
-              letterSpacing: "0.04em",
-            }}
-          >
-            {initials}
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <h3
-              className="truncate text-[15px] font-bold text-[#0d3d54]"
-              style={{ letterSpacing: "-0.025em" }}
-            >
-              {tutor.name}
-            </h3>
-            <p className="mt-0.5 text-[11px] font-medium text-[#6aacca]">
-              {tutor.experience} experience
-            </p>
-            <div className="mt-1.5">
-              <StarRating rating={tutor.rating ?? 0} />
-            </div>
-          </div>
-
-          <div
-            className="shrink-0 rounded-xl px-3 py-2 text-center"
-            style={{
-              background: "linear-gradient(135deg, #2196c4 0%, #42b8e0 100%)",
-              boxShadow: "0 4px 14px rgba(33,150,196,0.25)",
-            }}
-          >
-            <span className="block text-[20px] font-black leading-none text-white">
-              ${tutor.hourlyRate ?? tutor.price}
-            </span>
-            <span
-              className="text-[9px] font-bold uppercase tracking-widest"
-              style={{ color: "#c8edf8" }}
-            >
-              /hr
-            </span>
-          </div>
+      {/* Top row: Avatar + Share button */}
+      <div className="flex justify-between items-start mb-8 relative z-10">
+        <div className="size-16 rounded-full bg-background border-2 border-primary/40 flex items-center justify-center overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.15)] group-hover:border-primary transition-colors">
+          <span className="text-xl font-black text-primary">{initials}</span>
         </div>
-        <div
-          style={{
-            height: 1,
-            flexShrink: 0,
-            background:
-              "linear-gradient(90deg, transparent 0%, #c8e8f5 40%, #c8e8f5 60%, transparent 100%)",
-          }}
-        />
-
-        <p
-          className="line-clamp-2 text-[12.5px] leading-relaxed"
-          style={{ color: "#4a7a90" }}
+        <button 
+          className="text-muted-foreground hover:text-primary transition-colors p-2 rounded-full hover:bg-primary/10"
         >
-          {tutor.bio}
+          <Share2 className="size-5" />
+        </button>
+      </div>
+
+      {/* Name & Bio */}
+      <div className="mb-6 relative z-10">
+        <h3 className="text-2xl font-black tracking-tighter text-neutral-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
+          {tutor.name}
+        </h3>
+        <p className="text-sm font-medium text-muted-foreground line-clamp-1 lowercase">
+          {tutor.bio || "expert mentor"}
         </p>
+      </div>
 
-        {tutor.subjects?.length > 0 && (
-          <div>
-            <p
-              className="mb-2 text-[9px] font-bold uppercase"
-              style={{ letterSpacing: "0.18em", color: "#7bbdd8" }}
-            >
-              Subjects
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {tutor.subjects.map((subject: string, i: number) => (
-                <span
-                  key={i}
-                  className="rounded-lg px-2.5 py-[3px] text-[11px] font-semibold"
-                  style={{
-                    background: hovered ? "#e0f4fc" : "#eef9fe",
-                    border: "1px solid #b8dff0",
-                    color: "#1a6f96",
-                  }}
-                >
-                  {subject}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {tutor.availability && Object.keys(tutor.availability).length > 0 && (
-          <div
-            className="rounded-xl p-3"
-            style={{ background: "#f0f9fe", border: "1px solid #c8e8f5" }}
+      {/* Subjects */}
+      <div className="flex flex-wrap gap-2 mb-8 relative z-10 h-[28px]">
+        {tutor.subjects?.slice(0, 2).map((sub: string, i: number) => (
+          <span
+            key={i}
+            className="px-3 py-1 bg-primary/5 border border-primary/10 rounded-full text-[10px] font-black uppercase tracking-widest text-primary/90"
           >
-            <p
-              className="mb-2 text-[9px] font-bold uppercase"
-              style={{ letterSpacing: "0.18em", color: "#7bbdd8" }}
-            >
-              Availability
-            </p>
-            <div className="flex flex-col gap-1.5">
-              {Object.entries(tutor.availability).map(([day, slots]) => (
-                <div key={day} className="flex items-center gap-2.5">
-                  <span
-                    className="w-7 text-[10px] font-bold"
-                    style={{ color: "#2196c4" }}
-                  >
-                    {DAY_LABELS[day] ?? day.toUpperCase()}
-                  </span>
-                  <div className="flex flex-wrap gap-1">
-                    {(slots as string[]).map((slot, i) => (
-                      <span
-                        key={i}
-                        className="rounded-md px-2 py-0.5 text-[10px] font-medium"
-                        style={{
-                          background: "#ffffff",
-                          border: "1px solid #b8dff0",
-                          color: "#1a6f96",
-                        }}
-                      >
-                        {slot}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            {sub}
+          </span>
+        ))}
+        {tutor.subjects?.length > 2 && (
+           <span className="px-3 py-1 bg-primary/5 border border-primary/10 rounded-full text-[10px] font-black uppercase tracking-widest text-neutral-500">
+             +{tutor.subjects.length - 2}
+           </span>
         )}
+      </div>
 
-        <Link href={`/tutorCard/${tutor.id}`}>
-          <button
-            className="mt-auto w-full rounded-xl py-2.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-all duration-300 active:scale-95"
-            style={{
-              background: booked
-                ? "linear-gradient(135deg, #22a06b, #2ecc94)"
-                : hovered
-                  ? "linear-gradient(135deg, #1a7fa8, #2196c4)"
-                  : "linear-gradient(135deg, #2196c4, #42b8e0)",
-              boxShadow: booked
-                ? "0 4px 18px rgba(34,160,107,0.3)"
-                : "0 4px 18px rgba(33,150,196,0.25)",
-            }}
-          >
-            More Details
+      {/* Stats Row: Rating, Exp, Rate */}
+      <div className="grid grid-cols-3 gap-2 mb-8 relative z-10">
+        <div className="text-left md:text-center">
+          <div className="flex items-center md:justify-center gap-1 text-neutral-900 dark:text-white font-black mb-1.5">
+            <Star className="size-3.5 fill-amber-500 text-amber-500" /> {Number(tutor.rating ?? 0).toFixed(1)}
+          </div>
+          <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Rating</div>
+        </div>
+        <div className="text-center">
+          <div className="text-neutral-900 dark:text-white font-black mb-1.5">{tutor.experience} Yrs</div>
+          <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Experience</div>
+        </div>
+        <div className="text-right md:text-center">
+          <div className="text-neutral-900 dark:text-white font-black mb-1.5">${tutor.hourlyRate ?? tutor.price}/hr</div>
+          <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">Rate</div>
+        </div>
+      </div>
+
+      {/* Bottom action bar */}
+      <div className="flex gap-3 relative z-10">
+        <Link href={`/tutorCard/${tutor.id}`} className="flex-1">
+          <button className="w-full h-12 rounded-full bg-primary/10 text-primary font-black uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all border border-primary/20 hover:border-primary">
+            get in touch
           </button>
         </Link>
+        <button 
+          onClick={handleBookmark}
+          disabled={isToggling}
+          className={cn(
+            "size-12 rounded-full border flex items-center justify-center transition-all shrink-0",
+            bookmarked 
+              ? "bg-primary/20 border-primary text-primary" 
+              : "bg-primary/5 border-primary/10 text-neutral-600 dark:text-white hover:bg-primary/10",
+            isToggling && "opacity-50 cursor-not-allowed"
+          )}
+        >
+          <Bookmark className={cn("size-5 transition-transform active:scale-75", bookmarked && "fill-primary")} />
+        </button>
       </div>
     </div>
   );
 };
 
-export { TutorCard };
+export default TutorCard;

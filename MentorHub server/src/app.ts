@@ -8,6 +8,11 @@ import { reviewRouter } from "./modules/review/review.route";
 import { studentRouter } from "./modules/students/student.route";
 import { categoryRouter } from "./modules/categories/categories.route";
 import { bookingsRouter } from "./modules/bookings/bookings.route";
+import { pricingRouter } from "./modules/pricing/pricing.route";
+import { blogRouter } from "./modules/blog/blog.route";
+import { bookmarkRouter } from "./modules/bookmark/bookmark.route";
+import { statsRouter } from "./modules/stats/stats.route";
+import { contactRouter } from "./modules/contact/contact.route";
 import { notFound } from "./middleware/notFound";
 import errorHandler from "./middleware/errorHandler";
 import session from "express-session";
@@ -57,6 +62,16 @@ app.use("/api/student", studentRouter);
 app.use("/api/category", categoryRouter);
 
 app.use("/api/booking", bookingsRouter);
+
+app.use("/api/blog", blogRouter);
+
+app.use("/api/bookmark", bookmarkRouter);
+
+app.use("/api/pricing", pricingRouter);
+
+app.use("/api/stats", statsRouter);
+
+app.use("/api/contact", contactRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

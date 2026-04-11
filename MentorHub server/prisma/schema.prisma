@@ -1,7 +1,6 @@
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -21,6 +20,8 @@ model User {
   studentBookings Booking[]     @relation("StudentBookings")
   reviews         Review[]
   tutorProfile    TutorProfile?
+  blogs           Blog[]
+  bookmarks       Bookmark[]
 
   role   String @default("STUDENT")
   status Status @default(UnBAN)
@@ -101,6 +102,7 @@ model TutorProfile {
 
   bookings     Booking[] @relation("TutorBookings")
   reviews      Review[]
+  bookmarks    Bookmark[]
 }
 
 model Category {
@@ -146,6 +148,48 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime     @default(now())
+}
+
+
+model Blog {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  excerpt   String?
+  image     String?
+  category  String?
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tutorId   String
+  tutor     TutorProfile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tutorId])
+  @@map("bookmarks")
+}
+
+model PricingTier {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  price         Float
+  description   String?
+  features      String[]
+  stripePriceId String?
+  isPopular     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("pricing_tiers")
 }
 
 enum Role{

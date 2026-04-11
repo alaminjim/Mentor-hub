@@ -71,7 +71,7 @@ const TutorDetailsPage = async ({
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50/50 to-cyan-50/30">
-      <div className="container mx-auto px-4 sm:px-6 py-12">
+      <div className="container mx-auto px-4 sm:px-6 pt-32 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-2 space-y-8">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 bg-white rounded-2xl p-6 shadow-sm border border-sky-100">
@@ -192,7 +192,7 @@ const TutorDetailsPage = async ({
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-6">
+            <div className="sticky top-32">
               <BookingForm
                 tutorId={data.id}
                 tutorName={data.name}

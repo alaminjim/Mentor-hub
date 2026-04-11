@@ -6,7 +6,8 @@ const app_url = env.NEXT_PUBLIC_BACKEND_URL;
 export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
     try {
-      const res = await fetch(`${app_url}/api/tutor`, {
+      const baseUrl = typeof window === "undefined" ? "http://localhost:5000" : "";
+      const res = await fetch(`${baseUrl}/api/tutor`, {
         method: "GET",
         cache: "no-store",
       });
@@ -27,7 +28,8 @@ export const tutorService = {
     tutorId: string,
   ): Promise<{ data: TutorDataType | null }> {
     try {
-      const res = await fetch(`${app_url}/api/tutor/${tutorId}`, {
+      const baseUrl = typeof window === "undefined" ? "http://localhost:5000" : "";
+      const res = await fetch(`${baseUrl}/api/tutor/${tutorId}`, {
         method: "GET",
         cache: "no-store",
       });

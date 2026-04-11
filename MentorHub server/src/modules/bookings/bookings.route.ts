@@ -2,6 +2,8 @@ import express from "express";
 import { bookingsController } from "./booking.controller";
 import auth from "../../middleware/auth";
 import { Role } from "../../types/role";
+import validateRequest from "../../middleware/validateRequest";
+import { BookingValidation, UpdateBookingStatusValidation } from "./booking.validation";
 
 const router = express.Router();
 
@@ -17,11 +19,17 @@ router.get(
   bookingsController.getBookingById,
 );
 
-router.post("/create", auth(Role.STUDENT), bookingsController.createBookings);
+router.post(
+  "/create",
+  auth(Role.STUDENT),
+  validateRequest(BookingValidation),
+  bookingsController.createBookings
+);
 
 router.put(
   "/status/:statusId",
   auth(Role.TUTOR),
+  validateRequest(UpdateBookingStatusValidation),
   bookingsController.moderateStatus,
 );
 

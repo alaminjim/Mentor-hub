@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { tutorService } from "@/components/service/tutor.service";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, Sparkles, Zap, Shield, Globe, Star } from "lucide-react";
 import toast from "react-hot-toast";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -18,13 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  bio: z.string().min(10, "Bio must be at least 10 characters"),
-  subjects: z.string().min(1, "At least one subject is required"),
-  experience: z.number().min(0, "Experience must be 0 or greater"),
-  hourlyRate: z.string().min(1, "Hourly rate is required"),
+  name: z.string().min(2, "name is too short"),
+  email: z.string().email("invalid email perspective"),
+  phone: z.string().min(10, "phone number required"),
+  bio: z.string().min(10, "bio needs more substance"),
+  subjects: z.string().min(1, "define your expertise"),
+  experience: z.number().min(0, "experience must be positive"),
+  hourlyRate: z.string().min(1, "define your value"),
 });
 
 type AvailabilitySlot = {
@@ -34,9 +33,7 @@ type AvailabilitySlot = {
 
 export default function CreateTutorProfileForm() {
   const router = useRouter();
-  const [availabilitySlots, setAvailabilitySlots] = useState<
-    AvailabilitySlot[]
-  >([{ day: "", timeSlot: "" }]);
+  const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([{ day: "", timeSlot: "" }]);
 
   const form = useForm({
     defaultValues: {
@@ -52,420 +49,210 @@ export default function CreateTutorProfileForm() {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastId = toast.loading("Creating profile...");
+      const toastId = toast.loading("crystallizing your profile...");
       try {
-        const validSlots = availabilitySlots.filter(
-          (slot) => slot.day && slot.timeSlot,
-        );
+        const validSlots = availabilitySlots.filter(s => s.day && s.timeSlot);
         if (validSlots.length === 0) {
-          toast.error("Please add at least one availability slot", {
-            id: toastId,
-          });
+          toast.error("at least one availability slot is required", { id: toastId });
           return;
         }
 
-        const subjectsArray = value.subjects
-          .split(",")
-          .map((s) => s.trim())
-          .filter((s) => s.length > 0);
-
+        const subjectsArray = value.subjects.split(",").map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
         const availability: Record<string, string[]> = {};
-        validSlots.forEach((slot) => {
+        validSlots.forEach(slot => {
           const dayKey = slot.day.toLowerCase();
-          if (!availability[dayKey]) {
-            availability[dayKey] = [];
-          }
+          if (!availability[dayKey]) availability[dayKey] = [];
           availability[dayKey].push(slot.timeSlot);
         });
 
         const rate = parseFloat(value.hourlyRate);
-        if (isNaN(rate) || rate <= 0) {
-          toast.error("Please enter a valid hourly rate", {
-            id: toastId,
-          });
-          return;
-        }
-
         const profilePayload = {
-          name: value.name,
-          email: value.email,
-          phone: value.phone,
-          bio: value.bio,
+          ...value,
           subjects: subjectsArray,
           price: rate,
-          experience: value.experience,
           hourlyRate: rate,
-          availability: availability,
+          availability,
         };
 
         const response = await tutorService.createTutorProfile(profilePayload);
 
         if (response.success) {
-          toast.success("Tutor profile created successfully!", {
-            id: toastId,
-          });
+          toast.success("profile established successfully.", { id: toastId });
           router.push("/dashboard/tutor");
           router.refresh();
         } else {
-          toast.error(response.error || "Failed to create profile", {
-            id: toastId,
-          });
+          toast.error(response.error || "failed to establish profile", { id: toastId });
         }
       } catch (error: any) {
-        console.error("Error creating profile:", error);
-        toast.error(error.message || "An error occurred. Please try again.", {
-          id: toastId,
-        });
+        toast.error("an error occurred in the workspace.", { id: toastId });
       }
     },
   });
 
-  const addAvailabilitySlot = () => {
-    setAvailabilitySlots([...availabilitySlots, { day: "", timeSlot: "" }]);
-  };
-
-  const removeAvailabilitySlot = (index: number) => {
-    if (availabilitySlots.length > 1) {
-      setAvailabilitySlots(availabilitySlots.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateAvailabilitySlot = (
-    index: number,
-    field: "day" | "timeSlot",
-    value: string,
-  ) => {
+  const addSlot = () => setAvailabilitySlots([...availabilitySlots, { day: "", timeSlot: "" }]);
+  const removeSlot = (i: number) => availabilitySlots.length > 1 && setAvailabilitySlots(availabilitySlots.filter((_, idx) => idx !== i));
+  const updateSlot = (i: number, f: "day" | "timeSlot", v: string) => {
     const updated = [...availabilitySlots];
-    updated[index][field] = value;
+    updated[i][f] = v;
     setAvailabilitySlots(updated);
   };
 
-  const daysOfWeek = [
-    { value: "sat", label: "Saturday" },
-    { value: "sun", label: "Sunday" },
-    { value: "mon", label: "Monday" },
-    { value: "tue", label: "Tuesday" },
-    { value: "wed", label: "Wednesday" },
-    { value: "thu", label: "Thursday" },
-    { value: "fri", label: "Friday" },
-  ];
-
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Create Your <span className="text-sky-500">Tutor Profile</span>
-          </h2>
-          <p className="text-gray-600">
-            Set up your profile to start connecting with students
-          </p>
+    <div className="max-w-4xl mx-auto py-12 px-6">
+      <div className="mb-16">
+        <h1 className="text-6xl font-black tracking-tighter lowercase mb-4">
+          establish. <br />
+          <span className="text-gradient">expertise.</span>
+        </h1>
+        <p className="text-xl text-neutral-400 font-medium lowercase">define your presence within the global mentorship network.</p>
+      </div>
+
+      <div className="glass border border-white/5 rounded-[3rem] p-12 relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-12 opacity-10">
+           <Globe className="size-32" />
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit();
-          }}
-        >
-          <FieldGroup>
-            <form.Field
-              name="name"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Name <span className="text-red-500">*</span>
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Enter your full name"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            />
+        <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(); }} className="relative z-10">
+          <FieldGroup className="space-y-12">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+               <form.Field name="name" children={(field) => (
+                 <Field>
+                   <FieldLabel className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">full name.</FieldLabel>
+                   <Input 
+                    value={field.state.value} 
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="e.g. marcus vance"
+                    className="bg-white/5 border-white/10 h-14 px-6 rounded-2xl focus:ring-primary/20"
+                   />
+                   <FieldError errors={field.state.meta.errors} />
+                 </Field>
+               )} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <form.Field
-                name="email"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Email <span className="text-red-500">*</span>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="email"
-                        value={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder="your.email@example.com"
-                      />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
-
-              <form.Field
-                name="phone"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Phone Number <span className="text-red-500">*</span>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="tel"
-                        value={field.state.value}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder="01712345678"
-                      />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
+               <form.Field name="email" children={(field) => (
+                 <Field>
+                   <FieldLabel className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">professional email.</FieldLabel>
+                   <Input 
+                    type="email"
+                    value={field.state.value} 
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="name@workspace.com"
+                    className="bg-white/5 border-white/10 h-14 px-6 rounded-2xl focus:ring-primary/20"
+                   />
+                   <FieldError errors={field.state.meta.errors} />
+                 </Field>
+               )} />
             </div>
 
-            <form.Field
-              name="bio"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Bio <span className="text-red-500">*</span>
-                    </FieldLabel>
-                    <textarea
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      rows={4}
-                      placeholder="Tell students about yourself..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            />
+            <form.Field name="bio" children={(field) => (
+               <Field>
+                 <FieldLabel className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">professional philosophy (bio).</FieldLabel>
+                 <textarea 
+                  value={field.state.value} 
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="describe your impact and mentorship style..."
+                  className="w-full bg-white/5 border border-white/10 min-h-[150px] p-6 rounded-[2rem] focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
+                 />
+                 <FieldError errors={field.state.meta.errors} />
+               </Field>
+            )} />
 
-            <form.Field
-              name="subjects"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>
-                      Subjects (comma separated){" "}
-                      <span className="text-red-500">*</span>
-                    </FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g., Bangla, Grammar, Writing"
-                    />
-                    <FieldDescription>
-                      Separate subjects with commas
-                    </FieldDescription>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+               <form.Field name="subjects" children={(field) => (
+                 <Field>
+                   <FieldLabel className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">expertise domains (comma separated).</FieldLabel>
+                   <Input 
+                    value={field.state.value} 
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="e.g. algorithms, architecture, rust"
+                    className="bg-white/5 border-white/10 h-14 px-6 rounded-2xl focus:ring-primary/20"
+                   />
+                   <FieldError errors={field.state.meta.errors} />
+                 </Field>
+               )} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <form.Field
-                name="experience"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Experience (years){" "}
-                        <span className="text-red-500">*</span>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="number"
-                        value={field.state.value}
-                        onChange={(e) =>
-                          field.handleChange(parseInt(e.target.value) || 0)
-                        }
-                        min="0"
-                        placeholder="3"
-                      />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
-
-              <form.Field
-                name="hourlyRate"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel htmlFor={field.name}>
-                        Hourly Rate (৳) <span className="text-red-500">*</span>
-                      </FieldLabel>
-                      <Input
-                        id={field.name}
-                        name={field.name}
-                        type="text"
-                        value={field.state.value}
+               <form.Field name="hourlyRate" children={(field) => (
+                 <Field>
+                   <FieldLabel className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">hourly rate (valution).</FieldLabel>
+                   <div className="relative">
+                      <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-primary">$</span>
+                      <Input 
+                        value={field.state.value} 
                         onChange={(e) => field.handleChange(e.target.value)}
-                        placeholder="900"
+                        placeholder="95"
+                        className="bg-white/5 border-white/10 h-14 pl-12 pr-6 rounded-2xl focus:ring-primary/20"
                       />
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
+                   </div>
+                   <FieldError errors={field.state.meta.errors} />
+                 </Field>
+               )} />
             </div>
 
-            <div>
-              <FieldLabel>
-                Availability <span className="text-red-500">*</span>
-              </FieldLabel>
-              <FieldDescription className="mb-3">
-                Add your available days and time slots
-              </FieldDescription>
-
-              <div className="space-y-3">
-                {availabilitySlots.map((slot, index) => (
-                  <div key={index} className="flex gap-3 items-start">
-                    <div className="flex-1">
-                      <select
-                        value={slot.day}
-                        onChange={(e) =>
-                          updateAvailabilitySlot(index, "day", e.target.value)
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-                      >
-                        <option value="">Select day</option>
-                        {daysOfWeek.map((day) => (
-                          <option key={day.value} value={day.value}>
-                            {day.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="flex-1">
-                      <Input
-                        type="text"
-                        value={slot.timeSlot}
-                        onChange={(e) =>
-                          updateAvailabilitySlot(
-                            index,
-                            "timeSlot",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="e.g., 9am-12pm"
-                        className="w-full"
-                      />
-                    </div>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeAvailabilitySlot(index)}
-                      disabled={availabilitySlots.length === 1}
-                      className="shrink-0"
-                    >
-                      <Trash2 className="size-4" />
-                    </Button>
+            {/* Availability Management */}
+            <div className="pt-8 border-t border-white/5">
+               <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h3 className="text-xl font-black tracking-tighter lowercase">availability windows.</h3>
+                    <p className="text-xs text-neutral-500 lowercase mt-1">define when you are accessible for sessions.</p>
                   </div>
-                ))}
-              </div>
+                  <Button type="button" onClick={addSlot} className="bg-primary/10 text-primary border border-primary/20 rounded-full hover:bg-primary hover:text-white transition-all">
+                    <Plus className="size-4 mr-2" /> add slot
+                  </Button>
+               </div>
 
-              <Button
-                type="button"
-                variant="outline"
-                onClick={addAvailabilitySlot}
-                className="mt-3 w-full"
-              >
-                <Plus className="size-4 mr-2" />
-                Add More Availability
-              </Button>
+               <div className="space-y-4">
+                  {availabilitySlots.map((slot, i) => (
+                    <div key={i} className="flex gap-4 items-center animate-in fade-in slide-in-from-top-2">
+                       <select 
+                        value={slot.day} 
+                        onChange={(e) => updateSlot(i, "day", e.target.value)}
+                        className="flex-1 bg-white/5 border-white/10 h-14 px-6 rounded-2xl text-xs font-black uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-primary/20"
+                       >
+                         <option value="">day</option>
+                         {["sat", "sun", "mon", "tue", "wed", "thu", "fri"].map(d => (
+                           <option key={d} value={d}>{d}</option>
+                         ))}
+                       </select>
+                       <Input 
+                         value={slot.timeSlot} 
+                        onChange={(e) => updateSlot(i, "timeSlot", e.target.value)}
+                        placeholder="e.g. 09:00 - 12:00"
+                        className="flex-1 bg-white/5 border-white/10 h-14 px-6 rounded-2xl"
+                       />
+                       <button 
+                        type="button" 
+                        onClick={() => removeSlot(i)}
+                        className="size-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-500 hover:bg-rose-500 hover:text-white transition-all disabled:opacity-20"
+                        disabled={availabilitySlots.length === 1}
+                       >
+                         <Trash2 className="size-5" />
+                       </button>
+                    </div>
+                  ))}
+               </div>
             </div>
 
-            <div className="flex gap-4 pt-4">
-              <form.Subscribe
-                selector={(state) => ({
-                  isSubmitting: state.isSubmitting,
-                })}
-              >
-                {({ isSubmitting }) => (
-                  <>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="flex-1 bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="size-5 animate-spin mr-2" />
-                          Creating Profile...
-                        </>
-                      ) : (
-                        "Create Profile"
-                      )}
-                    </Button>
-
-                    <Button
-                      type="button"
-                      onClick={() => router.back()}
-                      disabled={isSubmitting}
-                      variant="outline"
-                      className="px-6"
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                )}
-              </form.Subscribe>
+            <div className="pt-12 flex items-center gap-6">
+               <form.Subscribe selector={(s) => ({ isSubmitting: s.isSubmitting })}>
+                 {({ isSubmitting }) => (
+                    <>
+                      <button 
+                        type="submit" 
+                        disabled={isSubmitting}
+                        className="btn-premium flex-1 h-14 rounded-2xl text-xs font-black uppercase tracking-[0.2em]"
+                      >
+                        {isSubmitting ? <Loader2 className="animate-spin" /> : "crystallize profile"}
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => router.back()}
+                        className="px-12 h-14 rounded-2xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+                      >
+                        cancel
+                      </button>
+                    </>
+                 )}
+               </form.Subscribe>
             </div>
           </FieldGroup>
         </form>
