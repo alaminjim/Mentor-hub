@@ -167,64 +167,64 @@ export default function EventsPage() {
                        <Globe className="size-32" />
                     </div>
 
-                    <div className="space-y-6">
-                       <div className="flex items-center justify-between">
-                          <div className="px-5 py-2 rounded-2xl bg-primary/10 border border-primary/20 text-[9px] font-black uppercase tracking-widest text-primary italic">
-                             {ev.status} SESSION
-                          </div>
-                          <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground">
-                             <Users className="size-4" /> {ev.capacity} slots left
-                          </div>
-                       </div>
-                       <Link href={`/events/${ev.id}`}>
-                         <h3 className="text-3xl font-black tracking-tighter italic leading-none group-hover:text-primary transition-colors line-clamp-2 uppercase">
-                           {ev.title}
-                         </h3>
-                       </Link>
-                    </div>
+                     <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                           <div className="px-4 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[8px] font-black uppercase tracking-widest text-primary italic">
+                              {ev.status} SESSION
+                           </div>
+                           <div className="flex items-center gap-2 text-[9px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-3 py-1.5 rounded-xl">
+                              <Users className="size-3 text-primary" /> {ev.capacity} slots left
+                           </div>
+                        </div>
+                        <Link href={`/events/${ev.id}`}>
+                          <h3 className="text-xl md:text-2xl font-black tracking-tighter italic leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase h-14">
+                            {ev.title}
+                          </h3>
+                        </Link>
+                     </div>
 
-                    {/* Short Description */}
-                    {ev.description && (
-                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2 opacity-70">
-                        {ev.description}
-                      </p>
-                    )}
+                     {/* Short Description */}
+                     {ev.description && (
+                       <p className="text-[13px] text-muted-foreground font-medium leading-relaxed line-clamp-2 opacity-70 italic min-h-[2.5rem]">
+                         {ev.description}
+                       </p>
+                     )}
 
-                    <div className="space-y-4 flex-1">
-                       <div className="flex items-center gap-5 p-5 rounded-[2rem] bg-muted/40 border border-border group-hover:bg-primary/5 transition-colors">
-                          <div className="size-12 rounded-2xl bg-white dark:bg-slate-800 border border-border flex items-center justify-center text-primary shadow-sm">
-                             <Calendar className="size-6" />
-                          </div>
-                          <div>
-                             <p className="text-[9px] font-black uppercase text-muted-foreground tracking-widest">Scheduled For</p>
-                             <p className="text-[13px] font-black tracking-tight">{new Date(ev.date).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-                          </div>
-                       </div>
-                       <div className="flex items-center gap-5 p-5 rounded-[2rem] bg-muted/40 border border-border group-hover:bg-primary/5 transition-colors">
-                          <div className="size-12 rounded-2xl bg-white dark:bg-slate-800 border border-border flex items-center justify-center text-primary shadow-sm">
-                             <MapPin className="size-6" />
-                          </div>
-                          <div>
-                             <p className="text-[9px] font-black uppercase text-muted-foreground tracking-widest">Location Intel</p>
-                             <p className="text-[13px] font-black tracking-tight line-clamp-1 italic">{ev.location}</p>
-                          </div>
-                       </div>
-                    </div>
+                     <div className="space-y-3 flex-1">
+                        <div className="flex items-center gap-4 p-4 rounded-[1.8rem] bg-muted/30 border border-border/50 group-hover:bg-primary/5 transition-all group-hover:border-primary/20">
+                           <div className="size-10 rounded-xl bg-white dark:bg-slate-800 border border-border flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
+                              <Calendar className="size-5" />
+                           </div>
+                           <div>
+                              <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest opacity-50">Scheduled For</p>
+                              <p className="text-[12px] font-black tracking-tight">{new Date(ev.date).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-4 p-4 rounded-[1.8rem] bg-muted/30 border border-border/50 group-hover:bg-primary/5 transition-all group-hover:border-primary/20">
+                           <div className="size-10 rounded-xl bg-white dark:bg-slate-800 border border-border flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
+                              <MapPin className="size-5" />
+                           </div>
+                           <div>
+                              <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest opacity-50">Location Intel</p>
+                              <p className="text-[12px] font-black tracking-tight line-clamp-1 italic">{ev.location}</p>
+                           </div>
+                        </div>
+                     </div>
 
-                    <div className="pt-10 border-t border-border flex items-center justify-between">
-                       <div className="flex items-center gap-3">
-                          <div className="size-10 rounded-2xl bg-primary shadow-lg shadow-primary/20 flex items-center justify-center text-white font-black text-xs">
-                             {ev.organizer?.name?.[0] || 'O'}
-                          </div>
-                          <div className="flex flex-col">
-                             <span className="text-[9px] font-black uppercase tracking-wider text-primary">Curated By</span>
-                             <span className="text-[11px] font-black uppercase tracking-widest line-clamp-1">{ev.organizer?.name || 'Academic Lab'}</span>
-                          </div>
-                       </div>
-                       <Link href={`/events/${ev.id}`} className="size-14 rounded-[1.5rem] bg-muted hover:bg-primary hover:text-white transition-all flex items-center justify-center group/btn shadow-inner">
-                          <ArrowRight className="size-5 group-hover/btn:translate-x-1 transition-transform" />
-                       </Link>
-                    </div>
+                     <div className="pt-8 border-t border-border/50 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                           <div className="size-8 rounded-xl bg-primary shadow-lg shadow-primary/20 flex items-center justify-center text-white font-black text-[10px] ring-2 ring-white dark:ring-slate-900">
+                              {ev.organizer?.name?.[0] || 'O'}
+                           </div>
+                           <div className="flex flex-col">
+                              <span className="text-[8px] font-black uppercase tracking-wider text-primary/60">Curated By</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest line-clamp-1">{ev.organizer?.name || 'Academic Lab'}</span>
+                           </div>
+                        </div>
+                        <Link href={`/events/${ev.id}`} className="size-12 rounded-2xl bg-muted/50 hover:bg-primary hover:text-white transition-all flex items-center justify-center group/btn shadow-inner border border-transparent hover:border-primary/50">
+                           <ArrowRight className="size-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
+                     </div>
                   </motion.div>
                 ))}
               </div>
