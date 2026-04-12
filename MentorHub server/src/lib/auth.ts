@@ -26,6 +26,13 @@ export const auth = betterAuth({
     "https://mentor-hub-client-seven.vercel.app",
     "https://mentor-hub-server.vercel.app",
   ].filter(Boolean),
+  advanced: {
+    cookiePrefix: "better-auth",
+    useSecureCookies: true,
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+  },
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
@@ -73,13 +80,6 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60,
-    },
-  },
-  advanced: {
-    cookiePrefix: "better-auth",
-    useSecureCookies: process.env.NODE_ENV === "production",
-    crossSubDomainCookies: {
-      enabled: false,
     },
   },
 });

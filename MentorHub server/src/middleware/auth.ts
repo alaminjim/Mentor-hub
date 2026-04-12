@@ -6,11 +6,13 @@ import { Status } from "../../generated/prisma/client/index.js";
 const auth = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // Handle session retrieval
       const session = await betterAuth.api.getSession({
         headers: req.headers as any,
       });
 
       if (!session?.user) {
+        console.log("Session not found for headers:", req.headers.cookie ? "Cookie present" : "No cookie");
         return res.status(401).json({
           success: false,
           message: "You are not authorized",
