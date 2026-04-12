@@ -226,6 +226,48 @@ export const dashboardController = {
     }
   },
 
+  getEventByIdPublic: async (req: Request, res: Response) => {
+    try {
+      const data = await dashboardService.getEventByIdPublic(req.params.id as string);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  toggleEventRegistration: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const { eventId } = req.body;
+      const data = await dashboardService.toggleEventRegistration(user.id, eventId);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  toggleEventBookmark: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const { eventId } = req.body;
+      const data = await dashboardService.toggleEventBookmark(user.id, eventId);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  getEventStatusForUser: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const { id: eventId } = req.params;
+      const data = await dashboardService.getEventStatusForUser(user.id, eventId as string);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
   getAllProducts: async (req: Request, res: Response) => {
     try {
       const { user } = req as any;

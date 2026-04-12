@@ -113,13 +113,19 @@ const Navbar = () => {
     { 
       title: "events", 
       url: "/events",
-      items: events.length > 0 ? events.slice(0, 4).map(ev => ({
-        title: ev.title,
-        url: `/events/${ev.id}`,
-        description: `${ev.location} • ${new Date(ev.date).toLocaleDateString()}`,
-        icon: <Calendar className="size-5 text-primary" />
-      })) : [
-        { title: "All Events", url: "/events", description: "Explore all upcoming workshops", icon: <Calendar className="size-5 text-primary" /> }
+      items: events.length > 0 ? [
+        ...events.slice(0, 3).map(ev => ({
+          title: ev.title,
+          url: `/events/${ev.id}`,
+          description: `${ev.location} • ${new Date(ev.date).toLocaleDateString()}`,
+          icon: <Calendar className="size-5 text-primary" />
+        })),
+        { title: "View All Events", url: "/events", description: "Browse the complete academic calendar", icon: <Globe className="size-5 text-cyan-500" /> }
+      ] : [
+        { title: "Academic Workshops", url: "/events?cat=workshops", description: "Intensive 1-on-1 skill sessions", icon: <Sparkles className="size-5 text-primary" /> },
+        { title: "Global Webinars", url: "/events?cat=webinars", description: "Live sessions from industry experts", icon: <Globe className="size-5 text-cyan-500" /> },
+        { title: "Guest Lectures", url: "/events?cat=lectures", description: "Insights from top-tier mentors", icon: <GraduationCap className="size-5 text-emerald-500" /> },
+        { title: "Browse Calendar", url: "/events", description: "See all upcoming platform activities", icon: <Calendar className="size-5 text-primary" /> }
       ]
     },
     { title: "blog", url: "/blog" },

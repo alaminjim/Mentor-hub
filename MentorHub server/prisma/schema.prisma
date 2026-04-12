@@ -26,6 +26,8 @@ model User {
   products        Product[]
   productBookmarks ProductBookmark[]
   purchases        Purchase[]
+  eventRegistrations EventRegistration[]
+  eventBookmarks     EventBookmark[]
 
   role   String @default("STUDENT")
   status Status @default(UnBAN)
@@ -239,6 +241,8 @@ model Event {
   capacity    Int      @default(100)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  registrations EventRegistration[]
+  bookmarks     EventBookmark[]
 
   @@map("events")
 }
@@ -284,4 +288,27 @@ model Purchase {
   updatedAt DateTime @updatedAt
 
   @@map("purchases")
+}
+model EventRegistration {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@map("event_registrations")
+}
+
+model EventBookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@map("event_bookmarks")
 }

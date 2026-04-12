@@ -388,6 +388,42 @@ export const dashboardService = {
     }));
   },
 
+  getEventStatusForUser: async (userId: string, eventId: string) => {
+    const [registration, bookmark] = await Promise.all([
+      (prisma as any).eventRegistration.findUnique({ where: { userId_eventId: { userId, eventId } } }),
+      (prisma as any).eventBookmark.findUnique({ where: { userId_eventId: { userId, eventId } } }),
+    ]);
+    return { isRegistered: !!registration, isBookmarked: !!bookmark };
+  },
+
+  toggleEventRegistration: async (userId: string, eventId: string) => {
+    const existing = await (prisma as any).eventRegistration.findUnique({
+      where: { userId_eventId: { userId, eventId } }
+    });
+
+    if (existing) {
+      await (prisma as any).eventRegistration.delete({ where: { id: existing.id } });
+      return { registered: false };
+    } else {
+      await (prisma as any).eventRegistration.create({ data: { userId, eventId } });
+      return { registered: true };
+    }
+  },
+
+  toggleEventBookmark: async (userId: string, eventId: string) => {
+    const existing = await (prisma as any).eventBookmark.findUnique({
+      where: { userId_eventId: { userId, eventId } }
+    });
+
+    if (existing) {
+      await (prisma as any).eventBookmark.delete({ where: { id: existing.id } });
+      return { bookmarked: false };
+    } else {
+      await (prisma as any).eventBookmark.create({ data: { userId, eventId } });
+      return { bookmarked: true };
+    }
+  },
+
   getStudentBookmarks: async (userId: string) => {
     const [tutors, products] = await Promise.all([
       prisma.bookmark.findMany({
@@ -410,6 +446,13 @@ export const dashboardService = {
       where: { status: "UPCOMING" },
       orderBy: { date: "asc" },
       include: { organizer: { select: { name: true } } }
+    });
+  },
+
+  getEventByIdPublic: async (id: string) => {
+    return await prisma.event.findUnique({
+      where: { id },
+      include: { organizer: { select: { name: true, image: true, email: true } } }
     });
   },
 
