@@ -157,5 +157,20 @@ export const aiController = {
     } catch (error) {
       res.status(500).json({ success: false, message: "AI Generation failed" });
     }
+  },
+
+  generateReview: async (req: Request, res: Response) => {
+    try {
+      const { subject, tutorName } = req.body;
+      if (!subject || !tutorName) {
+        return res.status(400).json({ success: false, message: "Subject and tutorName are required" });
+      }
+
+      const review = await aiService.generateReview(subject, tutorName);
+      res.status(200).json({ success: true, data: review });
+    } catch (error) {
+      console.error("AI Review Generation Error:", error);
+      res.status(500).json({ success: false, message: "AI review generation failed" });
+    }
   }
 };

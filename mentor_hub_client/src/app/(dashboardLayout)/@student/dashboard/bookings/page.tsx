@@ -29,6 +29,8 @@ interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   tutorId: string;
+  tutorName?: string;
+  subject?: string;
   onSuccess: () => void;
 }
 
@@ -36,16 +38,40 @@ function ReviewModal({
   isOpen,
   onClose,
   tutorId,
+  tutorName,
+  subject,
   onSuccess,
 }: ReviewModalProps) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
 
   const router = useRouter();
 
   if (!isOpen) return null;
+
+  const handleAiReview = async () => {
+    setAiGenerating(true);
+    try {
+      const res = await fetch("/api/ai/generate-review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject, tutorName }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        setComment(result.data);
+        if (rating === 0) setRating(5);
+        toast.success("AI generated a review for you!");
+      }
+    } catch (err) {
+      toast.error("AI review generation failed");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,6 +173,19 @@ function ReviewModal({
               placeholder="What did you learn today?"
               className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl focus:outline-none focus:ring-4 focus:ring-yellow-500/10 text-slate-900 dark:text-white font-medium resize-none transition-all"
             />
+            <button
+              type="button"
+              onClick={handleAiReview}
+              disabled={aiGenerating}
+              className="mt-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-primary hover:text-primary/70 transition-colors"
+            >
+              {aiGenerating ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Sparkles size={12} />
+              )}
+              Generate With AI Magic
+            </button>
           </div>
 
           <button
@@ -180,9 +219,13 @@ export default function StudentBookingsPage() {
   const [reviewModal, setReviewModal] = useState<{
     isOpen: boolean;
     tutorId: string | null;
+    tutorName: string | null;
+    subject: string | null;
   }>({
     isOpen: false,
     tutorId: null,
+    tutorName: null,
+    subject: null,
   });
 
   useEffect(() => {
@@ -251,10 +294,12 @@ export default function StudentBookingsPage() {
     }
   };
 
-  const openReviewModal = (tutorId: string) => {
+  const openReviewModal = (tutorId: string, tutorName: string, subject: string) => {
     setReviewModal({
       isOpen: true,
       tutorId,
+      tutorName,
+      subject,
     });
   };
 
@@ -296,8 +341,10 @@ export default function StudentBookingsPage() {
     <>
       <ReviewModal
         isOpen={reviewModal.isOpen}
-        onClose={() => setReviewModal({ isOpen: false, tutorId: null })}
+        onClose={() => setReviewModal({ isOpen: false, tutorId: null, tutorName: null, subject: null })}
         tutorId={reviewModal.tutorId || ""}
+        tutorName={reviewModal.tutorName || ""}
+        subject={reviewModal.subject || ""}
         onSuccess={loadBookings}
       />
 
@@ -443,31 +490,39 @@ export default function StudentBookingsPage() {
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-4 min-w-[240px]">
                        {booking.status === "COMPLETED" ? (
                          <button
-                           onClick={() => openReviewModal(tutor?._id || tutor?.id || "")}
+                           onClick={() => openReviewModal(tutor?._id || tutor?.id || "", tutor?.name || "mentor", booking.subject)}
                            className="w-full flex items-center justify-center gap-3 h-14 bg-yellow-500 hover:bg-yellow-600 text-black rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-yellow-500/10"
                          >
                            <Star size={16} className="fill-black" />
                            Leave Review
                          </button>
                        ) : booking.status === "CONFIRMED" ? (
-                         <button 
-                           onClick={async () => {
-                             try {
-                               const res = await fetch(`/api/booking/pay/${bookingId}`);
-                               const result = await res.json();
-                               if (result.success && result.data.url) {
-                                 window.location.href = result.data.url;
-                               } else {
-                                 toast.error("Failed to generate payment link");
-                               }
-                             } catch (err) {
-                               toast.error("Payment system offline");
-                             }
-                           }}
-                           className="w-full flex items-center justify-center gap-3 h-14 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-primary/20"
-                         >
-                           Pay & Finalize <DollarSign size={14} />
-                         </button>
+                         <div className="space-y-3">
+                            <button 
+                              onClick={async () => {
+                                try {
+                                  const res = await fetch(`/api/booking/pay/${bookingId}`);
+                                  const result = await res.json();
+                                  if (result.success && result.data.url) {
+                                    window.location.href = result.data.url;
+                                  } else {
+                                    toast.error("Failed to generate payment link");
+                                  }
+                                } catch (err) {
+                                  toast.error("Payment system offline");
+                                }
+                              }}
+                              className="w-full flex items-center justify-center gap-3 h-14 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-primary/20"
+                            >
+                              Pay & Finalize <DollarSign size={14} />
+                            </button>
+                            <button
+                              onClick={() => openReviewModal(tutor?._id || tutor?.id || "", tutor?.name || "mentor", booking.subject)}
+                              className="w-full flex items-center justify-center gap-3 h-12 bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-black uppercase tracking-widest text-[9px] transition-all"
+                            >
+                              Leave Review <Star size={12} />
+                            </button>
+                         </div>
                        ) : (
                          <button className="w-full flex items-center justify-center gap-3 h-14 bg-white/5 border border-white/10 hover:bg-primary hover:text-white hover:border-primary text-slate-400 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all">
                            Wait for Approval <Clock size={14} />

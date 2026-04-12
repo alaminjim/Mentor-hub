@@ -169,5 +169,39 @@ export const aiService = {
     } catch (err) {
       return "";
     }
+  },
+
+  generateReview: async (subject: string, tutorName: string) => {
+    const systemPrompt = `
+      You are an expert educational reviewer for MentorHub.
+      Your task is to write a warm, professional, and slightly enthusiastic 1-sentence review for a mentor and their session.
+      The review should mention the subject and feel like it was written by a satisfied student.
+      Example: 'Subject: Math, Tutor: Dr. Smith' -> 'dr. smith made complex math concepts incredibly easy to understand in today's session. highly recommended!'
+      Constraint: 
+      - Use lowercase for a modern vibe. 
+      - Output ONLY the review text. 
+      - Max 150 characters.
+    `;
+
+    try {
+      const response = await fetch("https://text.pollinations.ai/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `Subject: ${subject}, Tutor: ${tutorName}` }
+          ],
+          model: "openai",
+          seed: 77
+        })
+      });
+
+      if (!response.ok) return "great session! learned a lot about this subject.";
+      const text = await response.text();
+      return text.trim();
+    } catch (err) {
+      return "excellent mentorship. very helpful guidance.";
+    }
   }
 };
