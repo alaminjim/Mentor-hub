@@ -128,7 +128,7 @@ const Navbar = () => {
         { title: "Browse Calendar", url: "/events", description: "See all upcoming platform activities", icon: <Calendar className="size-5 text-primary" /> }
       ]
     },
-    { title: "about", url: "/about" },
+    { title: "blogs", url: "/blog" },
     { title: "contact", url: "/contact" },
   ];
 
