@@ -219,8 +219,10 @@ export const dashboardController = {
 
   getAllEventsPublic: async (req: Request, res: Response) => {
     try {
-      const data = await dashboardService.getAllEventsPublic();
-      res.status(200).json({ success: true, data });
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 9;
+      const data = await dashboardService.getAllEventsPublic(page, limit);
+      res.status(200).json({ success: true, ...data });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
@@ -262,6 +264,26 @@ export const dashboardController = {
       const { user } = req as any;
       const { id: eventId } = req.params;
       const data = await dashboardService.getEventStatusForUser(user.id, eventId as string);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  getJoinedEvents: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const data = await dashboardService.getJoinedEvents(user.id);
+      res.status(200).json({ success: true, data });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  getSavedEvents: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const data = await dashboardService.getSavedEvents(user.id);
       res.status(200).json({ success: true, data });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });

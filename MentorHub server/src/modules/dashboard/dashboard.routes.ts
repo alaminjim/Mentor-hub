@@ -30,6 +30,8 @@ router.get("/events/public/:id", dashboardController.getEventByIdPublic);
 router.post("/events/registration", auth(), dashboardController.toggleEventRegistration);
 router.post("/events/bookmark", auth(), dashboardController.toggleEventBookmark);
 router.get("/events/status/:id", auth(), dashboardController.getEventStatusForUser);
+router.get("/events/joined", auth(), dashboardController.getJoinedEvents);
+router.get("/events/saved", auth(), dashboardController.getSavedEvents);
 router.get("/products", auth(), dashboardController.getAllProducts);
 router.get("/products/purchased", auth(), dashboardController.getPurchasedProducts);
 router.post("/products/bookmark", auth(), dashboardController.toggleProductBookmark);

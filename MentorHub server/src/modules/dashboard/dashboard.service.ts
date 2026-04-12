@@ -64,7 +64,7 @@ export const dashboardService = {
 
   // ─── STUDENT ─────────────────────────────────────────────────────────────────
   getUserStats: async (userId: string) => {
-    const [totalBookings, completedBookings, totalSpentData, purchaseCount, purchaseSpentData, recentBookings, recentPurchases] = await Promise.all([
+    const [totalBookings, completedBookings, totalSpentData, purchaseCount, purchaseSpentData, recentBookings, recentPurchases, joinedCount, savedCount] = await Promise.all([
       prisma.booking.count({ where: { studentId: userId } }),
       prisma.booking.count({ where: { studentId: userId, status: "COMPLETED" } }),
       prisma.booking.aggregate({
@@ -87,7 +87,9 @@ export const dashboardService = {
         take: 5,
         orderBy: { createdAt: "desc" },
         include: { product: true }
-      })
+      }),
+      (prisma as any).eventRegistration.count({ where: { userId } }),
+      (prisma as any).eventBookmark.count({ where: { userId } }),
     ]);
 
     const totalSpent = Number(totalSpentData._sum.totalPrice || 0) + Number(purchaseSpentData._sum.amount || 0);
@@ -95,9 +97,10 @@ export const dashboardService = {
     return {
       stats: [
         { label: "Bookings", value: totalBookings, icon: "calendar" },
+        { label: "Events Joined", value: joinedCount, icon: "check" },
+        { label: "Events Saved", value: savedCount, icon: "star" },
         { label: "My Products", value: purchaseCount, icon: "book" },
         { label: "Total Investment", value: `$${totalSpent.toFixed(0)}`, icon: "dollar" },
-        { label: "Completed", value: completedBookings, icon: "check" },
       ],
       charts: {
         distribution: [
@@ -388,6 +391,20 @@ export const dashboardService = {
     }));
   },
 
+  getJoinedEvents: async (userId: string) => {
+    return await (prisma as any).eventRegistration.findMany({
+      where: { userId },
+      include: { event: { include: { organizer: { select: { name: true, image: true } } } } }
+    });
+  },
+
+  getSavedEvents: async (userId: string) => {
+    return await (prisma as any).eventBookmark.findMany({
+      where: { userId },
+      include: { event: { include: { organizer: { select: { name: true, image: true } } } } }
+    });
+  },
+
   getEventStatusForUser: async (userId: string, eventId: string) => {
     const [registration, bookmark] = await Promise.all([
       (prisma as any).eventRegistration.findUnique({ where: { userId_eventId: { userId, eventId } } }),
@@ -441,12 +458,22 @@ export const dashboardService = {
     return { tutors, products };
   },
 
-  getAllEventsPublic: async () => {
-    return await prisma.event.findMany({
-      where: { status: "UPCOMING" },
-      orderBy: { date: "asc" },
-      include: { organizer: { select: { name: true } } }
-    });
+  getAllEventsPublic: async (page: number = 1, limit: number = 9) => {
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+      prisma.event.findMany({
+        skip,
+        take: limit,
+        where: { status: { in: ["UPCOMING", "ONGOING"] } },
+        orderBy: { date: "asc" },
+        include: { organizer: { select: { name: true, image: true, email: true } } }
+      }),
+      prisma.event.count({
+        where: { status: { in: ["UPCOMING", "ONGOING"] } }
+      })
+    ]);
+
+    return { data, total, page, totalPages: Math.ceil(total / limit) };
   },
 
   getEventByIdPublic: async (id: string) => {

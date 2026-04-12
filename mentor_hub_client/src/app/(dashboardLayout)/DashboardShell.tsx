@@ -18,6 +18,7 @@ import {
   Bookmark,
   ShoppingBag,
   Heart,
+  Calendar,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -78,101 +79,81 @@ type SessionUser = {
 const navDataByRole: Record<Role, NavGroup[]> = {
   admin: [
     {
-      title: "Workspace Command",
+      title: "Global Command",
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Manage Users", icon: Users, href: "/dashboard/user" },
-        { label: "Manage Tutors", icon: UserCheck, href: "/dashboard/tutor" },
+        { label: "User Control", icon: Users, href: "/dashboard/user" },
+        { label: "Tutor Audits", icon: UserCheck, href: "/dashboard/tutor" },
         { label: "All Bookings", icon: ClipboardList, href: "/dashboard/booking" },
-        { label: "Manage Blogs", icon: BookOpen, href: "/dashboard/blogs" },
-        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+        { label: "Event Grid", icon: Calendar, href: "/dashboard/events" },
+        { label: "Product Vault", icon: ShoppingBag, href: "/dashboard/products" },
+        { label: "Blog Engine", icon: BookOpen, href: "/dashboard/blogs" },
         { label: "Settings", icon: Settings, href: "/dashboard/settings" },
       ],
     },
   ],
   student: [
     {
-      title: "Overview",
+      title: "Engagement Hub",
       items: [
-        {
-          label: "Dashboard",
-          icon: LayoutDashboard,
-          href: "/dashboard",
-        },
-        {
-          label: "My Bookings",
-          icon: ClipboardList,
-          href: "/dashboard/bookings",
-        },
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "My Sessions", icon: ClipboardList, href: "/dashboard/bookings" },
+        { label: "Joined Events", icon: UserCheck, href: "/dashboard/events/joined" },
+        { label: "Saved Events", icon: Heart, href: "/dashboard/events/saved" },
         { label: "Product Library", icon: BookOpen, href: "/dashboard/browse-products" },
-        { label: "Saved Tutors", icon: Heart, href: "/dashboard/bookmarks?tab=tutors" },
-        { label: "Product Wishlist", icon: Bookmark, href: "/dashboard/bookmarks?tab=products" },
+        { label: "Saved Tutors", icon: Star, href: "/dashboard/bookmarks?tab=tutors" },
         { label: "My Reviews", icon: Star, href: "/dashboard/bookings/review" },
-        {
-          label: "Manage Profile",
-          icon: User,
-          href: "/dashboard/profile",
-        },
+        { label: "Edit Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],
   tutor: [
     {
-      title: "Overview",
+      title: "Tutor Command",
       items: [
-        {
-          label: "Create Profile",
-          icon: LayoutDashboard,
-          href: "/dashboard",
-        },
-        {
-          label: "Tutor Profile",
-          icon: UserCheck,
-          href: "/dashboard/tutor",
-        },
-        {
-          label: "My Bookings",
-          icon: BookOpen,
-          href: "/dashboard/tutor/bookings",
-        },
-        {
-          label: "Manage Profile",
-          icon: User,
-          href: "/dashboard/profile",
-        },
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "Teaching Profile", icon: UserCheck, href: "/dashboard/tutor" },
+        { label: "My Bookings", icon: BookOpen, href: "/dashboard/tutor/bookings" },
+        { label: "Sell Products", icon: ShoppingBag, href: "/dashboard/products" },
+        { label: "Host Events", icon: Calendar, href: "/dashboard/events" },
+        { label: "Edit Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],
   manager: [
     {
-      title: "Management",
+      title: "Platform Ops",
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
         { label: "User Audits", icon: ShieldAlert, href: "/dashboard/audits" },
-        { label: "Reports", icon: BarChart3, href: "/dashboard/reports" },
-        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+        { label: "System Reports", icon: BarChart3, href: "/dashboard/reports" },
+        { label: "All Bookings", icon: ClipboardList, href: "/dashboard/booking" },
+        { label: "Manage Events", icon: Calendar, href: "/dashboard/events" },
+        { label: "Edit Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],
   vendor: [
     {
-      title: "Store",
+      title: "Commerce Hub",
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Products", icon: BookOpen, href: "/dashboard/products" },
-        { label: "Interests", icon: Bookmark, href: "/dashboard/bookmarks" },
-        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+        { label: "Sell Products", icon: ShoppingBag, href: "/dashboard/products" },
+        { label: "Host Events", icon: Calendar, href: "/dashboard/events" },
+        { label: "Wishlists", icon: Heart, href: "/dashboard/bookmarks" },
+        { label: "Edit Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],
   organizer: [
     {
-      title: "Events",
+      title: "Events & Trade",
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Meetings", icon: ClipboardList, href: "/dashboard/events" },
-        { label: "All Bookings", icon: Users, href: "/dashboard/bookings-manage" },
-        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+        { label: "Manage Events", icon: Calendar, href: "/dashboard/events" },
+        { label: "Registrations", icon: Users, href: "/dashboard/bookings-manage" },
+        { label: "Joined Events", icon: UserCheck, href: "/dashboard/events/joined" },
+        { label: "Edit Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],

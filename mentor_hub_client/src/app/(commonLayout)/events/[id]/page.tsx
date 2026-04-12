@@ -49,8 +49,20 @@ export default function EventDetailsPage() {
     const init = async () => {
       const session = await authClient.getSession();
       if (session?.data?.user) {
-        setUser(session.data.user);
+        const user = session.data.user as any;
+        setUser(user);
+        
+        // Premium Check: If student is not subscribed, redirect to pricing
+        if (user.role === "STUDENT" && !user.isSubscribed) {
+          toast.error("This is a Premium Session. Please subscribe to access details.");
+          return router.push("/pricing");
+        }
+        
         fetchStatus();
+      } else {
+        // If not logged in, they can't see details either (optional but safe)
+        toast.error("Please sign in to view event details");
+        return router.push("/signin");
       }
       if (id) fetchEvent();
     };
