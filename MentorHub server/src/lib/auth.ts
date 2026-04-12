@@ -18,12 +18,14 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  baseURL: process.env.APP_URL || "https://mentor-hub-server.vercel.app",
+  baseURL: process.env.BETTER_AUTH_URL || "https://mentor-hub-server.vercel.app",
   trustedOrigins: [
+    process.env.BETTER_AUTH_URL!,
     process.env.APP_URL!,
+    process.env.PROD_APP_URL!,
     "https://mentor-hub-client-seven.vercel.app",
     "https://mentor-hub-server.vercel.app",
-  ],
+  ].filter(Boolean),
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
