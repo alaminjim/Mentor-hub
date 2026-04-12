@@ -30,8 +30,9 @@ app.use(express.json());
 // Configure CORS to allow both production and Vercel preview deployments
 const allowedOrigins = [
   process.env.APP_URL || "http://localhost:3000",
-  process.env.PROD_APP_URL, // Production frontend URL
-].filter(Boolean); // Remove undefined values
+  process.env.PROD_APP_URL,
+  "https://mentor-hub-client-seven.vercel.app",
+].filter(Boolean) as string[]; // Remove undefined values
 
 app.use(
   cors({
