@@ -1,22 +1,22 @@
 import express from "express";
 import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
-import { authRouter } from "./modules/auth/auth.route";
-import { tutorRouter } from "./modules/tutor/tutor.route";
-import { reviewRouter } from "./modules/review/review.route";
-import { studentRouter } from "./modules/students/student.route";
-import { categoryRouter } from "./modules/categories/categories.route";
-import { bookingsRouter } from "./modules/bookings/bookings.route";
-import { pricingRouter } from "./modules/pricing/pricing.route";
-import { blogRouter } from "./modules/blog/blog.route";
-import { bookmarkRouter } from "./modules/bookmark/bookmark.route";
-import { statsRouter } from "./modules/stats/stats.route";
-import { contactRouter } from "./modules/contact/contact.route";
-import { aiRouter } from "./modules/ai/ai.route";
-import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
-import { notFound } from "./middleware/notFound";
-import errorHandler from "./middleware/errorHandler";
+import { auth } from "./lib/auth.js";
+import { authRouter } from "./modules/auth/auth.route.js";
+import { tutorRouter } from "./modules/tutor/tutor.route.js";
+import { reviewRouter } from "./modules/review/review.route.js";
+import { studentRouter } from "./modules/students/student.route.js";
+import { categoryRouter } from "./modules/categories/categories.route.js";
+import { bookingsRouter } from "./modules/bookings/bookings.route.js";
+import { pricingRouter } from "./modules/pricing/pricing.route.js";
+import { blogRouter } from "./modules/blog/blog.route.js";
+import { bookmarkRouter } from "./modules/bookmark/bookmark.route.js";
+import { statsRouter } from "./modules/stats/stats.route.js";
+import { contactRouter } from "./modules/contact/contact.route.js";
+import { aiRouter } from "./modules/ai/ai.route.js";
+import { dashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
+import { notFound } from "./middleware/notFound.js";
+import errorHandler from "./middleware/errorHandler.js";
 import session from "express-session";
 
 const app = express();
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 });
 
 // Stripe webhook needs raw body
-import { PricingController } from "./modules/pricing/pricing.controller";
+import { PricingController } from "./modules/pricing/pricing.controller.js";
 app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), PricingController.stripeWebhook);
 
 app.use(express.json());
