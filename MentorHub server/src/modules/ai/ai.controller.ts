@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { aiService } from "./ai.service";
-import { prisma } from "../../lib/prisma";
+import { aiService } from "./ai.service.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const aiController = {
   chat: async (req: Request, res: Response) => {

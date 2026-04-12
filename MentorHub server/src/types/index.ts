@@ -1,5 +1,5 @@
-import { Status } from "../../generated/prisma/enums";
-import { Role } from "./role";
+import { Status } from "../../generated/prisma/client/index.js";
+import { Role } from "./role.js";
 
 declare global {
   namespace Express {
