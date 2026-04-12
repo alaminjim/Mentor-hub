@@ -18,7 +18,7 @@ export interface UpdateCategoryData {
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
-    const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+    const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
     const res = await fetch(`${baseUrl}/api/category`, {
       credentials: "include",
       cache: "no-store",
@@ -37,7 +37,7 @@ export const getCategories = async (): Promise<Category[]> => {
 export const createCategory = async (
   data: CreateCategoryData,
 ): Promise<Category> => {
-  const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+  const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
   const res = await fetch(`${baseUrl}/api/category/create`, {
     method: "POST",
     headers: {

@@ -130,8 +130,9 @@ export default function BlogPage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${BACKEND_URL}/api/blog`, {
-          cache: "no-store",
+        const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
+        const res = await fetch(`${baseUrl}/api/blog`, {
+          next: { revalidate: 3600 }, // Cache but revalidate every hour
         });
         if (!res.ok) throw new Error(`Server error: ${res.status}`);
         const json = await res.json();

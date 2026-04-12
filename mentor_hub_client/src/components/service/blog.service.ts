@@ -1,7 +1,7 @@
 export const blogService = {
   getBlogs: async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+      const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
       const res = await fetch(`${baseUrl}/api/blog`, {
         cache: "no-store",
       });
