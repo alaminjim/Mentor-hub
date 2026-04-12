@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { CreateBookingInput } from "@/type/bookingType";
-import { env } from "../../../env";
+import { env } from "../../../env.js";
 
 const API_URL = env.BACKEND_URL;
 

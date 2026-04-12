@@ -1,7 +1,7 @@
 import { StatsDataType } from "@/type/statsType";
-import { env } from "../../../env";
+import { env } from "../../../env.js";
 
-const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : (env.NEXT_PUBLIC_BACKEND_URL || "");
 
 export const statsService = {
   getStats: async (): Promise<{ data: StatsDataType | null }> => {

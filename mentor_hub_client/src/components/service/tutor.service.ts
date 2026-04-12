@@ -1,5 +1,5 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
-import { env } from "../../../env";
+import { env } from "../../../env.js";
 
 const app_url = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : (env.NEXT_PUBLIC_BACKEND_URL || "");
 

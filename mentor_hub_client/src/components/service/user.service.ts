@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { env } from "../../../env";
+import { env } from "../../../env.js";
 
 const BASE_URL = env.NEXT_PUBLIC_AUTH_URL;
 

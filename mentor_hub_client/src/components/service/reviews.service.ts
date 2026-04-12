@@ -1,7 +1,7 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
-import { env } from "../../../env";
+import { env } from "../../../env.js";
 
-const app_url = env.NEXT_PUBLIC_BACKEND_URL;
+const app_url = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : "";
 
 export const reviewService = {
   getReviews: async function (
