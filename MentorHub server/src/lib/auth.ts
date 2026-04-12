@@ -18,9 +18,11 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  baseURL: process.env.APP_URL || "https://mentor-hub-server.vercel.app",
   trustedOrigins: [
     process.env.APP_URL!,
     "https://mentor-hub-client-seven.vercel.app",
+    "https://mentor-hub-server.vercel.app",
   ],
   plugins: [
     emailOTP({
@@ -75,7 +77,7 @@ export const auth = betterAuth({
     cookiePrefix: "better-auth",
     useSecureCookies: process.env.NODE_ENV === "production",
     crossSubDomainCookies: {
-      enabled: true,
+      enabled: false,
     },
   },
 });

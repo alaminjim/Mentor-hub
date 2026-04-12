@@ -20,6 +20,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import session from "express-session";
 
 const app = express();
+app.set("trust proxy", true);
 
 // MANUAL CORS FAILSAFE - MUST BE AT THE VERY TOP
 app.use((req, res, next) => {
