@@ -18,7 +18,7 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  baseURL: process.env.BETTER_AUTH_URL || "https://mentor-hub-server.vercel.app",
+  baseURL: process.env.APP_URL || process.env.BETTER_AUTH_URL || "https://mentor-hub-server.vercel.app",
   trustedOrigins: [
     process.env.BETTER_AUTH_URL!,
     process.env.APP_URL!,
