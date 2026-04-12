@@ -13,7 +13,7 @@ export const blogService = {
   },
   getBlogsByCategory: async (category: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+      const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
       const res = await fetch(`${baseUrl}/api/blog/category/${category}`, {
         cache: "no-store",
       });
@@ -25,7 +25,7 @@ export const blogService = {
   },
   searchBlogs: async (searchTerm: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+      const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
       const res = await fetch(`${baseUrl}/api/blog/search/posts?searchTerm=${searchTerm}`, {
         cache: "no-store",
       });
@@ -37,7 +37,7 @@ export const blogService = {
   },
   getBlogById: async (id: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.NEXT_PUBLIC_BACKEND_URL || "") : "";
+      const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
       const res = await fetch(`${baseUrl}/api/blog/${id}`, {
         cache: "no-store",
       });
