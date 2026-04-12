@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
 
-const config: NextConfig = {
+const config: any = {
   images: {
     unoptimized: true, // Force disable optimization to resolve 404 on local dev
     remotePatterns: [
