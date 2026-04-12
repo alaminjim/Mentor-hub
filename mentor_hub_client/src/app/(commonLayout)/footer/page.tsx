@@ -56,6 +56,14 @@ const Footer = ({ className }: { className?: string }) => {
         { text: "Instagram", url: "https://www.instagram.com/alamin_zig/" },
       ],
     },
+    {
+      title: "Support",
+      links: [
+        { text: "Office: Mirpur DOHS, Dhaka", url: "#" },
+        { text: "Phone: +880 1712 345678", url: "#" },
+        { text: "Help: help@mentorhub.com", url: "mailto:help@mentorhub.com" },
+      ],
+    },
   ];
 
   return (
@@ -130,7 +138,7 @@ const Footer = ({ className }: { className?: string }) => {
           </div>
 
           {/* Middle Section: Links Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-28 border-t border-cyan-100 pt-16">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-12 mb-28 border-t border-cyan-100 pt-16">
             {sections.map((section, i) => (
               <div key={i}>
                 <RevealItem>

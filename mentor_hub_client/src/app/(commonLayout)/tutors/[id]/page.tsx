@@ -165,9 +165,30 @@ const TutorDetailsPage = async ({
                    About Mentor
                 </h2>
                 <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-black font-serif italic">
-                  "{data.bio || "inspiring a new generation of leaders and thinkers through dedicated mentorship."}"
+                   "{data.bio || "inspiring a new generation of leaders and thinkers through dedicated mentorship."}"
                 </p>
               </div>
+            </div>
+
+            {/* Certifications & Media Gallery */}
+            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-xl border border-slate-200 dark:border-slate-800">
+               <h2 className="text-lg font-black uppercase tracking-widest text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                  <BadgeCheck className="size-5 text-primary" /> Certifications & Media
+               </h2>
+               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="aspect-video rounded-3xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden group relative">
+                       <img 
+                          src={`https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400&seed=${i}`} 
+                          alt="Certification" 
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-100" 
+                       />
+                       <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="text-[10px] font-black text-white uppercase tracking-widest bg-primary px-3 py-1.5 rounded-full">View Credential</span>
+                       </div>
+                    </div>
+                  ))}
+               </div>
             </div>
 
             {/* Expertise & Availability */}

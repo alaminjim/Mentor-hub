@@ -77,8 +77,10 @@ export default function Hero() {
   const titleRef = useRef(null);
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (!titleRef.current) return;
     
     // GSAP text reveal
@@ -98,10 +100,12 @@ export default function Hero() {
     });
   }, []);
 
+  if (!isMounted) return null;
+
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center overflow-hidden">
+    <section suppressHydrationWarning ref={containerRef} className="relative min-h-[75vh] flex items-center overflow-hidden pt-20">
       {/* 3D background visual */}
-      <div className="absolute right-[-10vw] top-[10vh] w-[60vw] h-[80vh] pointer-events-none z-0">
+      <div suppressHydrationWarning className="absolute right-[-10vw] top-[10vh] w-[60vw] h-[80vh] pointer-events-none z-0">
         <Canvas>
           <PerspectiveCamera makeDefault position={[0, 0, 5]} />
           <ambientLight intensity={0.5} />

@@ -7,25 +7,27 @@ import { motion } from "framer-motion";
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen bg-white dark:bg-slate-950 overflow-hidden">
+    <div className="flex min-h-screen bg-white dark:bg-slate-950">
       {/* Left side: Form */}
       <motion.div 
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-24 xl:px-32 relative z-10"
+        className="flex-1 flex flex-col px-8 sm:px-12 lg:px-24 xl:px-32 relative z-10"
       >
-        <div className="absolute top-8 left-12 flex items-center gap-2">
+        <div className="pt-12 pb-8 flex items-center gap-2">
             <div className="size-10 bg-sky-500 rounded-2xl rotate-12 flex items-center justify-center shadow-lg shadow-sky-500/20">
                 <span className="text-white font-black text-xl -rotate-12">M</span>
             </div>
             <span className="font-black text-2xl tracking-tighter text-slate-900 dark:text-white uppercase">Mentor<span className="text-sky-500">Hub.</span></span>
         </div>
 
-        <LoginForm />
+        <div className="flex-1 flex flex-col justify-center">
+          <LoginForm />
+        </div>
 
-        <div className="absolute bottom-8 left-12">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+        <div className="py-8">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center lg:text-left">
                 © 2026 MentorHub Global. All Rights Reserved.
             </p>
         </div>

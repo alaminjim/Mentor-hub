@@ -19,11 +19,16 @@ export const AIChatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
+
+  if (!isMounted) return null;
 
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
@@ -52,7 +57,7 @@ export const AIChatbot = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100] pointer-events-none">
+    <div suppressHydrationWarning className="fixed bottom-8 right-8 z-[100] pointer-events-none">
       <AnimatePresence>
         {isOpen && (
           <motion.div

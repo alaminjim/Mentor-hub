@@ -206,8 +206,8 @@ export default function DashboardShell({
   const formattedPage = currentPage.toLowerCase().replace(/-/g, " ");
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background text-foreground">
+    <SidebarProvider suppressHydrationWarning>
+      <div suppressHydrationWarning className="flex min-h-screen w-full bg-background text-foreground">
         <Sidebar className="border-r border-border bg-card/80 backdrop-blur-xl">
           <SidebarHeader className="p-6">
             <Link href="/" className="flex items-center gap-3 group">
