@@ -21,23 +21,25 @@ import session from "express-session";
 
 const app = express();
 
-// Stripe webhook needs raw body, so we put it BEFORE express.json()
-import { PricingController } from "./modules/pricing/pricing.controller";
-app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), PricingController.stripeWebhook);
-
-app.use(express.json());
-
+// MANUAL CORS FAILSAFE - MUST BE AT THE VERY TOP
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  const origin = req.headers.origin;
+  res.header("Access-Control-Allow-Origin", origin || "*");
   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
   res.header("Access-Control-Allow-Credentials", "true");
   
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+    return res.status(200).end();
   }
   next();
 });
+
+// Stripe webhook needs raw body
+import { PricingController } from "./modules/pricing/pricing.controller";
+app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), PricingController.stripeWebhook);
+
+app.use(express.json());
 
 app.use(
   cors({
