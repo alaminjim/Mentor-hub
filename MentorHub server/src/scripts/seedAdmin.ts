@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma";
-import { Role } from "../types/role";
+import { prisma } from "../lib/prisma.js";
+import { Role } from "../types/role.js";
 
 async function seedingAdmin() {
   try {

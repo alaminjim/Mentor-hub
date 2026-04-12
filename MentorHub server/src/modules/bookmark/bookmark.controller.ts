@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BookmarkService } from "./bookmark.service";
+import { BookmarkService } from "./bookmark.service.js";
 
 const toggleBookmark = async (req: Request, res: Response) => {
   try {

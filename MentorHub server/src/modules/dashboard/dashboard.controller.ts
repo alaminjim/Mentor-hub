@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { dashboardService } from "./dashboard.service";
+import { dashboardService } from "./dashboard.service.js";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {

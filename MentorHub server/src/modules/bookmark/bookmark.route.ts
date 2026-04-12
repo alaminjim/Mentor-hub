@@ -1,7 +1,7 @@
 import express from "express";
-import { BookmarkController } from "./bookmark.controller";
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
+import { BookmarkController } from "./bookmark.controller.js";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router = express.Router();
 

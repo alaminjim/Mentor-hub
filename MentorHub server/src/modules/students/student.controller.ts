@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { student_bookingService } from "./student.service";
-import { Role } from "../../types/role";
+import { student_bookingService } from "./student.service.js";
+import { Role } from "../../types/role.js";
 
 const manageProfile = async (
   req: Request,

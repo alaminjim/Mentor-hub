@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 const createCategory = async (role: string, payload: any) => {
   if (role !== "ADMIN") throw new Error("Only admins can create categories");

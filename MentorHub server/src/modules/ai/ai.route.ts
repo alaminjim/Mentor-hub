@@ -1,5 +1,5 @@
 import express from "express";
-import { aiController } from "./ai.controller";
+import { aiController } from "./ai.controller.js";
 
 const router = express.Router();
 

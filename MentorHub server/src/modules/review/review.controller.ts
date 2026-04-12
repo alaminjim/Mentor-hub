@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { reviewService } from "./review.service";
-import { Role } from "../../types/role";
+import { reviewService } from "./review.service.js";
+import { Role } from "../../types/role.js";
 
 const createReview = async (
   req: Request,

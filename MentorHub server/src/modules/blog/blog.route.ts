@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { BlogController } from "./blog.controller";
+import { BlogController } from "./blog.controller.js";
 
 import {
   createBlogSchema,
@@ -8,11 +8,11 @@ import {
   authorIdSchema,
   categorySchema,
   searchBlogSchema,
-} from "./blog.validation";
-import validateRequest from "../../middleware/validateRequest";
+} from "./blog.validation.js";
+import validateRequest from "../../middleware/validateRequest.js";
 
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router: Router = express.Router();
 

@@ -1,7 +1,7 @@
 import express from "express";
-import { categoryController } from "./categories.controller";
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
+import { categoryController } from "./categories.controller.js";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router = express.Router();
 

@@ -1,10 +1,10 @@
 import express from "express";
-import validateRequest from "../../middleware/validateRequest";
-import { PricingValidation } from "./pricing.validation";
-import { PricingController } from "./pricing.controller";
+import validateRequest from "../../middleware/validateRequest.js";
+import { PricingValidation } from "./pricing.validation.js";
+import { PricingController } from "./pricing.controller.js";
 
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router = express.Router();
 

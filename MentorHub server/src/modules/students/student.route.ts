@@ -1,7 +1,7 @@
 import express from "express";
-import { student_bookingController } from "./student.controller";
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
+import { student_bookingController } from "./student.controller.js";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router = express.Router();
 

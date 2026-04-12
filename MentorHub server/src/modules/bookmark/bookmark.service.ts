@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 const toggleBookmark = async (userId: string, tutorId: string) => {
   const existing = await prisma.bookmark.findUnique({

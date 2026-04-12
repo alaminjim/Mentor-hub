@@ -3,8 +3,8 @@ import {
   BookingStatus,
   PrismaClient,
 } from "@prisma/client";
-import { prisma } from "../../lib/prisma";
-import { Role } from "../../types/role";
+import { prisma } from "../../lib/prisma.js";
+import { Role } from "../../types/role.js";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {

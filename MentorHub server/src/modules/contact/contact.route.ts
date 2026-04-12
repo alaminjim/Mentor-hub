@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleContactSubmit } from "./contact.controller";
+import { handleContactSubmit } from "./contact.controller.js";
 
 export const contactRouter = Router();
 

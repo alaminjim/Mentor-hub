@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 import { Prisma, TutorProfile, Role } from "@prisma/client";
 
 const tutorProfile = async (

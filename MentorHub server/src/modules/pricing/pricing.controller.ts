@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { PricingService } from "./pricing.service";
-import { prisma } from "../../lib/prisma";
+import { PricingService } from "./pricing.service.js";
+import { prisma } from "../../lib/prisma.js";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {

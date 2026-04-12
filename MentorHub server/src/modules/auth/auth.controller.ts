@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { authService } from "./auth.service";
-import { auth } from "../../lib/auth";
-import { Role } from "../../types/role";
+import { authService } from "./auth.service.js";
+import { auth } from "../../lib/auth.js";
+import { Role } from "../../types/role.js";
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { sendContactEmail } from "../../lib/sendEmail";
+import { sendContactEmail } from "../../lib/sendEmail.js";
 
 export const handleContactSubmit = async (req: Request, res: Response): Promise<void> => {
     try {

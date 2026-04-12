@@ -1,9 +1,9 @@
 import express from "express";
-import { bookingsController } from "./booking.controller";
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
-import validateRequest from "../../middleware/validateRequest";
-import { BookingValidation, UpdateBookingStatusValidation } from "./booking.validation";
+import { bookingsController } from "./booking.controller.js";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
+import validateRequest from "../../middleware/validateRequest.js";
+import { BookingValidation, UpdateBookingStatusValidation } from "./booking.validation.js";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
 const createPricingTier = async (data: any) => {
   return await prisma.pricingTier.create({

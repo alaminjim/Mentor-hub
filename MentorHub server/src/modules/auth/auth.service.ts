@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 
-import { Role } from "../../types/role";
-import { IAdminStats } from "../../types";
+import { Role } from "../../types/role.js";
+import { IAdminStats } from "../../types.js";
 
 const authGetMe = async (userId: string) => {
   const user = await prisma.user.findUnique({

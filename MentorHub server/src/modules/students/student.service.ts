@@ -1,6 +1,6 @@
 import { Status } from "@prisma/client";
-import { prisma } from "../../lib/prisma";
-import { Role } from "../../types/role";
+import { prisma } from "../../lib/prisma.js";
+import { Role } from "../../types/role.js";
 
 const getAllStudents = async () => {
   return await prisma.user.findMany({

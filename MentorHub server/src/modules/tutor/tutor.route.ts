@@ -1,9 +1,9 @@
 import express from "express";
-import { tutorProfileController } from "./tutor.controller";
-import auth from "../../middleware/auth";
-import { Role } from "../../types/role";
-import validateRequest from "../../middleware/validateRequest";
-import { TutorProfileValidation, UpdateTutorProfileValidation } from "./tutor.validation";
+import { tutorProfileController } from "./tutor.controller.js";
+import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
+import validateRequest from "../../middleware/validateRequest.js";
+import { TutorProfileValidation, UpdateTutorProfileValidation } from "./tutor.validation.js";
 
 const router = express.Router();
 
