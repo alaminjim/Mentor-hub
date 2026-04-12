@@ -434,6 +434,8 @@ export default function StudentBookingsPage() {
               const tutor = typeof booking.tutorId === "object" ? (booking.tutorId as any) : null;
               const category = typeof booking.categoryId === "object" ? (booking.categoryId as any) : null;
 
+              const tutorIdActual = tutor?._id || tutor?.id || (typeof booking.tutorId === "string" ? booking.tutorId : "");
+
               return (
                 <motion.div
                   key={bookingId}
@@ -490,7 +492,7 @@ export default function StudentBookingsPage() {
                     <div className="flex flex-col sm:flex-row lg:flex-col gap-4 min-w-[240px]">
                        {booking.status === "COMPLETED" ? (
                          <button
-                           onClick={() => openReviewModal(tutor?._id || tutor?.id || "", tutor?.name || "mentor", booking.subject)}
+                           onClick={() => openReviewModal(tutorIdActual, tutor?.name || "mentor", booking.subject)}
                            className="w-full flex items-center justify-center gap-3 h-14 bg-yellow-500 hover:bg-yellow-600 text-black rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-lg shadow-yellow-500/10"
                          >
                            <Star size={16} className="fill-black" />
@@ -517,10 +519,10 @@ export default function StudentBookingsPage() {
                               Pay & Finalize <DollarSign size={14} />
                             </button>
                             <button
-                              onClick={() => openReviewModal(tutor?._id || tutor?.id || "", tutor?.name || "mentor", booking.subject)}
-                              className="w-full flex items-center justify-center gap-3 h-12 bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-black uppercase tracking-widest text-[9px] transition-all"
+                              onClick={() => openReviewModal(tutorIdActual, tutor?.name || "mentor", booking.subject)}
+                              className="w-full flex items-center justify-center gap-3 h-12 bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white rounded-xl font-black uppercase tracking-[0.2em] text-[10px] transition-all shadow-sm"
                             >
-                              Leave Review <Star size={12} />
+                              Leave Review <Star size={12} className="fill-current" />
                             </button>
                          </div>
                        ) : (
