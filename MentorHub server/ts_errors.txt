@@ -1,0 +1,17 @@
+src/middleware/auth.ts(4,24): error TS2307: Cannot find module '../../generated/prisma/enums' or its corresponding type declarations.
+src/middleware/validateRequest.ts(2,10): error TS2724: '"zod"' has no exported member named 'AnyZodObject'. Did you mean 'ZodObject'?
+src/modules/pricing/pricing.validation.ts(5,22): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; } | undefined): ZodString', gave the following error.
+    Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+  Overload 2 of 2, '(params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; } | undefined): $ZodType<...>', gave the following error.
+    Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/modules/pricing/pricing.validation.ts(6,23): error TS2353: Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/modules/tutor/tutor.validation.ts(5,22): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; } | undefined): ZodString', gave the following error.
+    Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+  Overload 2 of 2, '(params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; } | undefined): $ZodType<...>', gave the following error.
+    Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/modules/tutor/tutor.validation.ts(10,23): error TS2353: Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/modules/tutor/tutor.validation.ts(12,28): error TS2353: Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/scripts/seedMoreTutors.ts(2,24): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+src/types/index.ts(1,24): error TS2307: Cannot find module '../../generated/prisma/enums' or its corresponding type declarations.

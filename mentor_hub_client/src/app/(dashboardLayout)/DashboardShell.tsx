@@ -13,9 +13,14 @@ import {
   User,
   UserCheck,
   Users,
+  ChevronDown,
+  ShieldAlert,
+  Bookmark,
+  ShoppingBag,
+  Heart,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -49,7 +54,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
-type Role = "admin" | "student" | "tutor";
+type Role = "admin" | "student" | "tutor" | "manager" | "vendor" | "organizer";
 
 type NavItem = {
   label: string;
@@ -73,20 +78,15 @@ type SessionUser = {
 const navDataByRole: Record<Role, NavGroup[]> = {
   admin: [
     {
-      title: "Overview",
+      title: "Workspace Command",
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "All Users", icon: Users, href: "/dashboard/user" },
-        {
-          label: "All Bookings",
-          icon: ClipboardList,
-          href: "/dashboard/booking",
-        },
-        {
-          label: "Manage Category",
-          icon: Star,
-          href: "/dashboard/category",
-        },
+        { label: "Manage Users", icon: Users, href: "/dashboard/user" },
+        { label: "Manage Tutors", icon: UserCheck, href: "/dashboard/tutor" },
+        { label: "All Bookings", icon: ClipboardList, href: "/dashboard/booking" },
+        { label: "Manage Blogs", icon: BookOpen, href: "/dashboard/blogs" },
+        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+        { label: "Settings", icon: Settings, href: "/dashboard/settings" },
       ],
     },
   ],
@@ -104,6 +104,9 @@ const navDataByRole: Record<Role, NavGroup[]> = {
           icon: ClipboardList,
           href: "/dashboard/bookings",
         },
+        { label: "Product Library", icon: BookOpen, href: "/dashboard/browse-products" },
+        { label: "Saved Tutors", icon: Heart, href: "/dashboard/bookmarks?tab=tutors" },
+        { label: "Product Wishlist", icon: Bookmark, href: "/dashboard/bookmarks?tab=products" },
         { label: "My Reviews", icon: Star, href: "/dashboard/bookings/review" },
         {
           label: "Manage Profile",
@@ -132,15 +135,56 @@ const navDataByRole: Record<Role, NavGroup[]> = {
           icon: BookOpen,
           href: "/dashboard/tutor/bookings",
         },
+        {
+          label: "Manage Profile",
+          icon: User,
+          href: "/dashboard/profile",
+        },
+      ],
+    },
+  ],
+  manager: [
+    {
+      title: "Management",
+      items: [
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "User Audits", icon: ShieldAlert, href: "/dashboard/audits" },
+        { label: "Reports", icon: BarChart3, href: "/dashboard/reports" },
+        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+      ],
+    },
+  ],
+  vendor: [
+    {
+      title: "Store",
+      items: [
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "Products", icon: BookOpen, href: "/dashboard/products" },
+        { label: "Interests", icon: Bookmark, href: "/dashboard/bookmarks" },
+        { label: "My Profile", icon: User, href: "/dashboard/profile" },
+      ],
+    },
+  ],
+  organizer: [
+    {
+      title: "Events",
+      items: [
+        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+        { label: "Meetings", icon: ClipboardList, href: "/dashboard/events" },
+        { label: "All Bookings", icon: Users, href: "/dashboard/bookings-manage" },
+        { label: "My Profile", icon: User, href: "/dashboard/profile" },
       ],
     },
   ],
 };
 
 const roleBadge: Record<Role, string> = {
-  admin: "bg-red-100 text-red-700",
-  student: "bg-blue-100 text-blue-700",
-  tutor: "bg-green-100 text-green-700",
+  admin: "bg-red-500/10 text-red-500 border-red-500/20",
+  student: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  tutor: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  manager: "bg-purple-500/10 text-purple-500 border-purple-500/20",
+  vendor: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  organizer: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
 };
 
 interface DashboardShellProps {
@@ -155,10 +199,12 @@ export default function DashboardShell({
   children,
 }: DashboardShellProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const role = rawRole.toLowerCase() as Role;
   const navGroups = navDataByRole[role] || [];
   const [userData, setUserData] = useState<any>(null);
-  const router = useRouter();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -182,9 +228,9 @@ export default function DashboardShell({
   const formattedPage = currentPage.toLowerCase().replace(/-/g, " ");
 
   return (
-    <SidebarProvider className="dark">
-      <div className="flex min-h-screen w-full bg-[#050505] text-neutral-200">
-        <Sidebar className="border-r border-white/5 bg-black/60 backdrop-blur-3xl">
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-background text-foreground">
+        <Sidebar className="border-r border-border bg-card/80 backdrop-blur-xl">
           <SidebarHeader className="p-6">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
@@ -206,17 +252,18 @@ export default function DashboardShell({
                 <SidebarGroupContent>
                   <SidebarMenu className="gap-2">
                     {group.items.map((item) => {
-                      const isActive = pathname === item.href;
+                      const currentFull = pathname + (searchParams.toString() ? "?" + searchParams.toString() : "");
+                      const isActive = currentFull === item.href || (pathname === item.href && !item.href.includes("?"));
                       return (
                         <SidebarMenuItem key={item.label}>
                           <SidebarMenuButton 
                             asChild 
                             isActive={isActive}
                             className={cn(
-                              "h-12 px-4 rounded-2xl transition-all duration-300 border border-transparent",
+                              "h-11 px-4 rounded-2xl transition-all duration-300 border border-transparent",
                               isActive 
-                                ? "bg-primary/10 border-primary/20 text-white shadow-lg" 
-                                : "hover:bg-white/5 hover:border-white/10 text-neutral-400 hover:text-white"
+                                ? "bg-primary/10 border-primary/30 text-primary" 
+                                : "hover:bg-accent hover:border-border text-muted-foreground hover:text-foreground"
                             )}
                           >
                             <Link href={item.href} className="flex items-center gap-3">
@@ -234,7 +281,7 @@ export default function DashboardShell({
           </SidebarContent>
 
           <SidebarFooter className="p-6 space-y-6">
-            <div className="p-4 rounded-3xl bg-white/5 border border-white/10">
+            <div className="p-4 rounded-3xl bg-accent border border-border">
               <div className="flex items-center gap-3 mb-4">
                  <Avatar className="size-10 border border-white/20">
                     <AvatarImage src={user.image} />
@@ -244,7 +291,9 @@ export default function DashboardShell({
                  </Avatar>
                  <div className="overflow-hidden">
                     <p className="text-xs font-black uppercase tracking-tight truncate lowercase">{user.name}</p>
-                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest">{role}</p>
+                    <p className={cn("text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border w-fit mt-1", roleBadge[role])}>
+                      {role}
+                    </p>
                  </div>
               </div>
               <button 
@@ -257,11 +306,11 @@ export default function DashboardShell({
           </SidebarFooter>
         </Sidebar>
 
-        <SidebarInset className="bg-[#050505] flex-1">
-          <header className="flex h-20 items-center justify-between px-8 border-b border-white/5 sticky top-0 bg-[#050505]/80 backdrop-blur-xl z-10">
+        <SidebarInset className="bg-background flex-1 min-w-0">
+          <header className="flex h-16 items-center justify-between px-6 border-b border-border sticky top-0 bg-background backdrop-blur-md z-40">
             <div className="flex items-center gap-6">
                <SidebarTrigger className="hover:bg-white/5 p-2 rounded-xl transition-colors" />
-               <div className="h-6 w-px bg-white/10 hidden md:block" />
+               <div className="h-5 w-px bg-border hidden md:block" />
                <Breadcrumb>
                  <BreadcrumbList>
                     <BreadcrumbItem className="hidden md:block">
@@ -269,7 +318,7 @@ export default function DashboardShell({
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block opacity-20" />
                     <BreadcrumbItem>
-                      <BreadcrumbPage className="text-xs font-black uppercase tracking-[0.2em] text-white underline decoration-primary decoration-2 underline-offset-8">
+                       <BreadcrumbPage className="text-xs font-black uppercase tracking-widest text-foreground">
                         {formattedPage}.
                       </BreadcrumbPage>
                     </BreadcrumbItem>
@@ -278,12 +327,57 @@ export default function DashboardShell({
             </div>
             
             <div className="flex items-center gap-4">
-               <button className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors">
-                  <Search className="size-4" />
+               <button className="w-9 h-9 rounded-xl bg-background border border-border flex items-center justify-center hover:bg-accent transition-colors hidden sm:flex">
+                  <Search className="size-4 opacity-40" />
                </button>
-               <button className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center hover:bg-primary/20 transition-colors">
-                  <Settings className="size-4 text-primary" />
-               </button>
+               
+               {/* Profile Dropdown — JS controlled for proper z-index */}
+               <div className="relative">
+                  <button 
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    className="flex items-center gap-2.5 bg-background pl-2 pr-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-accent transition-all duration-300"
+                  >
+                    <Avatar className="size-8">
+                        <AvatarImage src={user.image} />
+                        <AvatarFallback className="bg-primary text-primary-foreground font-black uppercase text-[10px]">
+                            {user.name?.[0]}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="text-left hidden md:block">
+                        <p className="text-[10px] font-black uppercase tracking-tight leading-none text-foreground">{user.name}</p>
+                        <p className="text-[8px] font-bold text-primary uppercase tracking-widest mt-1">{role}</p>
+                    </div>
+                    <ChevronDown className={cn("size-3 text-muted-foreground transition-transform duration-300", dropdownOpen && "rotate-180")} />
+                  </button>
+
+                  {dropdownOpen && (
+                    <>
+                      {/* Overlay to close on click outside */}
+                      <div className="fixed inset-0" style={{ zIndex: 998 }} onClick={() => setDropdownOpen(false)} />
+                      {/* Dropdown panel */}
+                      <div className="absolute top-full right-0 mt-2 w-64" style={{ zIndex: 999 }}>
+                        <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
+                            <div className="px-5 py-4 border-b border-border bg-muted/60">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">Signed in as</p>
+                                <p className="text-sm font-bold text-foreground truncate">{user.email}</p>
+                            </div>
+                            <div className="p-2">
+                                <Link href="/dashboard/profile" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-accent transition-colors">
+                                    <User className="size-4 text-primary" />
+                                    <span className="text-xs font-black uppercase tracking-widest text-foreground">My Profile</span>
+                                </Link>
+                            </div>
+                            <div className="p-2 border-t border-border">
+                                <button onClick={handleSignOut} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-destructive/10 transition-colors text-destructive">
+                                    <LogOut className="size-4" />
+                                    <span className="text-xs font-black uppercase tracking-widest">Sign Out</span>
+                                </button>
+                            </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+               </div>
             </div>
           </header>
 

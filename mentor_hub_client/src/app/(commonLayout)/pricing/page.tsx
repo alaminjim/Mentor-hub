@@ -72,11 +72,7 @@ export default function PricingPage() {
     setCheckoutLoading(tierId);
     try {
       const baseUrl = window.location.origin + "/pricing";
-      const res = await pricingService.createCheckoutSession(
-        tierId,
-        `${baseUrl}?success=true&tierId=${tierId}`,
-        `${baseUrl}?cancel=true`
-      );
+      const res = await pricingService.createCheckoutSession(tierId);
       if (res.success && res.data?.url) {
         window.location.href = res.data.url;
       } else {

@@ -14,6 +14,7 @@ import { bookmarkRouter } from "./modules/bookmark/bookmark.route";
 import { statsRouter } from "./modules/stats/stats.route";
 import { contactRouter } from "./modules/contact/contact.route";
 import { aiRouter } from "./modules/ai/ai.route";
+import { dashboardRoutes } from "./modules/dashboard/dashboard.routes";
 import { notFound } from "./middleware/notFound";
 import errorHandler from "./middleware/errorHandler";
 import session from "express-session";
@@ -80,6 +81,7 @@ app.use("/api/stats", statsRouter);
 app.use("/api/contact", contactRouter);
 
 app.use("/api/ai", aiRouter);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

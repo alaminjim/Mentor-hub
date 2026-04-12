@@ -1,7 +1,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -23,6 +22,10 @@ model User {
   tutorProfile    TutorProfile?
   blogs           Blog[]
   bookmarks       Bookmark[]
+  events          Event[]
+  products        Product[]
+  productBookmarks ProductBookmark[]
+  purchases        Purchase[]
 
   role   String @default("STUDENT")
   status Status @default(UnBAN)
@@ -207,6 +210,9 @@ enum Role{
   ADMIN
   STUDENT
   TUTOR
+  MANAGER
+  VENDOR
+  ORGANIZER
 }
 
 enum Status {
@@ -221,3 +227,61 @@ enum BookingStatus {
   CANCELLED
 }
 
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  date        DateTime
+  location    String
+  organizerId String
+  organizer   User     @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  status      String   @default("UPCOMING")
+  capacity    Int      @default(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  price       Float
+  imageUrl    String?
+  vendorId    String
+  vendor      User     @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookmarks   ProductBookmark[]
+  purchases   Purchase[]
+
+  @@map("products")
+}
+
+model ProductBookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@map("product_bookmarks")
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  amount    Float
+  status    String   @default("COMPLETED")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("purchases")
+}

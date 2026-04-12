@@ -47,6 +47,7 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
     const result = await authService.getAll(
       user?.id as string,
       user?.role as Role,
+      req.query as any
     );
     res.status(200).json({
       success: true,

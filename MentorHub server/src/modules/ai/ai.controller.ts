@@ -145,5 +145,17 @@ export const aiController = {
       console.error("AI Payment Confirm Error:", error);
       res.status(500).json({ success: false, message: "AI verification failed" });
     }
+  },
+
+  generateDescription: async (req: Request, res: Response) => {
+    try {
+      const { title } = req.body;
+      if (!title) return res.status(400).json({ success: false, message: "Title is required" });
+
+      const description = await aiService.generateDescription(title);
+      res.status(200).json({ success: true, data: description });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "AI Generation failed" });
+    }
   }
 };

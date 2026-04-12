@@ -12,29 +12,34 @@ const authGetMe = async (userId: string) => {
   return user;
 };
 
-const getAll = async (userId: string, role: Role) => {
-  const existUser = await prisma.user.findUniqueOrThrow({
-    where: {
-      id: userId,
-    },
-  });
+const getAll = async (userId: string, role: Role, query: { search?: string; page?: string; limit?: string; sortBy?: string; sortOrder?: string }) => {
+  const { search, page = "1", limit = "10", sortBy = "createdAt", sortOrder = "desc" } = query;
+  
+  const skip = (Number(page) - 1) * Number(limit);
+  const take = Number(limit);
 
-  if (!existUser) {
-    throw new Error("User can not exist");
+  const where: any = {
+    role: { not: Role.ADMIN },
+  };
+
+  if (search) {
+    where.OR = [
+      { name: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } },
+    ];
   }
 
-  if (role !== Role.ADMIN) {
-    throw new Error("Only Admin can access");
-  }
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      where,
+      skip,
+      take,
+      orderBy: { [sortBy]: sortOrder },
+    }),
+    prisma.user.count({ where }),
+  ]);
 
-  const result = await prisma.user.findMany({
-    where: {
-      role: {
-        not: Role.ADMIN,
-      },
-    },
-  });
-  return result;
+  return { users, total };
 };
 
 const updateStatus = async (

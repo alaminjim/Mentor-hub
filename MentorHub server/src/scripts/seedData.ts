@@ -47,8 +47,8 @@ async function seedData() {
       { title: "success stories: from learner to leader.", excerpt: "how mentorship transformed these ambitious individuals.", category: "career", authorId: admin.id, image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=1000" },
       { title: "financial planning for education.", excerpt: "budgeting for top-tier tutoring and elite resources.", category: "career", authorId: admin.id, image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=1000" },
       { title: "creative writing mastery tips.", excerpt: "how expert feedback improves your narrative skills.", category: "academics", authorId: admin.id, image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1000" },
-      { title: "the ethics of professional tutoring.", excerpt: "maintaining academic integrity while mentoring students.", category: "academics", authorId: admin.id, image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1000" },
-      { title: "future trends: AI-assisted tutoring in 2026.", excerpt: "the next evolution of personalized student support systems.", category: "technology", authorId: admin.id, image: "https://images.unsplash.com/photo-1573164713988-8665ea963095?auto=format&fit=crop&q=80&w=1000" }
+      { title: "the ethics of professional tutoring.", excerpt: "maintaining academic integrity while mentoring students.", category: "academics", authorId: admin.id, image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80&w=1000" },
+      { title: "future trends: AI-assisted tutoring in 2026.", excerpt: "the next evolution of personalized student support systems.", category: "technology", authorId: admin.id, image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000" }
     ];
 
     for (const blog of blogList) {

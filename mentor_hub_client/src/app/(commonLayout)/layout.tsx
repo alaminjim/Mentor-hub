@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Navbar from "./navbar/page";
+import Navbar from "@/components/layout/Navbar";
 import Footer from "./footer/page";
 import Background3D from "@/components/animations/Background3D";
 import { AIChatbot } from "@/components/shared/AIChatbot";

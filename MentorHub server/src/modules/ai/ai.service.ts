@@ -138,5 +138,36 @@ export const aiService = {
         analysis: "the system has verified that your specific learning goals align perfectly with the mentor's expertise. this session is optimized for rapid skill acquisition."
       };
     }
+  },
+
+  generateDescription: async (title: string) => {
+    const systemPrompt = `
+      You are an expert e-commerce copywriter for MentorHub.
+      Your task is to write a compelling, professional, yet concise product description (max 2-3 sentences).
+      The product is usually a digital resource, a book, or a course.
+      Example: 'English Mastery' -> 'Unlock the secrets of fluent English with this comprehensive guide tailored for all levels. Perfect for building confidence in professional or casual settings.'
+      Constraint: Output ONLY the description text. No emojis at the beginning. No titles.
+    `;
+
+    try {
+      const response = await fetch("https://text.pollinations.ai/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `Product Title: ${title}` }
+          ],
+          model: "openai",
+          seed: 55
+        })
+      });
+
+      if (!response.ok) return "";
+      const text = await response.text();
+      return text.trim();
+    } catch (err) {
+      return "";
+    }
   }
 };

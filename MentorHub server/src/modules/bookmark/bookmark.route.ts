@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.post(
   "/toggle",
-  auth(Role.STUDENT, Role.TUTOR, Role.ADMIN),
+  auth(), // সব authenticated user পারবে
   BookmarkController.toggleBookmark
 );
 
 router.get(
   "/my-bookmarks",
-  auth(Role.STUDENT, Role.TUTOR, Role.ADMIN),
+  auth(), // MANAGER, VENDOR, ORGANIZER সহ সবাই পারবে
   BookmarkController.getMyBookmarks
 );
 

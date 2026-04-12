@@ -20,6 +20,7 @@ import {
   Settings,
   CreditCard,
   ChevronDown,
+  Calendar,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -91,11 +92,37 @@ const Navbar = () => {
     toast.success("signed out successfully");
   };
 
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch("/api/dashboard/events/public").then(r => r.json());
+        if (res.success) setEvents(res.data);
+      } catch (err) {
+        console.error("Events sync failed");
+      }
+    };
+    fetchEvents();
+  }, []);
+
   const menu: MenuItem[] = [
     { title: "home", url: "/" },
     { title: "tutors", url: "/tutors" },
+    { title: "products", url: "/products" },
+    { 
+      title: "events", 
+      url: "/events",
+      items: events.length > 0 ? events.slice(0, 4).map(ev => ({
+        title: ev.title,
+        url: `/events/${ev.id}`,
+        description: `${ev.location} • ${new Date(ev.date).toLocaleDateString()}`,
+        icon: <Calendar className="size-5 text-primary" />
+      })) : [
+        { title: "All Events", url: "/events", description: "Explore all upcoming workshops", icon: <Calendar className="size-5 text-primary" /> }
+      ]
+    },
     { title: "blog", url: "/blog" },
-    { title: "features", url: "/features" },
   ];
 
   return (
@@ -255,12 +282,12 @@ const Navbar = () => {
                         </span>
                       </Link>
                       <Link
-                        href="/profile"
+                        href="/dashboard/profile"
                         className="flex items-center gap-3 w-full p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group/item"
                       >
-                        <Settings className="size-4 text-slate-500 group-hover/item:scale-110 transition-transform" />
+                        <User className="size-4 text-slate-500 group-hover/item:scale-110 transition-transform" />
                         <span className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-slate-300 group-hover:text-cyan-600 transition-colors">
-                          settings.
+                          my profile.
                         </span>
                       </Link>
                       <Link

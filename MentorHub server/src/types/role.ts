@@ -2,4 +2,7 @@ export enum Role {
   ADMIN = "ADMIN",
   STUDENT = "STUDENT",
   TUTOR = "TUTOR",
+  MANAGER = "MANAGER",
+  VENDOR = "VENDOR",
+  ORGANIZER = "ORGANIZER",
 }
