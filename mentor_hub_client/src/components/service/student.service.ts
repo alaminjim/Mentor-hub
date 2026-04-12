@@ -1,4 +1,4 @@
-import { env } from "../../../env.js";
+import { env } from "../../../env";
 
 const API_URL = env.NEXT_PUBLIC_BACKEND_URL;
 

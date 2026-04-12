@@ -1,5 +1,5 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
-import { env } from "../../../env.js";
+import { env } from "../../../env";
 
 const app_url = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : "";
 

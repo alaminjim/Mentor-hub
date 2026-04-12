@@ -1,5 +1,5 @@
 import { StatsDataType } from "@/type/statsType";
-import { env } from "../../../env.js";
+import { env } from "../../../env";
 
 const API_URL = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : (env.NEXT_PUBLIC_BACKEND_URL || "");
 
