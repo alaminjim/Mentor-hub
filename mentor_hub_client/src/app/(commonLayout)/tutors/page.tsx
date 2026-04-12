@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { TutorCard } from "../tutorCard/tutorsCard";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 function TutorSkeleton() {
   return (

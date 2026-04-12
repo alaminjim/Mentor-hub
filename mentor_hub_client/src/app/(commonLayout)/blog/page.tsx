@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 const categories = ["all", "academics", "career", "technology", "productivity"];
 
 const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
+  process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 // ── Skeleton card ──────────────────────────────────────────────────────────────
 function SkeletonCard() {

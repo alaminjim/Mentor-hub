@@ -1,7 +1,7 @@
 export const dashboardService = {
   getStats: async () => {
     try {
-      const res = await fetch(`https://mentor-hub-server.vercel.app/api/dashboard/stats`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/dashboard/stats`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         // @ts-ignore
@@ -16,7 +16,7 @@ export const dashboardService = {
 
   updateProfile: async (payload: any) => {
     try {
-      const res = await fetch(`https://mentor-hub-server.vercel.app/api/dashboard/profile`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/dashboard/profile`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         // @ts-ignore

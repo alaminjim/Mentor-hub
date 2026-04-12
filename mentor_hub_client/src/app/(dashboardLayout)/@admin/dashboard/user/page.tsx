@@ -27,7 +27,7 @@ const AllUsersClient = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`https://mentor-hub-server.vercel.app/api/auth/getAll?search=${search}&page=${page}&limit=${limit}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/auth/getAll?search=${search}&page=${page}&limit=${limit}`, {
         headers: { "Content-Type": "application/json" },
         // @ts-ignore
         credentials: "include",
