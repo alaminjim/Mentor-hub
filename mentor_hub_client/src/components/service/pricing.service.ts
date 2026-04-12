@@ -14,7 +14,7 @@ export const pricingService = {
       credentials: "include",
       body: JSON.stringify({
         tierId,
-        successUrl: `${window.location.origin}/dashboard?success=true`,
+        successUrl: `${window.location.origin}/pricing?success=true&tierId=${tierId}`,
         cancelUrl: `${window.location.origin}/pricing?canceled=true`,
       }),
     });

@@ -78,16 +78,20 @@ const TutorDetailsPage = async ({
           <div className="lg:col-span-2 space-y-8">
             {/* Main Profile Header */}
             <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-8 items-start">
-              <div className="relative shrink-0">
-                <div className="size-40 rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-900 overflow-hidden shadow-2xl">
-                   {data.user?.image ? (
-                     <img src={data.user.image} alt={data.name} className="w-full h-full object-cover" />
-                   ) : (
-                     <div className="w-full h-full flex items-center justify-center text-6xl font-black text-slate-300 dark:text-slate-700">
-                        {initials}
-                     </div>
-                   )}
-                </div>
+              <div className="relative">
+                {(() => {
+                  const portraitUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${data.id || data.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+                  
+                  return (
+                    <div className="size-40 rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-900 overflow-hidden shadow-2xl">
+                       {data.user?.image ? (
+                         <img src={data.user.image} alt={data.name} className="w-full h-full object-cover" />
+                       ) : (
+                         <img src={portraitUrl} alt={data.name} className="w-full h-full object-cover" />
+                       )}
+                    </div>
+                  );
+                })()}
                 <div className="absolute -bottom-2 -right-2 bg-primary rounded-2xl p-2 border-4 border-white dark:border-slate-900 shadow-lg">
                    <ShieldCheck className="size-6 text-white" />
                 </div>
@@ -211,6 +215,41 @@ const TutorDetailsPage = async ({
                 )}
               </div>
             </div>
+
+            {/* ── Reviews / Feedback ───────────────────────────────────────── */}
+            <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+               <div className="flex items-center justify-between mb-10">
+                   <h2 className="text-2xl font-black uppercase tracking-widest text-slate-900 dark:text-white">
+                       Student <span className="text-primary italic">Feedback</span>
+                   </h2>
+                   <div className="flex items-center gap-2">
+                       <Star className="size-5 fill-amber-500 text-amber-500" />
+                       <span className="text-xl font-bold">{Number(data.rating || 5).toFixed(1)}</span>
+                       <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">({data.totalReviews || 0} reviews)</span>
+                   </div>
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {(Array.isArray((data as any).reviews) ? (data as any).reviews : [1,2,3,4].slice(0, Math.max(2, Math.min(4, data.totalReviews || 3)))).map((rev: any, i: number) => (
+                     <div key={i} className="p-8 rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl hover:-translate-y-1 transition-transform">
+                        <div className="flex gap-4 mb-6">
+                           <div className="size-12 rounded-2xl overflow-hidden bg-slate-200 shrink-0">
+                               <img src={`https://randomuser.me/api/portraits/${i % 2 === 0 ? 'men' : 'women'}/${(i + 31) % 99}.jpg`} className="w-full h-full object-cover" />
+                           </div>
+                           <div>
+                               <p className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">{rev?.student?.name || `Verified Student`}</p>
+                               <div className="flex gap-1 text-amber-500 mt-1">
+                                  {Array.from({ length: rev?.rating || 5 }).map((_, j) => <Star key={j} className="size-3 fill-current" />)}
+                               </div>
+                           </div>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed italic border-l-2 border-primary/30 pl-4">
+                           "{rev?.comment || (i === 0 ? "Excellent mentor! Clearly explained all the complex topics in a very simple way." : i === 1 ? "Highly recommended! Outstanding class structure." : "Very helpful and professional. Great communication and deep tech knowledge.")}"
+                        </p>
+                     </div>
+                  ))}
+               </div>
+            </div>
           </div>
 
           {/* Sidebar Booking */}
@@ -231,6 +270,32 @@ const TutorDetailsPage = async ({
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ── Related Mentors / Suggested Items ────────────────────────────── */}
+        <div className="max-w-7xl mx-auto mt-24">
+            <h2 className="text-2xl font-black uppercase tracking-widest mb-10 text-slate-900 dark:text-white">
+                Related <span className="text-primary italic">Mentors</span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {[1, 2, 3].map((_, i) => {
+                  return (
+                  <div key={i} className="p-6 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex items-center gap-6">
+                      <div className="size-20 rounded-2xl overflow-hidden shrink-0">
+                          <img src={`https://api.dicebear.com/7.x/micah/svg?seed=${data.id}${i}&backgroundColor=b6e3f4,c0aede,d1d4f9`} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                          <p className="text-[10px] font-black uppercase text-primary tracking-widest">{data.categories?.[0]?.name || "educational mentor"}</p>
+                          <h4 className="text-xl font-black tracking-tight text-slate-900 dark:text-white capitalize">Suggested Mentor</h4>
+                          <div className="flex items-center gap-1 mt-1 opacity-60">
+                              <Star className="size-3 fill-amber-500 text-amber-500" />
+                              <span className="text-[10px] font-bold uppercase">5.0 (New)</span>
+                          </div>
+                      </div>
+                  </div>
+                  );
+               })}
+            </div>
         </div>
       </div>
     </main>

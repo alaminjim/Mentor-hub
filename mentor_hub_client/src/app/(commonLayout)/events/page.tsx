@@ -24,7 +24,7 @@ export default function EventsPage() {
   const fetchEvents = async (currentPage: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/dashboard/events/public?page=${currentPage}&limit=9`).then(r => r.json());
+      const res = await fetch(`/api/dashboard/events/public?page=${currentPage}&limit=8`).then(r => r.json());
       if (res.success) {
         setEvents(res.data);
         setTotalPages(res.totalPages);
@@ -116,22 +116,44 @@ export default function EventsPage() {
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
-               className="py-40 flex flex-col items-center gap-4"
+               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
              >
-                <div className="size-16 rounded-[2rem] bg-primary/10 flex items-center justify-center relative overflow-hidden">
-                   <div className="absolute inset-0 bg-primary/5 animate-pulse" />
-                   <Calendar className="size-8 text-primary animate-bounce" />
-                </div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground animate-pulse">Syncing Calendar...</p>
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="bg-card border border-border rounded-[3rem] p-10 space-y-8 animate-pulse">
+                    <div className="flex items-center justify-between">
+                      <div className="h-8 w-32 rounded-2xl bg-muted" />
+                      <div className="h-6 w-20 rounded-xl bg-muted" />
+                    </div>
+                    <div className="h-8 w-3/4 rounded-xl bg-muted" />
+                    <div className="space-y-2">
+                      <div className="h-4 w-full rounded-lg bg-muted" />
+                      <div className="h-4 w-5/6 rounded-lg bg-muted" />
+                    </div>
+                    <div className="space-y-4">
+                      <div className="h-16 w-full rounded-[2rem] bg-muted" />
+                      <div className="h-16 w-full rounded-[2rem] bg-muted" />
+                    </div>
+                    <div className="pt-8 border-t border-border flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="size-10 rounded-2xl bg-muted" />
+                        <div className="space-y-1">
+                          <div className="h-3 w-16 rounded bg-muted" />
+                          <div className="h-4 w-24 rounded bg-muted" />
+                        </div>
+                      </div>
+                      <div className="size-14 rounded-[1.5rem] bg-muted" />
+                    </div>
+                  </div>
+                ))}
              </motion.div>
           ) : filtered.length > 0 ? (
             <motion.div
               key="grid"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-16"
+              className="space-y-16 max-w-[1400px] mx-auto"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {filtered.map((ev, i) => (
                   <motion.div
                     key={ev.id}
@@ -139,7 +161,7 @@ export default function EventsPage() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="group bg-card border border-border rounded-[3rem] p-10 space-y-10 relative overflow-hidden flex flex-col hover:shadow-3xl hover:shadow-primary/5 transition-all hover:-translate-y-2"
+                    className="group bg-card border border-border rounded-[3rem] p-10 space-y-8 relative overflow-hidden flex flex-col hover:shadow-3xl hover:shadow-primary/5 transition-all hover:-translate-y-2 h-full"
                   >
                     <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-10 transition-opacity">
                        <Globe className="size-32" />
@@ -160,6 +182,13 @@ export default function EventsPage() {
                          </h3>
                        </Link>
                     </div>
+
+                    {/* Short Description */}
+                    {ev.description && (
+                      <p className="text-sm text-muted-foreground font-medium leading-relaxed line-clamp-2 opacity-70">
+                        {ev.description}
+                      </p>
+                    )}
 
                     <div className="space-y-4 flex-1">
                        <div className="flex items-center gap-5 p-5 rounded-[2rem] bg-muted/40 border border-border group-hover:bg-primary/5 transition-colors">
@@ -201,7 +230,7 @@ export default function EventsPage() {
               </div>
 
               {/* ── Pagination UI ─────────────────────────────────────── */}
-              {totalPages > 1 && (
+              {totalPages >= 1 && (
                 <div className="flex items-center justify-center gap-8 pt-10">
                    <button 
                      disabled={page === 1}

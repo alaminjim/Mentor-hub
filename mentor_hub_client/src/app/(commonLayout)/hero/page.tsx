@@ -198,10 +198,10 @@ export default function Hero() {
             className="relative w-full max-w-lg aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border border-white/10"
           >
             <Image 
-              src={img_1} 
+              src="/image/mentor-hero.png" 
               alt="Mentor" 
               fill 
-              className="object-cover scale-110"
+              className="object-cover"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -216,9 +216,9 @@ export default function Hero() {
                   </div>
                </div>
                <div className="text-2xl font-black text-white tracking-tighter leading-none mb-1">
-                  dr. sarah mitchell.
+                  imran hossain.
                </div>
-               <div className="text-sm font-bold text-white/60 lowercase">expert in mathematics & physics</div>
+               <div className="text-sm font-bold text-white/60 lowercase">senior software architect @ mentorhub</div>
             </div>
           </motion.div>
 

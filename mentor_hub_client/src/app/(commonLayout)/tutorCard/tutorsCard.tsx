@@ -46,6 +46,8 @@ export const TutorCard = ({ className, tutor, initialBookmarked = false }: Tutor
   };
 
   const initials = tutor?.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "TU";
+  
+  const portraitUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${tutor.id || tutor.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
 
   return (
     <div
@@ -69,7 +71,7 @@ export const TutorCard = ({ className, tutor, initialBookmarked = false }: Tutor
                 {tutor.user?.image ? (
                   <img src={tutor.user.image} alt={tutor.name} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-xl font-black text-white">{initials}</span>
+                  <img src={portraitUrl} alt={tutor.name} className="w-full h-full object-cover" />
                 )}
              </div>
            </div>

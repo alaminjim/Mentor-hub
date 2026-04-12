@@ -35,7 +35,7 @@ export default function TutorsPage({ isFeatured = false }: { isFeatured?: boolea
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   
   // Search & Filter States
   const [searchTerm, setSearchTerm] = useState("");
@@ -208,10 +208,10 @@ export default function TutorsPage({ isFeatured = false }: { isFeatured?: boolea
       )}
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         {loading ? (
-          <div className={cn("grid gap-12", isFeatured ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3")}>
-            {Array.from({ length: isFeatured ? 3 : 6 }).map((_, i) => <TutorSkeleton key={i} />)}
+          <div className={cn("grid gap-8", isFeatured ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4")}>
+            {Array.from({ length: isFeatured ? 3 : 8 }).map((_, i) => <TutorSkeleton key={i} />)}
           </div>
         ) : error ? (
           <div className="text-center py-32 bg-white dark:bg-slate-900 rounded-[5rem] shadow-2xl border border-slate-100 dark:border-white/5">
@@ -230,7 +230,7 @@ export default function TutorsPage({ isFeatured = false }: { isFeatured?: boolea
           <>
             <div className={cn(
               viewMode === "grid" 
-                ? cn("grid gap-12", isFeatured ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3")
+                ? cn("grid gap-8", isFeatured ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4")
                 : "flex flex-col gap-10"
             )}>
               {displayedTutors.map((t) => (
@@ -243,7 +243,7 @@ export default function TutorsPage({ isFeatured = false }: { isFeatured?: boolea
             </div>
 
             {/* Pagination Controls */}
-            {!isFeatured && totalPages > 1 && (
+            {!isFeatured && totalPages >= 1 && (
                 <div className="mt-20 flex items-center justify-center gap-4">
                     <button 
                       onClick={() => handlePageChange(Math.max(1, currentPage - 1))}

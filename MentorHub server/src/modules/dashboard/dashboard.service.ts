@@ -507,6 +507,52 @@ export const dashboardService = {
     return products;
   },
 
+  getProductById: async (id: string, userId?: string) => {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: { 
+        vendor: { select: { name: true, email: true, image: true } },
+        _count: { select: { bookmarks: true } },
+        ...(userId ? {
+          bookmarks: {
+            where: { userId }
+          }
+        } : {})
+      }
+    });
+
+    if (!product) return null;
+
+    return {
+      ...product,
+      isBookmarked: userId ? (product as any).bookmarks?.length > 0 : false
+    };
+  },
+
+  confirmProductPurchase: async (userId: string, productId: string) => {
+    const p = prisma as any;
+    
+    // Check if already purchased
+    const existing = await p.purchase.findFirst({
+      where: { userId, productId, status: "COMPLETED" }
+    });
+
+    if (existing) return existing;
+
+    // Get product price
+    const product = await prisma.product.findUnique({ where: { id: productId } });
+    if (!product) throw new Error("Product not found");
+
+    return await p.purchase.create({
+      data: {
+        userId,
+        productId,
+        amount: product.price,
+        status: "COMPLETED"
+      }
+    });
+  },
+
   toggleProductBookmark: async (userId: string, productId: string) => {
     const p = prisma as any;
     const existing = await p.productBookmark.findUnique({

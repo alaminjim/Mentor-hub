@@ -218,6 +218,39 @@ export function LoginForm() {
           >
             Student Demo
           </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-[10px] h-9 px-3 border border-slate-100 rounded-full hover:bg-sky-50 transition-colors font-bold text-slate-500 hover:text-sky-600"
+            onClick={() => {
+              form.setFieldValue("email", "jimislam690@gmail.com");
+              form.setFieldValue("password", "12345678");
+            }}
+          >
+            Manager Demo
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-[10px] h-9 px-3 border border-slate-100 rounded-full hover:bg-sky-50 transition-colors font-bold text-slate-500 hover:text-sky-600"
+            onClick={() => {
+              form.setFieldValue("email", "mdalaminislam6999@gmail.com");
+              form.setFieldValue("password", "12345678");
+            }}
+          >
+            Organizer Demo
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            className="text-[10px] h-9 px-3 border border-slate-100 rounded-full hover:bg-sky-50 transition-colors font-bold text-slate-500 hover:text-sky-600"
+            onClick={() => {
+              form.setFieldValue("email", "alaminislam200408@gmail.com");
+              form.setFieldValue("password", "12345678");
+            }}
+          >
+            Vendor Demo
+          </Button>
         </div>
 
         <p className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest pt-2">

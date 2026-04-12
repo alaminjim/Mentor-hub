@@ -300,6 +300,31 @@ export const dashboardController = {
     }
   },
 
+  getProductById: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const { id } = req.params;
+      const product = await dashboardService.getProductById(id as string, user?.id);
+      if (!product) return res.status(404).json({ success: false, message: "Product not found" });
+      res.status(200).json({ success: true, data: product });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
+  confirmProductPurchase: async (req: Request, res: Response) => {
+    try {
+      const { user } = req as any;
+      const { productId } = req.body;
+      if (!user) return res.status(401).json({ success: false, message: "Unauthorized" });
+
+      const purchase = await dashboardService.confirmProductPurchase(user.id, productId);
+      res.status(200).json({ success: true, data: purchase, message: "Purchase verified successfully" });
+    } catch (error: any) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  },
+
   toggleProductBookmark: async (req: Request, res: Response) => {
     try {
       const { productId } = req.body;

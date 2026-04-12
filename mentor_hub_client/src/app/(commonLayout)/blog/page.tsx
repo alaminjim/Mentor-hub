@@ -9,8 +9,11 @@ import {
   Tag,
   Search,
   Zap,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const categories = ["all", "academics", "career", "technology", "productivity"];
 
@@ -116,6 +119,8 @@ export default function BlogPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   // Fetch ALL blogs ONCE on mount — no extra calls for category/search
   useEffect(() => {
@@ -194,6 +199,16 @@ export default function BlogPage() {
 
     return posts;
   }, [allPosts, selectedCategory, searchTerm]);
+
+  // Pagination
+  const totalPages = Math.ceil(displayedPosts.length / itemsPerPage);
+  const paginatedPosts = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return displayedPosts.slice(start, start + itemsPerPage);
+  }, [displayedPosts, currentPage]);
+
+  // Reset page on filter change
+  useEffect(() => { setCurrentPage(1); }, [selectedCategory, searchTerm]);
 
   return (
     <div className="min-h-screen pb-24 px-6 md:px-12 lg:px-24">
@@ -280,11 +295,57 @@ export default function BlogPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedPosts.map((post) => (
-            <BlogCard key={post.id || post._id} post={post} />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {paginatedPosts.map((post) => (
+              <BlogCard key={post.id || post._id} post={post} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-6 mt-16">
+               <button 
+                 disabled={currentPage === 1}
+                 onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                 className="h-12 px-8 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest disabled:opacity-30 hover:bg-primary hover:text-white hover:border-primary transition-all"
+               >
+                 <ChevronLeft className="size-4" /> Prev
+               </button>
+               
+               <div className="flex items-center gap-2">
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setCurrentPage(i + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                      className={cn(
+                        "size-10 rounded-xl text-xs font-black transition-all",
+                        currentPage === i + 1 
+                          ? "bg-primary text-white shadow-lg shadow-primary/20" 
+                          : "bg-white/5 border border-white/10 text-muted-foreground hover:border-primary hover:text-primary"
+                      )}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+               </div>
+
+               <button 
+                 disabled={currentPage === totalPages}
+                 onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                 className="h-12 px-8 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest disabled:opacity-30 hover:bg-primary hover:text-white hover:border-primary transition-all"
+               >
+                 Next <ChevronRight className="size-4" />
+               </button>
+            </div>
+          )}
+
+          <div className="text-center mt-6">
+             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground opacity-40">
+               showing {paginatedPosts.length} of {displayedPosts.length} insights.
+             </p>
+          </div>
+        </>
       )}
 
       {/* Newsletter */}

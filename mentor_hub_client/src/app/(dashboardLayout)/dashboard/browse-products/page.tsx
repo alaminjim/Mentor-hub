@@ -26,7 +26,35 @@ export default function BrowseProductsPage() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    const searchParams = new URLSearchParams(window.location.search);
+    const success = searchParams.get("success");
+    const productId = searchParams.get("productId");
+
+    const init = async () => {
+      if (success === "true" && productId) {
+        const loadingToast = toast.loading("Verifying your purchase...");
+        try {
+          const res = await fetch("/api/dashboard/products/confirm-purchase", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId })
+          }).then(r => r.json());
+
+          if (res.success) {
+            toast.success("Product added to your library!", { id: loadingToast });
+          } else {
+            toast.error("Purchase verification failed.", { id: loadingToast });
+          }
+        } catch (e) {
+          toast.error("Verification error", { id: loadingToast });
+        } finally {
+          window.history.replaceState({}, "", "/dashboard/browse-products");
+        }
+      }
+      fetchProducts();
+    };
+
+    init();
   }, []);
 
   const filtered = products.filter(p => 

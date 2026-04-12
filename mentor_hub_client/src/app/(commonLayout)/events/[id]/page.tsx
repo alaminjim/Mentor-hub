@@ -47,22 +47,29 @@ export default function EventDetailsPage() {
 
   useEffect(() => {
     const init = async () => {
-      const session = await authClient.getSession();
-      if (session?.data?.user) {
-        const user = session.data.user as any;
-        setUser(user);
+      try {
+        const [sessionRes, userStatusRes] = await Promise.all([
+          authClient.getSession(),
+          fetch("/api/auth/authMe").then(r => r.json())
+        ]);
         
-        // Premium Check: If student is not subscribed, redirect to pricing
-        if (user.role === "STUDENT" && !user.isSubscribed) {
-          toast.error("This is a Premium Session. Please subscribe to access details.");
-          return router.push("/pricing");
+        if (sessionRes?.data?.user && userStatusRes.success) {
+          const user = userStatusRes.data;
+          setUser(user);
+          
+          // Premium Check: ONLY Students need a subscription to see details.
+          if (user.role === "STUDENT" && !user.isSubscribed) {
+            toast.error("This is a Premium Session. Please subscribe to access details.");
+            return router.push("/pricing");
+          }
+          
+          fetchStatus();
+        } else {
+          toast.error("Please sign in to view event details");
+          return router.push("/signin");
         }
-        
-        fetchStatus();
-      } else {
-        // If not logged in, they can't see details either (optional but safe)
-        toast.error("Please sign in to view event details");
-        return router.push("/signin");
+      } catch (err) {
+         console.error("Init failed", err);
       }
       if (id) fetchEvent();
     };
@@ -120,12 +127,30 @@ export default function EventDetailsPage() {
   };
 
   if (loading) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-      <div className="size-20 rounded-[2.5rem] bg-primary/10 flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-primary/5 animate-pulse" />
-        <Zap className="size-10 text-primary animate-bounce" />
-      </div>
-      <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground animate-pulse">Syncing Intel...</p>
+    <div className="min-h-screen pt-32 pb-32 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16 animate-pulse">
+        <div className="lg:col-span-8 space-y-12">
+            <div className="h-4 w-32 bg-muted rounded-full" />
+            <div className="space-y-6">
+                <div className="flex gap-3">
+                    <div className="h-8 w-24 bg-muted rounded-full" />
+                    <div className="h-8 w-32 bg-muted rounded-full" />
+                </div>
+                <div className="h-24 w-full bg-muted rounded-2xl" />
+                <div className="flex gap-4">
+                    <div className="h-10 w-32 bg-muted rounded-xl" />
+                    <div className="h-10 w-40 bg-muted rounded-xl" />
+                </div>
+            </div>
+            <div className="space-y-6 pt-8">
+                <div className="h-8 w-48 bg-muted rounded-full mb-6" />
+                <div className="h-4 w-full bg-muted rounded" />
+                <div className="h-4 w-full bg-muted rounded" />
+                <div className="h-4 w-3/4 bg-muted rounded" />
+            </div>
+        </div>
+        <div className="lg:col-span-4 space-y-8">
+            <div className="h-[500px] w-full bg-muted rounded-[3.5rem]" />
+        </div>
     </div>
   );
 

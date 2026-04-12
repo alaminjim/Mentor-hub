@@ -34,8 +34,10 @@ router.get("/events/joined", auth(), dashboardController.getJoinedEvents);
 router.get("/events/saved", auth(), dashboardController.getSavedEvents);
 router.get("/products", auth(), dashboardController.getAllProducts);
 router.get("/products/purchased", auth(), dashboardController.getPurchasedProducts);
+router.get("/products/:id", auth(), dashboardController.getProductById);
 router.post("/products/bookmark", auth(), dashboardController.toggleProductBookmark);
 router.post("/products/checkout", auth(), dashboardController.createProductCheckout);
+router.post("/products/confirm-purchase", auth(), dashboardController.confirmProductPurchase);
 router.get("/student/bookmarks", auth(), dashboardController.getStudentBookmarks);
 router.get("/vendor/bookmarks", auth(), dashboardController.getProductBookmarks);
 

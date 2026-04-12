@@ -54,6 +54,9 @@ export default function UniversalDashboard() {
         authClient.getSession(),
       ]);
       if (statsRes?.success) setData(statsRes.data);
+      else if (statsRes?.message?.includes("Tutor profile not found") || statsRes?.error?.includes("not found")) {
+        setData({ isMissingProfile: true });
+      }
       if (sessionRes?.data?.user) setUser(sessionRes.data.user);
       setLoading(false);
     };
@@ -82,6 +85,25 @@ export default function UniversalDashboard() {
 
   return (
     <div className="space-y-6 pb-16">
+
+      {data?.isMissingProfile && role === "tutor" && (
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent p-10 border border-amber-500/20 mb-8 shadow-2xl">
+           <div className="absolute top-0 right-0 p-12 opacity-10">
+              <Star className="size-32 text-amber-500" />
+           </div>
+           <div className="relative z-10 max-w-2xl">
+              <h2 className="text-3xl font-black tracking-tighter mb-4 text-foreground">
+                 Complete Your <span className="text-amber-500 italic">Teaching Profile.</span>
+              </h2>
+              <p className="text-muted-foreground font-medium mb-8 leading-relaxed">
+                 You are registered as a Tutor, but your public profile is not yet active. Establish your presence, define your pricing, and start accepting global mentorship sessions today.
+              </p>
+              <Link href="/dashboard/tutor" className="inline-flex items-center gap-3 px-8 h-12 rounded-full bg-amber-500 text-amber-950 font-black uppercase tracking-widest text-[10px] hover:bg-amber-400 transition-all shadow-xl shadow-amber-500/20">
+                 Activate Profile <ArrowRight className="size-4" />
+              </Link>
+           </div>
+        </div>
+      )}
 
       {/* ── Welcome Banner ─────────────────────────────────────────────── */}
       <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-primary/[0.02] to-transparent p-8">
@@ -271,7 +293,7 @@ export default function UniversalDashboard() {
             <p className="text-xs text-muted-foreground font-medium mt-0.5">Live data from backend</p>
           </div>
           <Link href={
-            role === "admin" ? "/dashboard/booking" :
+            role === "admin" ? "/dashboard/bookings" :
               role === "vendor" ? "/dashboard/products" :
                 role === "organizer" ? "/dashboard/bookings-manage" :
                   role === "tutor" ? "/dashboard/tutor/bookings" :
