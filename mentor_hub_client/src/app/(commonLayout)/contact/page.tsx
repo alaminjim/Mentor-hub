@@ -23,7 +23,7 @@ const ContactPage = () => {
     setIsSubmitting(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}/api/contact`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app"}/api/contact`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

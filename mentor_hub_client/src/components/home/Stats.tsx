@@ -16,7 +16,7 @@ export default function Stats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/stats`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'https://mentor-hub-server.vercel.app'}/api/stats`);
         const json = await res.json();
         if (json.success && json.data) {
           setData(json.data);

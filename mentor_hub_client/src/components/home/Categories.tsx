@@ -79,7 +79,7 @@ export default function Categories() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'}/api/category`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'https://mentor-hub-server.vercel.app'}/api/category`);
         const json = await res.json();
         if (json.success) {
           setCategoryData(json.data);
