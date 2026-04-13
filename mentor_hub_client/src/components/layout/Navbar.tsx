@@ -149,9 +149,9 @@ const Navbar = () => {
         <Link href="/" className="flex items-center gap-2 group mr-4">
           <motion.div
             whileHover={{ rotate: 15, scale: 1.1 }}
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center shadow-lg"
+            className="w-10 h-10 rounded-xl bg-white/10 dark:bg-black/20 flex items-center justify-center shadow-lg border border-white/20 overflow-hidden"
           >
-            <GraduationCap className="size-6 text-white" />
+            <img src="/logo.png" alt="MentorHub Logo" className="size-8 object-contain" />
           </motion.div>
           <span className="text-xl font-black tracking-tighter bg-gradient-to-r from-primary to-cyan-600 bg-clip-text text-transparent">
             mentorhub.

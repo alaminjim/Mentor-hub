@@ -211,8 +211,8 @@ export default function DashboardShell({
         <Sidebar className="border-r border-border bg-card/80 backdrop-blur-xl">
           <SidebarHeader className="p-6">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                <BarChart3 className="size-5 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-white/10 dark:bg-black/20 flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform border border-border overflow-hidden">
+                <img src="/logo.png" alt="MentorHub Logo" className="size-8 object-contain" />
               </div>
               <span className="text-xl font-black tracking-tighter lowercase leading-tight">
                 hub.<br />

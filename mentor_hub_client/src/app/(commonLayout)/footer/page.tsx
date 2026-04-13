@@ -81,8 +81,8 @@ const Footer = ({ className }: { className?: string }) => {
             <div className="flex flex-col md:flex-row items-start gap-6 md:gap-10">
               <RevealItem>
                 <Link href="/" className="inline-flex items-center gap-3">
-                  <div className="size-10 rounded-xl bg-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                    <GraduationCap className="size-6 text-white" />
+                  <div className="size-10 rounded-xl bg-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 overflow-hidden">
+                    <img src="/logo.png" alt="MentorHub Logo" className="size-8 object-contain" />
                   </div>
                   <span className="font-extrabold text-2xl tracking-tight text-slate-900">
                     MENTORHUB.
