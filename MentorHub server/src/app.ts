@@ -22,21 +22,8 @@ import session from "express-session";
 const app = express();
 app.set("trust proxy", true);
 
-// MANUAL CORS FAILSAFE - MUST BE AT THE VERY TOP
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  res.header("Access-Control-Allow-Origin", origin || "*");
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
-  res.header("Access-Control-Allow-Credentials", "true");
-  
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-  next();
-});
-
 // Stripe webhook needs raw body
+
 import { PricingController } from "./modules/pricing/pricing.controller.js";
 app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), PricingController.stripeWebhook);
 

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Role } from "../types/role.js";
 import { auth as betterAuth } from "../lib/auth.js";
-import { Status } from "../../generated/prisma/client/index.js";
+import { Status } from "@prisma/client";
 
 const auth = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +12,6 @@ const auth = (...roles: Role[]) => {
       });
 
       if (!session?.user) {
-        console.log("Session not found for headers:", req.headers.cookie ? "Cookie present" : "No cookie");
         return res.status(401).json({
           success: false,
           message: "You are not authorized",
@@ -44,6 +43,7 @@ const auth = (...roles: Role[]) => {
 
       next();
     } catch (error: any) {
+      console.error("Authentication Middleware Error:", error);
       return res.status(500).json({
         success: false,
         message: "Authentication error",
@@ -54,3 +54,4 @@ const auth = (...roles: Role[]) => {
 };
 
 export default auth;
+

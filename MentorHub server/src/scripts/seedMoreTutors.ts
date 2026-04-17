@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { prisma } from "../lib/prisma.ts.js";
+import { prisma } from "../lib/prisma.js";
+
 
 async function seedMoreTutors() {
   console.log("🌱 Updating Elite Tutors with Phone & Availability...");
