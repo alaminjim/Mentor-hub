@@ -29,9 +29,20 @@ app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), Pric
 
 app.use(express.json());
 
+const allowedOrigins = [
+  "https://mentor-hub-client-seven.vercel.app",
+  "http://localhost:3000",
+];
+
 app.use(
   cors({
-    origin: true,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );

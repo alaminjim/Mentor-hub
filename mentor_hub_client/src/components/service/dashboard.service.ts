@@ -1,7 +1,9 @@
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
+
 export const dashboardService = {
   getStats: async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/dashboard/stats`, {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/stats`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         // @ts-ignore
@@ -16,7 +18,7 @@ export const dashboardService = {
 
   updateProfile: async (payload: any) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || ""}/api/dashboard/profile`, {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/profile`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         // @ts-ignore

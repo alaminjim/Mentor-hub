@@ -1,7 +1,6 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
-import { env } from "../../../env";
 
-const app_url = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : (env.NEXT_PUBLIC_BACKEND_URL || "");
+const app_url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
 
 export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
