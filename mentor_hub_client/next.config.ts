@@ -1,11 +1,8 @@
 import type { NextConfig } from "next";
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
-
-const config: any = {
+const config: NextConfig = {
   images: {
-    unoptimized: true, // Force disable optimization to resolve 404 on local dev
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
@@ -14,23 +11,10 @@ const config: any = {
       { protocol: "http", hostname: "**" },
     ],
   },
-
-  // Proxy /api/* → backend
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${BACKEND_URL}/api/:path*`,
-      },
-    ];
-  },
-
+  // Removed eslint key as it's no longer supported in next.config.ts for recent Next.js versions
 };
 
 export default config;
