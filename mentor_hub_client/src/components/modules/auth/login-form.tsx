@@ -107,6 +107,8 @@ export function LoginForm() {
                   <div>
                     <Input
                       id={field.name}
+                      type="email"
+                      autoComplete="email"
                       placeholder="name@company.com"
                       className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
                       value={field.state.value}
@@ -135,6 +137,7 @@ export function LoginForm() {
                     <Input
                       id={field.name}
                       type="password"
+                      autoComplete="current-password"
                       placeholder="••••••••"
                       className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
                       value={field.state.value}
