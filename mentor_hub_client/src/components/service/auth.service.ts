@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 import { env } from "../../../env";
 
-const AUTH_URL = typeof window === 'undefined' ? (env.AUTH_URL || "https://mentor-hub-server.vercel.app/api/auth") : (env.NEXT_PUBLIC_AUTH_URL || "/api/auth");
+const AUTH_URL = typeof window === 'undefined' ? (env.AUTH_URL || "https://mentor-hub-1.onrender.com/api/auth") : (env.NEXT_PUBLIC_AUTH_URL || "/api/auth");
 
 export const getSession = async () => {
   try {

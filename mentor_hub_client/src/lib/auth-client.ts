@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 import { emailOTPClient } from "better-auth/client/plugins";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server.vercel.app";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
 
 export const authClient = createAuthClient({
   baseURL: BACKEND_URL,

@@ -7,7 +7,7 @@ import { BadgeCheck, Star, MapPin, Clock, BookOpen, Quote, ShieldCheck } from "l
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-const api_url = typeof window === 'undefined' ? (env.BACKEND_URL || "https://mentor-hub-server.vercel.app") : (env.NEXT_PUBLIC_BACKEND_URL || "");
+const api_url = typeof window === 'undefined' ? (env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (env.NEXT_PUBLIC_BACKEND_URL || "");
 
 interface Category {
   id: string;
