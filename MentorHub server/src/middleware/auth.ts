@@ -16,13 +16,13 @@ const auth = (...roles: Role[]) => {
       // better-auth will automatically handle cookie parsing based on the request context
       let session = null;
       try {
-        console.log("[Auth Middleware] Calling betterAuth.api.getSession with original headers...");
+        // We pass the full headers object which includes Cookies, Authorization, etc.
         session = await betterAuth.api.getSession({
           headers: req.headers as any,
         });
-        console.log("[Auth Middleware] Session found:", !!session?.user);
       } catch (err: any) {
-        console.error("[Auth Middleware] getSession error:", err.message);
+        // If Prisma fails with a delete error or record not found, we treat it as no session
+        console.warn("[Auth Middleware] Session decoding failed (possible stale cookie):", err.message);
         session = null;
       }
 

@@ -38,7 +38,6 @@ export const auth = betterAuth({
     defaultCookieAttributes: {
       sameSite: "none",
       secure: true,
-      // No domain specified = cookie available to all domains
     },
   },
   plugins: [
@@ -87,14 +86,12 @@ export const auth = betterAuth({
   },
   session: {
     cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60,
+      enabled: false, // Disable cache to ensure DB sync across domains
     },
     cookie: {
       sameSite: "none",
       secure: true,
       httpOnly: true,
-      // No domain specified = cookie available to all domains
     },
   },
   callbacks: {

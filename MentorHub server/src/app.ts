@@ -30,14 +30,15 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "https://mentor-hub-client.onrender.com",
+      "http://localhost:3000",
+      process.env.CLIENT_URL,
+      process.env.PROD_CLIENT_URL,
+    ].filter(Boolean) as string[],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "x-requested-with"],
   })
 );
 
