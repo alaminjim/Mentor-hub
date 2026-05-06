@@ -89,5 +89,9 @@ export const auth = betterAuth({
       enabled: true,
       maxAge: 5 * 60,
     },
+    cookie: {
+      sameSite: "none",
+      secure: true,
+    },
   },
 });
