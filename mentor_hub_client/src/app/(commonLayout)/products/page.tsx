@@ -46,9 +46,10 @@ export default function PublicProductsPage() {
   const itemsPerPage = 8;
 
   const fetchProducts = async () => {
-    try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-      const res = await fetch(`${baseUrl}/api/dashboard/products`).then(r => r.json());
+      const res = await fetch(`${baseUrl}/api/dashboard/products`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res?.success) setProducts(res.data);
     } catch (err) {
       toast.error("Failed to load marketplace data");

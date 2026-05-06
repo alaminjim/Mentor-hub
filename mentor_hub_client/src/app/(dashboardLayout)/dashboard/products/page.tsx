@@ -52,7 +52,8 @@ export default function VendorProductsPage() {
       const res = await fetch(`${baseUrl}/api/ai/generate-description`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: formData.title })
+        body: JSON.stringify({ title: formData.title }),
+        credentials: "include"
       }).then(r => r.json());
 
       if (res?.success && res.data) {
@@ -89,7 +90,9 @@ export default function VendorProductsPage() {
   const fetchProducts = async () => {
     try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-      const res = await fetch(`${baseUrl}/api/dashboard/vendor/products`).then(r => r.json());
+      const res = await fetch(`${baseUrl}/api/dashboard/vendor/products`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res?.success) setProducts(res.data);
     } catch (err) {
       toast.error("Failed to load inventory");
@@ -120,7 +123,8 @@ export default function VendorProductsPage() {
         body: JSON.stringify({
           ...formData,
           price: parseFloat(formData.price)
-        })
+        }),
+        credentials: "include"
       }).then(r => r.json());
 
       if (res?.success) {
@@ -150,7 +154,8 @@ export default function VendorProductsPage() {
     try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/vendor/products/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: "include"
       }).then(r => r.json());
 
       if (res?.success) {

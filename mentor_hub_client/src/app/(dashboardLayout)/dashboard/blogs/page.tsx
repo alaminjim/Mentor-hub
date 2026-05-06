@@ -38,7 +38,9 @@ export default function BlogManagementPage() {
   const fetchBlogs = async () => {
     try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-      const res = await fetch(`${baseUrl}/api/blog`);
+      const res = await fetch(`${baseUrl}/api/blog`, {
+        credentials: "include"
+      });
       const data = await res.json();
       if (data?.success || data?.data) {
         setBlogs(data.data || []);
@@ -103,6 +105,7 @@ export default function BlogManagementPage() {
           category: formData.category,
           image: formData.image || null,
         }),
+        credentials: "include"
       });
 
       const data = await res.json();
@@ -127,7 +130,10 @@ export default function BlogManagementPage() {
     setActionLoading(`delete-${id}`);
     try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-      const res = await fetch(`${baseUrl}/api/blog/${id}`, { method: "DELETE" });
+      const res = await fetch(`${baseUrl}/api/blog/${id}`, { 
+        method: "DELETE",
+        credentials: "include"
+      });
       const data = await res.json();
 
       if (data?.success) {
