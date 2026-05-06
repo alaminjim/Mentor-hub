@@ -25,6 +25,8 @@ export const auth = betterAuth({
     process.env.CLIENT_URL,
     process.env.PROD_APP_URL,
     process.env.PROD_CLIENT_URL,
+    "https://mentor-hub-client.onrender.com",
+    "https://mentor-hub-1.onrender.com",
     "http://localhost:3000",
     "http://localhost:5000",
   ].filter(Boolean) as string[],

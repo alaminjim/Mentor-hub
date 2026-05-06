@@ -60,7 +60,8 @@ export const updateCategory = async (
   id: string,
   data: UpdateCategoryData,
 ): Promise<Category> => {
-  const res = await fetch(`/api/category/update/${id}`, {
+  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+  const res = await fetch(`${baseUrl}/api/category/update/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -79,7 +80,8 @@ export const updateCategory = async (
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {
-  const res = await fetch(`/api/category/delete/${id}`, {
+  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+  const res = await fetch(`${baseUrl}/api/category/delete/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
