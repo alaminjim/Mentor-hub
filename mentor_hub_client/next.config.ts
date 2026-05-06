@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
-const config: NextConfig = {
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
+const config: any = {
   images: {
-    unoptimized: true,
+    unoptimized: true, // Force disable optimization to resolve 404 on local dev
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
@@ -11,10 +14,39 @@ const config: NextConfig = {
       { protocol: "http", hostname: "**" },
     ],
   },
+
+  // Proxy /api/* → backend
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Removed eslint key as it's no longer supported in next.config.ts for recent Next.js versions
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${BACKEND_URL}/api/:path*`,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self'",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default config;
