@@ -30,9 +30,12 @@ app.post("/api/pricing/webhook", express.raw({ type: "application/json" }), Pric
 app.use(express.json());
 
 const allowedOrigins = [
-  "https://mentor-hub-client-seven.vercel.app",
+  process.env.CLIENT_URL,
+  process.env.PROD_CLIENT_URL,
   "http://localhost:3000",
-];
+  "http://localhost:3001",
+  "https://mentor-hub-client-seven.vercel.app",
+].filter(Boolean) as string[];
 
 app.use(
   cors({
