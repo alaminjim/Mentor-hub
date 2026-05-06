@@ -18,17 +18,19 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  baseURL: process.env.APP_URL || process.env.BETTER_AUTH_URL || "https://mentor-hub-server.vercel.app",
+  baseURL: process.env.BETTER_AUTH_URL || process.env.APP_URL || "http://localhost:5000",
   trustedOrigins: [
     process.env.BETTER_AUTH_URL!,
     process.env.APP_URL!,
     process.env.PROD_APP_URL!,
+    "http://localhost:3000",
+    "http://localhost:5000",
     "https://mentor-hub-client-seven.vercel.app",
     "https://mentor-hub-server.vercel.app",
   ].filter(Boolean),
   advanced: {
     cookiePrefix: "better-auth",
-    useSecureCookies: true,
+    useSecureCookies: false, // Disable for localhost (HTTP)
     crossSubDomainCookies: {
       enabled: false,
     },

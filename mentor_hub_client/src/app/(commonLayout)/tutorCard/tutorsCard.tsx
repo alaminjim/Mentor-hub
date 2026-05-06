@@ -47,7 +47,7 @@ export const TutorCard = ({ className, tutor, initialBookmarked = false }: Tutor
 
   const initials = tutor?.name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "TU";
   
-  const portraitUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${tutor.id || tutor.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+  const portraitUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name || "Tutor")}&background=random&color=fff&size=256`;
 
   return (
     <div

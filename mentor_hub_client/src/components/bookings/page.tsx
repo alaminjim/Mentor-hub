@@ -73,7 +73,7 @@ export default function BookingForm({
   const rawTotal = Math.round(formData.duration * hourlyRate);
   const discountAmount = Math.round(rawTotal * (discountPercentage / 100));
   const totalPrice = rawTotal - discountAmount;
-  const isStudent = userRole === "STUDENT";
+  const isStudent = userRole?.toUpperCase() === "STUDENT";
 
   useEffect(() => {
     if (formData.scheduledAt) {

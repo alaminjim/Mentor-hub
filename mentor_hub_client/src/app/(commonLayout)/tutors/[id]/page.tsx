@@ -7,7 +7,7 @@ import { BadgeCheck, Star, MapPin, Clock, BookOpen, Quote, ShieldCheck } from "l
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-const api_url = typeof window === 'undefined' ? "https://mentor-hub-server.vercel.app" : (env.NEXT_PUBLIC_BACKEND_URL || "");
+const api_url = typeof window === 'undefined' ? (env.BACKEND_URL || "https://mentor-hub-server.vercel.app") : (env.NEXT_PUBLIC_BACKEND_URL || "");
 
 interface Category {
   id: string;
@@ -80,7 +80,7 @@ const TutorDetailsPage = async ({
             <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-8 items-start">
               <div className="relative">
                 {(() => {
-                  const portraitUrl = `https://api.dicebear.com/7.x/micah/svg?seed=${data.id || data.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+                  const portraitUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || "Tutor")}&background=random&color=fff&size=256`;
                   
                   return (
                     <div className="size-40 rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-900 overflow-hidden shadow-2xl">
@@ -303,7 +303,7 @@ const TutorDetailsPage = async ({
                   return (
                   <div key={i} className="p-6 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex items-center gap-6">
                       <div className="size-20 rounded-2xl overflow-hidden shrink-0">
-                          <img src={`https://api.dicebear.com/7.x/micah/svg?seed=${data.id}${i}&backgroundColor=b6e3f4,c0aede,d1d4f9`} className="w-full h-full object-cover" />
+                          <img src={`https://ui-avatars.com/api/?name=SM${i+1}&background=random&color=fff&size=128`} className="w-full h-full object-cover" />
                       </div>
                       <div>
                           <p className="text-[10px] font-black uppercase text-primary tracking-widest">{data.categories?.[0]?.name || "educational mentor"}</p>

@@ -121,13 +121,15 @@ export function SignupForm() {
                 <FieldLabel className="text-xs font-black uppercase tracking-widest text-slate-400">Full Name</FieldLabel>
                 <div className="relative">
                   <UserRound className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                  <Input
-                    id={field.name}
-                    placeholder="John Doe"
-                    className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
+                  <div>
+                    <Input
+                      id={field.name}
+                      placeholder="John Doe"
+                      className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </div>
                 </div>
                 {field.state.meta.isTouched && field.state.meta.errors && (
                   <FieldError className="text-[10px] font-bold uppercase tracking-tighter text-rose-500" errors={field.state.meta.errors} />
@@ -143,13 +145,15 @@ export function SignupForm() {
                 <FieldLabel className="text-xs font-black uppercase tracking-widest text-slate-400">Email Address</FieldLabel>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                  <Input
-                    id={field.name}
-                    placeholder="name@company.com"
-                    className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
+                  <div>
+                    <Input
+                      id={field.name}
+                      placeholder="name@company.com"
+                      className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </div>
                 </div>
                 {field.state.meta.isTouched && field.state.meta.errors && (
                   <FieldError className="text-[10px] font-bold uppercase tracking-tighter text-rose-500" errors={field.state.meta.errors} />
@@ -165,14 +169,16 @@ export function SignupForm() {
                 <FieldLabel className="text-xs font-black uppercase tracking-widest text-slate-400">Password</FieldLabel>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
-                  <Input
-                    id={field.name}
-                    type="password"
-                    placeholder="••••••••"
-                    className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
+                  <div>
+                    <Input
+                      id={field.name}
+                      type="password"
+                      placeholder="••••••••"
+                      className="pl-12 h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-4 focus:ring-sky-500/10 transition-all font-medium"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                    />
+                  </div>
                 </div>
                 {field.state.meta.isTouched && field.state.meta.errors && (
                   <FieldError className="text-[10px] font-bold uppercase tracking-tighter text-rose-500" errors={field.state.meta.errors} />

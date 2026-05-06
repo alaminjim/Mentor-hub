@@ -130,7 +130,7 @@ export default function BlogPage() {
       setLoading(true);
       setError(null);
       try {
-        const baseUrl = typeof window === "undefined" ? "https://mentor-hub-server.vercel.app" : "";
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server.vercel.app") : "";
         const res = await fetch(`${baseUrl}/api/blog`, {
           next: { revalidate: 3600 }, // Cache but revalidate every hour
         });
