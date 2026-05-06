@@ -30,7 +30,7 @@ async function seedingAdmin() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Origin: "https://mentor-hub-client-chi.vercel.app",
+          Origin: "https://mentor-hub-client.onrender.com",
         },
         body: JSON.stringify(storeDataAmin),
       },
