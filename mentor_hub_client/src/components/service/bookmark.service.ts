@@ -1,10 +1,12 @@
 export const bookmarkService = {
   toggleBookmark: async (tutorId: string) => {
     try {
-      const res = await fetch(`/api/bookmark/toggle`, {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/bookmark/toggle`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tutorId }),
+        credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to toggle bookmark");
       return await res.json();
@@ -16,7 +18,10 @@ export const bookmarkService = {
 
   getMyBookmarks: async (): Promise<{ success: boolean; data: string[] }> => {
     try {
-      const res = await fetch(`/api/bookmark/my-bookmarks`);
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/bookmark/my-bookmarks`, {
+        credentials: "include",
+      });
       if (!res.ok) return { success: false, data: [] };
       return await res.json();
     } catch (e) {
