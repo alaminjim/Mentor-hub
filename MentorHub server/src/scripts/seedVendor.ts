@@ -32,7 +32,7 @@ async function seedingVendor() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Origin: "https://mentor-hub-1.onrender.com",
+          Origin: "https://mentor-hub-client-chi.vercel.app",
         },
         body: JSON.stringify(storeData),
       },
