@@ -8,7 +8,7 @@ import { reviewRouter } from "./modules/review/review.route.js";
 import { studentRouter } from "./modules/students/student.route.js";
 import { categoryRouter } from "./modules/categories/categories.route.js";
 import { bookingsRouter } from "./modules/bookings/bookings.route.js";
-import notFound from "./middleware/notFound.js";
+import { notFound } from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
