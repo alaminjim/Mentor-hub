@@ -16,27 +16,36 @@ const auth = (...roles: Role[]) => {
       const hasSessionToken = cookieHeader?.includes("better-auth.session_token") || cookieHeader?.includes("_Secure-better-auth.session_token");
       console.log("[Auth Middleware] Has session token:", hasSessionToken);
 
-      // Build headers object for better-auth
-      const headers = new Headers();
+      // Process cookie header - replace _Secure- prefix for better-auth
+      let processedCookieHeader = cookieHeader;
+      if (cookieHeader) {
+        processedCookieHeader = cookieHeader.replace(/_Secure-better-auth/g, "better-auth");
+        console.log("[Auth Middleware] Processed cookie header:", processedCookieHeader.substring(0, 100));
+      }
+
+      // Build headers for better-auth (use raw object, not Headers class)
+      const headersForAuth: Record<string, string> = {};
       
-      // Copy all request headers
+      // Copy headers from request
       Object.entries(req.headers).forEach(([key, value]) => {
         if (value) {
           const headerValue = Array.isArray(value) ? value[0] : value;
           if (headerValue) {
-            headers.set(key, headerValue);
+            headersForAuth[key.toLowerCase()] = headerValue;
           }
         }
       });
-
-      // Ensure cookie header is set
-      if (cookieHeader) {
-        headers.set("cookie", cookieHeader);
+      
+      // Override with processed cookie
+      if (processedCookieHeader) {
+        headersForAuth['cookie'] = processedCookieHeader;
       }
+
+      console.log("[Auth Middleware] Headers for auth:", Object.keys(headersForAuth));
 
       // Handle session retrieval
       const session = await betterAuth.api.getSession({
-        headers: headers as any,
+        headers: headersForAuth,
       });
 
       console.log("[Auth Middleware] Session found:", !!session?.user);
