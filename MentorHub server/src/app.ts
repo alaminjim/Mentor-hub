@@ -34,13 +34,13 @@ const allowedOrigins = [
   process.env.PROD_CLIENT_URL,
   "http://localhost:3000",
   "http://localhost:3001",
-  "https://mentor-hub-client-seven.vercel.app",
 ].filter(Boolean) as string[];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow if no origin (like mobile apps or curl) or if in allowed list or if it's a vercel subdomain
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
