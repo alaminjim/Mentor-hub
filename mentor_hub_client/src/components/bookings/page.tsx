@@ -5,6 +5,8 @@ import { Calendar, Clock, DollarSign, Brain, Sparkles, Rocket, Loader2 } from "l
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 interface Category {
   id: string;
   name: string;
@@ -79,7 +81,7 @@ export default function BookingForm({
     if (formData.scheduledAt) {
       const fetchBookedSlots = async () => {
         try {
-          const res = await fetch(`/api/booking/booked-slots?tutorId=${tutorId}&date=${formData.scheduledAt}`);
+          const res = await fetch(`${BACKEND_URL}/api/booking/booked-slots?tutorId=${tutorId}&date=${formData.scheduledAt}`, { credentials: "include" });
           const result = await res.json();
           if (result.success) setBookedSlots(result.data || []);
         } catch (err) {
@@ -97,9 +99,10 @@ export default function BookingForm({
     
     setAiLoading(true);
     try {
-      const res = await fetch("/api/ai/suggest-category", {
+      const res = await fetch(`${BACKEND_URL}/api/ai/suggest-category`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ subject }),
       });
       const result = await res.json();
@@ -147,7 +150,7 @@ export default function BookingForm({
 
   const handleFinalRedirect = async (bookingId: string) => {
     try {
-       const res = await fetch(`/api/booking/pay/${bookingId}`);
+       const res = await fetch(`${BACKEND_URL}/api/booking/pay/${bookingId}`, { credentials: "include" });
        const result = await res.json();
        if (result.success && result.data.url) {
           window.location.href = result.data.url;
@@ -194,9 +197,10 @@ export default function BookingForm({
         totalPrice,
       };
 
-      const res = await fetch("/api/booking/create", {
+      const res = await fetch(`${BACKEND_URL}/api/booking/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(bookingData),
       });
 

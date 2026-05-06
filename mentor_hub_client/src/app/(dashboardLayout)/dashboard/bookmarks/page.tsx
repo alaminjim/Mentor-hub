@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils";
 
 import { useSearchParams } from "next/navigation";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 export default function BookmarksPage() {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as "tutors" | "products") || "tutors";
@@ -22,7 +24,9 @@ export default function BookmarksPage() {
 
   const fetchBookmarks = async () => {
     try {
-      const res = await fetch("/api/dashboard/student/bookmarks").then(r => r.json());
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/student/bookmarks`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res?.success) setData(res.data);
     } catch (err) {
       toast.error("Failed to sync library");

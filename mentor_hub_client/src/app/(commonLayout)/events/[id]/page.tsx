@@ -15,6 +15,8 @@ import { useParams, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 export default function EventDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -27,7 +29,7 @@ export default function EventDetailsPage() {
 
   const fetchEvent = async () => {
     try {
-      const res = await fetch(`/api/dashboard/events/public/${id}`).then(r => r.json());
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/events/public/${id}`).then(r => r.json());
       if (res.success) setEvent(res.data);
     } catch (err) {
       console.error("Event fetch failed");
@@ -38,7 +40,9 @@ export default function EventDetailsPage() {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch(`/api/dashboard/events/status/${id}`).then(r => r.json());
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/events/status/${id}`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res.success) setStatus(res.data);
     } catch (err) {
       console.error("Status check failed");
@@ -50,7 +54,7 @@ export default function EventDetailsPage() {
       try {
         const [sessionRes, userStatusRes] = await Promise.all([
           authClient.getSession(),
-          fetch("/api/auth/authMe").then(r => r.json())
+          fetch(`${BACKEND_URL}/api/auth/authMe`, { credentials: "include" }).then(r => r.json())
         ]);
         
         if (sessionRes?.data?.user && userStatusRes.success) {
@@ -84,9 +88,10 @@ export default function EventDetailsPage() {
 
     setActionLoading(prev => ({ ...prev, register: true }));
     try {
-      const res = await fetch("/api/dashboard/events/registration", {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/events/registration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ eventId: id })
       }).then(r => r.json());
 
@@ -109,9 +114,10 @@ export default function EventDetailsPage() {
 
     setActionLoading(prev => ({ ...prev, bookmark: true }));
     try {
-      const res = await fetch("/api/dashboard/events/bookmark", {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/events/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ eventId: id })
       }).then(r => r.json());
 

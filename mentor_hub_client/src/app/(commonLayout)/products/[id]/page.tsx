@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function ProductDetailsPage() {
       setUser(session?.data?.user);
 
       try {
-        const res = await fetch(`/api/dashboard/products/${id}`).then(r => r.json());
+        const res = await fetch(`${BACKEND_URL}/api/dashboard/products/${id}`).then(r => r.json());
         if (res.success) setProduct(res.data);
         else toast.error("Product not found");
       } catch (err) {
@@ -46,9 +48,10 @@ export default function ProductDetailsPage() {
 
     setActionLoading(true);
     try {
-      const res = await fetch("/api/dashboard/products/checkout", {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/products/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           productId: id,
           successUrl: `${window.location.origin}/dashboard/browse-products?success=true&productId=${id}`,

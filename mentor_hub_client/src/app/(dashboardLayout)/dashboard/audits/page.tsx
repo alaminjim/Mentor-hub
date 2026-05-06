@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 export default function SecurityAuditsPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ export default function SecurityAuditsPage() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/dashboard/manager/users");
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/manager/users`, { credentials: "include" });
       const data = await res.json();
       if (data?.success) {
         setUsers(data.data);
@@ -33,9 +35,10 @@ export default function SecurityAuditsPage() {
   const handleToggleBan = async (id: string, currentStatus: string) => {
     setActionLoading(id);
     try {
-      const res = await fetch("/api/dashboard/manager/users/ban", {
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/manager/users/ban`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ id, currentStatus })
       });
       const data = await res.json();

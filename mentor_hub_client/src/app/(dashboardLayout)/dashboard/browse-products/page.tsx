@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 export default function BrowseProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,9 @@ export default function BrowseProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("/api/dashboard/products/purchased").then(r => r.json());
+      const res = await fetch(`${BACKEND_URL}/api/dashboard/products/purchased`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res?.success) setProducts(res.data || []);
       else setProducts([]);
     } catch (err) {
@@ -34,9 +38,10 @@ export default function BrowseProductsPage() {
       if (success === "true" && productId) {
         const loadingToast = toast.loading("Verifying your purchase...");
         try {
-          const res = await fetch("/api/dashboard/products/confirm-purchase", {
+          const res = await fetch(`${BACKEND_URL}/api/dashboard/products/confirm-purchase`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify({ productId })
           }).then(r => r.json());
 

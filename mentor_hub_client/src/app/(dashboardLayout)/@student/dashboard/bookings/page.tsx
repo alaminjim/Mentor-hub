@@ -25,6 +25,8 @@ import { CreateReview } from "@/components/service/reviews.service";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -55,9 +57,10 @@ function ReviewModal({
   const handleAiReview = async () => {
     setAiGenerating(true);
     try {
-      const res = await fetch("/api/ai/generate-review", {
+      const res = await fetch(`${BACKEND_URL}/api/ai/generate-review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ subject, tutorName }),
       });
       const result = await res.json();
@@ -249,9 +252,10 @@ export default function StudentBookingsPage() {
       router.replace("/dashboard/bookings");
       
       try {
-        const res = await fetch("/api/ai/confirm-payment", {
+        const res = await fetch(`${BACKEND_URL}/api/ai/confirm-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ bookingId }),
         });
         const result = await res.json();
@@ -503,7 +507,7 @@ export default function StudentBookingsPage() {
                             <button 
                               onClick={async () => {
                                 try {
-                                  const res = await fetch(`/api/booking/pay/${bookingId}`);
+                                  const res = await fetch(`${BACKEND_URL}/api/booking/pay/${bookingId}`, { credentials: "include" });
                                   const result = await res.json();
                                   if (result.success && result.data.url) {
                                     window.location.href = result.data.url;

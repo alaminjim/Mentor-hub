@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, Crown, Sparkles, Zap } from "lucide-react";
 import { pricingService } from "@/components/service/pricing.service";
+import { getAuthMe } from "@/components/service/student.service";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
 import { motion } from "framer-motion";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
 
 export default function PricingPage() {
   const [tiers, setTiers] = useState<any[]>([]);
@@ -21,29 +24,30 @@ export default function PricingPage() {
 
     const fetchData = async () => {
       try {
-        const [tiersRes, userRes] = await Promise.all([
+        const [tiersRes, userData] = await Promise.all([
           pricingService.getTiers(),
-          fetch("/api/auth/authMe").then(res => res.json())
+          getAuthMe()
         ]);
 
         if (tiersRes.success) setTiers(tiersRes.data);
-        if (userRes.success) setUserSubscription(userRes.data);
+        if (userData) setUserSubscription(userData);
 
         // If returned from payment success
         if (success === "true" && tierId) {
           const loadingToast = toast.loading("Verifying your subscription...");
           try {
-            const confirmRes = await fetch("/api/pricing/confirm-subscription", {
+            const confirmRes = await fetch(`${BACKEND_URL}/api/pricing/confirm-subscription`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify({ tierId })
             }).then(r => r.json());
 
             if (confirmRes.success) {
               toast.success("Welcome to the Premium Club!", { id: loadingToast });
               // Refresh user data to show active status immediately
-              const updatedUser = await fetch("/api/auth/authMe").then(r => r.json());
-              if (updatedUser.success) setUserSubscription(updatedUser.data);
+              const updatedUser = await getAuthMe();
+              if (updatedUser) setUserSubscription(updatedUser);
             } else {
               toast.error("Verification failed. Please contact support.", { id: loadingToast });
             }
