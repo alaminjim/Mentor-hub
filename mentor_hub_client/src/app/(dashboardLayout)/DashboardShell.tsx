@@ -191,21 +191,21 @@ export default function DashboardShell({
         const res = await authClient.getSession();
         if (res?.data?.user) {
           setUserData(res.data.user);
+          // Sync role from session data if it's different
+          if (res.data.user.role.toLowerCase() !== role) {
+             router.refresh();
+          }
         } else {
-          // No session found, redirect to signin
-          console.log("[DashboardShell] No session, redirecting to signin");
           router.push("/signin");
         }
       } catch (err) {
-        console.error("[DashboardShell] Session fetch error:", err);
-        setUserData(null);
         router.push("/signin");
       } finally {
         setIsLoading(false);
       }
     };
     fetchSession();
-  }, [router]);
+  }, [router, role]);
   
   // Show loading while checking auth
   if (isLoading) {

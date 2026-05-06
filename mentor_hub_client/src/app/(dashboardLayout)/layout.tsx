@@ -59,12 +59,14 @@ export default async function DashboardLayout({
   }
 
   return (
-    <DashboardShell role={rawRole} user={user}>
-      {role === "admin" && admin}
-      {role === "student" && student}
-      {role === "tutor" && tutor}
-      {/* For other roles like Manager, Vendor, Organizer, we use the default children */}
-      {(role === "manager" || role === "vendor" || role === "organizer") && children}
-    </DashboardShell>
+    <div key={rawRole}>
+      <DashboardShell role={rawRole} user={user}>
+        {role === "admin" && admin}
+        {role === "student" && student}
+        {role === "tutor" && tutor}
+        {/* For other roles like Manager, Vendor, Organizer, we use the default children */}
+        {(role === "manager" || role === "vendor" || role === "organizer") && children}
+      </DashboardShell>
+    </div>
   );
 }
