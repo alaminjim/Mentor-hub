@@ -31,7 +31,6 @@ export const auth = betterAuth({
     "http://localhost:5000",
   ].filter(Boolean) as string[],
   advanced: {
-    cookiePrefix: "better-auth",
     useSecureCookies: true, // MUST be true for cross-domain (Render to Vercel)
     crossSubDomainCookies: {
       enabled: true, // Enable for cross-domain cookies

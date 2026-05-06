@@ -13,6 +13,7 @@ import { statsRouter } from "./modules/stats/stats.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
 import { bookmarkRouter } from "./modules/bookmark/bookmark.route.js";
 import { pricingRouter } from "./modules/pricing/pricing.route.js";
+import testRouter from "./modules/test/test.route.js";
 import { notFound } from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
 
@@ -51,6 +52,7 @@ app.use("/api/stats", statsRouter);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/bookmark", bookmarkRouter);
 app.use("/api/pricing", pricingRouter);
+app.use("/api/test", testRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
