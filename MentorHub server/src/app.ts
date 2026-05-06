@@ -19,9 +19,22 @@ const app = express();
 
 app.use(express.json());
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.PROD_CLIENT_URL,
+  "http://localhost:3000",
+  "https://mentor-hub-client.onrender.com",
+].filter(Boolean) as string[];
+
 app.use(
   cors({
-    origin: process.env.APP_URL,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
