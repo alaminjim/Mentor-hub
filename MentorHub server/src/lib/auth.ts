@@ -20,14 +20,14 @@ export const auth = betterAuth({
   }),
   baseURL: process.env.BETTER_AUTH_URL || process.env.APP_URL || "http://localhost:5000",
   trustedOrigins: [
-    process.env.BETTER_AUTH_URL!,
-    process.env.APP_URL!,
-    process.env.PROD_APP_URL!,
+    process.env.BETTER_AUTH_URL,
+    process.env.APP_URL,
+    process.env.CLIENT_URL,
+    process.env.PROD_APP_URL,
+    process.env.PROD_CLIENT_URL,
     "http://localhost:3000",
     "http://localhost:5000",
-    "https://mentor-hub-client-seven.vercel.app",
-    "https://mentor-hub-server.vercel.app",
-  ].filter(Boolean),
+  ].filter(Boolean) as string[],
   advanced: {
     cookiePrefix: "better-auth",
     useSecureCookies: false, // Disable for localhost (HTTP)
