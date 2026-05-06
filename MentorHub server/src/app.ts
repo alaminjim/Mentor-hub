@@ -8,6 +8,10 @@ import { reviewRouter } from "./modules/review/review.route.js";
 import { studentRouter } from "./modules/students/student.route.js";
 import { categoryRouter } from "./modules/categories/categories.route.js";
 import { bookingsRouter } from "./modules/bookings/bookings.route.js";
+import { blogRouter } from "./modules/blog/blog.route.js";
+import { statsRouter } from "./modules/stats/stats.route.js";
+import { dashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
+import { bookmarkRouter } from "./modules/bookmark/bookmark.route.js";
 import { notFound } from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
 
@@ -28,6 +32,10 @@ app.use("/api/review", reviewRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/booking", bookingsRouter);
+app.use("/api/blog", blogRouter);
+app.use("/api/stats", statsRouter);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/bookmark", bookmarkRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

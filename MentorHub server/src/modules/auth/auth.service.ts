@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { prisma } from "../../lib/prisma.js";
 
 import { Role } from "../../types/role.js";
-import { IAdminStats } from "../../types.js";
+import { IAdminStats } from "../../types/index.js";
 
 const authGetMe = async (userId: string) => {
   const user = await prisma.user.findUnique({
