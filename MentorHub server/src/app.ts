@@ -12,6 +12,7 @@ import { blogRouter } from "./modules/blog/blog.route.js";
 import { statsRouter } from "./modules/stats/stats.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
 import { bookmarkRouter } from "./modules/bookmark/bookmark.route.js";
+import { pricingRouter } from "./modules/pricing/pricing.route.js";
 import { notFound } from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
 
@@ -49,6 +50,7 @@ app.use("/api/blog", blogRouter);
 app.use("/api/stats", statsRouter);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/bookmark", bookmarkRouter);
+app.use("/api/pricing", pricingRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

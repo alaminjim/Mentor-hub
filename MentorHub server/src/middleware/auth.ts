@@ -6,10 +6,36 @@ import { Status } from "@prisma/client";
 const auth = (...roles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      // Debug: log cookie header
+      const cookieHeader = req.headers.cookie;
+      console.log("[Auth Middleware] Cookie header:", cookieHeader ? cookieHeader.substring(0, 100) : "missing");
+      console.log("[Auth Middleware] Request path:", req.path);
+      console.log("[Auth Middleware] Origin:", req.headers.origin);
+
+      // Build headers object for better-auth
+      const headers = new Headers();
+      
+      // Copy all request headers
+      Object.entries(req.headers).forEach(([key, value]) => {
+        if (value) {
+          const headerValue = Array.isArray(value) ? value[0] : value;
+          if (headerValue) {
+            headers.set(key, headerValue);
+          }
+        }
+      });
+
+      // Ensure cookie header is set
+      if (cookieHeader) {
+        headers.set("cookie", cookieHeader);
+      }
+
       // Handle session retrieval
       const session = await betterAuth.api.getSession({
-        headers: req.headers as any,
+        headers: headers as any,
       });
+
+      console.log("[Auth Middleware] Session found:", !!session?.user);
 
       if (!session?.user) {
         return res.status(401).json({
