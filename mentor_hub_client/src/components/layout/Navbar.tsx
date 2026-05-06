@@ -97,7 +97,8 @@ const Navbar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("/api/dashboard/events/public").then(r => r.json());
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+        const res = await fetch(`${baseUrl}/api/dashboard/events/public`).then(r => r.json());
         if (res.success) setEvents(res.data);
       } catch (err) {
         console.error("Events sync failed");

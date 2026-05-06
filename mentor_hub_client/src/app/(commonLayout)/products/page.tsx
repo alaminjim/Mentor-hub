@@ -47,7 +47,8 @@ export default function PublicProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("/api/dashboard/products").then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/products`).then(r => r.json());
       if (res?.success) setProducts(res.data);
     } catch (err) {
       toast.error("Failed to load marketplace data");
@@ -63,7 +64,8 @@ export default function PublicProductsPage() {
   const handleBuy = async (productId: string) => {
     setActionLoading(`buy-${productId}`);
     try {
-      const res = await fetch("/api/dashboard/products/checkout", {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/products/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -88,7 +90,8 @@ export default function PublicProductsPage() {
   const handleBookmark = async (productId: string) => {
     setActionLoading(`bookmark-${productId}`);
     try {
-      const res = await fetch("/api/dashboard/products/bookmark", {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/products/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId })
