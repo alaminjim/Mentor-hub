@@ -183,16 +183,41 @@ export default function DashboardShell({
   const navGroups = navDataByRole[role] || [];
   const [userData, setUserData] = useState<any>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
       try {
         const res = await authClient.getSession();
-        if (res?.data?.user) setUserData(res.data.user);
-      } catch { setUserData(null); }
+        if (res?.data?.user) {
+          setUserData(res.data.user);
+        } else {
+          // No session found, redirect to signin
+          console.log("[DashboardShell] No session, redirecting to signin");
+          router.push("/signin");
+        }
+      } catch (err) {
+        console.error("[DashboardShell] Session fetch error:", err);
+        setUserData(null);
+        router.push("/signin");
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchSession();
-  }, []);
+  }, [router]);
+  
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSignOut = async () => {
     await authClient.signOut();

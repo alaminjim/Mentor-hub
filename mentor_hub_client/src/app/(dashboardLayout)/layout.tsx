@@ -1,5 +1,4 @@
 import { getSession } from "@/components/service/auth.service";
-import { redirect } from "next/navigation";
 import DashboardShell from "./DashboardShell";
 
 export const dynamic = "force-dynamic";
@@ -19,20 +18,19 @@ export default async function DashboardLayout({
   tutor,
   children,
 }: DashboardLayoutProps) {
-  const response = await getSession();
+  // Try to get session server-side, but don't redirect if it fails
+  // Client-side will handle auth check and redirect if needed
+  let response;
+  try {
+    response = await getSession();
+  } catch (e) {
+    console.log("[DashboardLayout] Server session fetch failed, letting client handle");
+  }
+  
   const session = response?.data;
-
-  if (!session?.user) {
-    redirect("/signin");
-  }
-
-  const rawRole = session.user.role;
+  const rawRole = session?.user?.role || "STUDENT";
   const role = rawRole.toLowerCase() as Role;
-  const user = session.user;
-
-  if (!role) {
-    redirect("/signin");
-  }
+  const user = session?.user || { id: "", name: "", email: "", role: "STUDENT", image: "" };
 
   // Handle Banned Users dynamically
   if (user.status === "BANNED") {
