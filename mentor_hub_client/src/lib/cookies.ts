@@ -9,11 +9,11 @@ import { cookies } from "next/headers";
 export async function getAuthCookies(): Promise<string> {
   const cookieStore = await cookies();
   
-  // Get better-auth specific cookies (check both with and without _Secure- prefix)
+  // Get better-auth specific cookies (check both with and without __Secure- prefix)
   const sessionToken = cookieStore.get("better-auth.session_token") 
-    || cookieStore.get("_Secure-better-auth.session_token");
+    || cookieStore.get("__Secure-better-auth.session_token");
   const sessionData = cookieStore.get("better-auth.session_data")
-    || cookieStore.get("_Secure-better-auth.session_data");
+    || cookieStore.get("__Secure-better-auth.session_data");
   
   const cookieStrings: string[] = [];
   if (sessionToken) {

@@ -10,9 +10,18 @@ export const getSession = async () => {
     // Debug: log all available cookies
     await logAllCookies();
     
-    // Get auth cookies using shared helper
-    const cookieHeader = await getAuthCookies();
-    
+    // Get better-auth specific cookies (check all possible names with and without __Secure- prefix)
+    let sessionCookie = cookieStore.get("better-auth.session_token") 
+      || cookieStore.get("__Secure-better-auth.session_token")
+      || cookieStore.get("better-auth.session")
+      || cookieStore.get("session_token");
+      
+    let sessionDataCookie = cookieStore.get("better-auth.session_data")
+      || cookieStore.get("__Secure-better-auth.session_data")
+      || cookieStore.get("session_data");
+
+    const cookieHeader = `${sessionCookie}; ${sessionDataCookie}`;
+
     console.log("[getSession] Cookie header:", cookieHeader ? "present" : "missing");
     
     console.log("[getSession] Fetching from:", AUTH_URL);

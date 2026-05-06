@@ -5,11 +5,11 @@ import { Role } from "../../types/role.js";
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Process cookie header - replace _Secure- prefix for better-auth compatibility
+    // Process cookie header - replace __Secure- prefix for better-auth compatibility
     const cookieHeader = req.headers.cookie;
     let processedCookieHeader = cookieHeader;
     if (cookieHeader) {
-      processedCookieHeader = cookieHeader.replace(/_Secure-better-auth/g, "better-auth");
+      processedCookieHeader = cookieHeader.replace(/__Secure-better-auth/g, "better-auth");
     }
 
     // Build headers for auth

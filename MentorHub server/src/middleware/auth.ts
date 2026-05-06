@@ -12,14 +12,14 @@ const auth = (...roles: Role[]) => {
       console.log("[Auth Middleware] Request path:", req.path);
       console.log("[Auth Middleware] Origin:", req.headers.origin);
       
-      // Check for better-auth cookies (with or without _Secure- prefix)
-      const hasSessionToken = cookieHeader?.includes("better-auth.session_token") || cookieHeader?.includes("_Secure-better-auth.session_token");
+      // Check for better-auth cookies (with or without __Secure- prefix)
+      const hasSessionToken = cookieHeader?.includes("better-auth.session_token") || cookieHeader?.includes("__Secure-better-auth.session_token");
       console.log("[Auth Middleware] Has session token:", hasSessionToken);
 
-      // Process cookie header - replace _Secure- prefix for better-auth
+      // Process cookie header - replace __Secure- prefix for better-auth compatibility
       let processedCookieHeader = cookieHeader;
       if (cookieHeader) {
-        processedCookieHeader = cookieHeader.replace(/_Secure-better-auth/g, "better-auth");
+        processedCookieHeader = cookieHeader.replace(/__Secure-better-auth/g, "better-auth");
         console.log("[Auth Middleware] Processed cookie header:", processedCookieHeader.substring(0, 100));
       }
 
