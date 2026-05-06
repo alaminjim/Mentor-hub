@@ -34,7 +34,8 @@ export const reviewService = {
     error?: string;
   }> {
     try {
-      const response = await fetch(`/api/review/own`, {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const response = await fetch(`${baseUrl}/api/review/own`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +95,8 @@ export const reviewService = {
         }),
       };
 
-      const response = await fetch(`/api/review/create`, {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const response = await fetch(`${baseUrl}/api/review/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

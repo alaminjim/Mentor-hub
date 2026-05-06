@@ -1,12 +1,14 @@
 export const pricingService = {
   getTiers: async () => {
-    const res = await fetch(`/api/pricing`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/pricing`, {
       cache: "no-store",
     });
     return res.json();
   },
   createCheckoutSession: async (tierId: string) => {
-    const res = await fetch(`/api/pricing/create-checkout-session`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/pricing/create-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -55,7 +55,8 @@ function ReviewModal({
   const handleAiReview = async () => {
     setAiGenerating(true);
     try {
-      const res = await fetch("/api/ai/generate-review", {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/ai/generate-review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subject, tutorName }),
@@ -249,7 +250,8 @@ export default function StudentBookingsPage() {
       router.replace("/dashboard/bookings");
       
       try {
-        const res = await fetch("/api/ai/confirm-payment", {
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+        const res = await fetch(`${baseUrl}/api/ai/confirm-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ bookingId }),
@@ -501,7 +503,8 @@ export default function StudentBookingsPage() {
                             <button 
                               onClick={async () => {
                                 try {
-                                  const res = await fetch(`/api/booking/pay/${bookingId}`);
+                                  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+                                  const res = await fetch(`${baseUrl}/api/booking/pay/${bookingId}`);
                                   const result = await res.json();
                                   if (result.success && result.data.url) {
                                     window.location.href = result.data.url;

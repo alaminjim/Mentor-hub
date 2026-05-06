@@ -46,7 +46,8 @@ export interface StudentStatsResponse {
 
 export const getAuthMe = async (): Promise<StudentProfile | null> => {
   try {
-    const res = await fetch(`/api/auth/authMe`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/auth/authMe`, {
       cache: "no-store",
       credentials: "include",
     });
@@ -66,7 +67,8 @@ export const updateStudentProfile = async (
   data: UpdateProfileData,
 ): Promise<ApiResponse> => {
   try {
-    const res = await fetch(`/api/student/profile/${studentId}`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/student/profile/${studentId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +96,8 @@ export const deleteStudentProfile = async (
   studentId: string,
 ): Promise<ApiResponse> => {
   try {
-    const res = await fetch(`/api/student/remove/${studentId}`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/student/remove/${studentId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -116,7 +119,8 @@ export const deleteStudentProfile = async (
 
 export const getStudentStats = async (): Promise<StudentStats | null> => {
   try {
-    const res = await fetch(`/api/student/stats`, {
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+    const res = await fetch(`${baseUrl}/api/student/stats`, {
       cache: "no-store",
       credentials: "include",
     });

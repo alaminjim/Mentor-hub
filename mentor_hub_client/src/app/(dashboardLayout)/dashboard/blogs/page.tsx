@@ -37,7 +37,8 @@ export default function BlogManagementPage() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("/api/blog");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/blog`);
       const data = await res.json();
       if (data?.success || data?.data) {
         setBlogs(data.data || []);
@@ -89,7 +90,8 @@ export default function BlogManagementPage() {
 
     setActionLoading("submit");
     try {
-      const url = editingBlog ? `/api/blog/${editingBlog.id}` : "/api/blog";
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const url = editingBlog ? `${baseUrl}/api/blog/${editingBlog.id}` : `${baseUrl}/api/blog`;
       const method = editingBlog ? "PATCH" : "POST";
 
       const res = await fetch(url, {
@@ -124,7 +126,8 @@ export default function BlogManagementPage() {
 
     setActionLoading(`delete-${id}`);
     try {
-      const res = await fetch(`/api/blog/${id}`, { method: "DELETE" });
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/blog/${id}`, { method: "DELETE" });
       const data = await res.json();
 
       if (data?.success) {

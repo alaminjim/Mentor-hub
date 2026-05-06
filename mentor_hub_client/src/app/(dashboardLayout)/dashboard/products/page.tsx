@@ -48,7 +48,8 @@ export default function VendorProductsPage() {
     
     setIsGenerating(true);
     try {
-      const res = await fetch("/api/ai/generate-description", {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/ai/generate-description`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: formData.title })
@@ -87,7 +88,8 @@ export default function VendorProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("/api/dashboard/vendor/products").then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/vendor/products`).then(r => r.json());
       if (res?.success) setProducts(res.data);
     } catch (err) {
       toast.error("Failed to load inventory");
@@ -108,8 +110,9 @@ export default function VendorProductsPage() {
     }
     setActionLoading("save");
     try {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
       const method = editingProduct ? "PATCH" : "POST";
-      const url = editingProduct ? `/api/dashboard/vendor/products/${editingProduct.id}` : "/api/dashboard/vendor/products";
+      const url = editingProduct ? `${baseUrl}/api/dashboard/vendor/products/${editingProduct.id}` : `${baseUrl}/api/dashboard/vendor/products`;
       
       const res = await fetch(url, {
         method,
@@ -145,7 +148,8 @@ export default function VendorProductsPage() {
     if (!confirm("Are you sure you want to remove this product?")) return;
     setActionLoading(id);
     try {
-      const res = await fetch(`/api/dashboard/vendor/products/${id}`, {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/vendor/products/${id}`, {
         method: "DELETE"
       }).then(r => r.json());
 

@@ -13,7 +13,8 @@ export default function ManageBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch("/api/dashboard/organizer/bookings").then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/organizer/bookings`).then(r => r.json());
       if (res?.success) setBookings(res.data);
     } catch (err) {
       toast.error("Failed to load bookings");
@@ -29,7 +30,8 @@ export default function ManageBookingsPage() {
   const handleUpdateStatus = async (id: string, status: string) => {
     setActionLoading(id);
     try {
-      const res = await fetch(`/api/dashboard/organizer/bookings/${id}`, {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/organizer/bookings/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status })

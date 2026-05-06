@@ -15,7 +15,8 @@ export default function ManageEventsPage() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch("/api/dashboard/organizer/events").then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/organizer/events`).then(r => r.json());
       if (res?.success) setEvents(res.data);
     } catch (err) {
       toast.error("Failed to load events");
@@ -38,7 +39,8 @@ export default function ManageEventsPage() {
         location: formData.location || "Online",
         date: new Date(formData.date).toISOString()
       };
-      const res = await fetch("/api/dashboard/organizer/events", {
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/organizer/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -60,7 +62,8 @@ export default function ManageEventsPage() {
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/dashboard/organizer/events/${id}`, { method: "DELETE" }).then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/organizer/events/${id}`, { method: "DELETE" }).then(r => r.json());
       if (res?.success) {
         toast.success("Event deleted");
         setEvents(events.filter(e => e.id !== id));
