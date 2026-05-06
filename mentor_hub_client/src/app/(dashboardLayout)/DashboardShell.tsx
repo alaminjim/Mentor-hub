@@ -269,7 +269,7 @@ export default function DashboardShell({
                                 : "hover:bg-accent hover:border-border text-muted-foreground hover:text-foreground"
                             )}
                           >
-                            <Link href={item.href} className="flex items-center gap-3">
+                            <Link href={item.href} prefetch={false} className="flex items-center gap-3">
                               <item.icon className={cn("size-4 transition-transform group-hover:scale-110", isActive ? "text-primary" : "")} />
                               <span className="text-xs font-black uppercase tracking-widest leading-none mt-0.5">{item.label}</span>
                             </Link>

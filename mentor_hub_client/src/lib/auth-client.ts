@@ -7,6 +7,9 @@ export const authClient = createAuthClient({
   baseURL: BACKEND_URL,
   fetchOptions: {
     credentials: "include",
+    additionalHeaders: {
+      "Accept": "application/json",
+    }
   },
   plugins: [
     emailOTPClient()
