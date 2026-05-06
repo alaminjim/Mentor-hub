@@ -261,7 +261,7 @@ const Navbar = () => {
                       {user.name}
                     </p>
                     <p className="text-[8px] font-bold uppercase tracking-widest text-cyan-600 mt-0.5">
-                      {user.role || "student"}
+                      {user.role?.toLowerCase() || "student"}
                     </p>
                   </div>
                   <ChevronDown className="size-3 text-muted-foreground group-hover/dropdown:rotate-180 transition-transform duration-300" />
@@ -281,7 +281,7 @@ const Navbar = () => {
 
                     <div className="p-2">
                       <Link
-                        href="/dashboard"
+                        href={user.role === "ADMIN" ? "/dashboard/admin" : "/dashboard"}
                         className="flex items-center gap-3 w-full p-4 rounded-2xl hover:bg-cyan-50 dark:hover:bg-primary/10 transition-colors group/item"
                       >
                         <LayoutDashboard className="size-4 text-cyan-600 group-hover/item:scale-110 transition-transform" />
