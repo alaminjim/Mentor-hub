@@ -23,30 +23,43 @@ const auth = (...roles: Role[]) => {
         console.log("[Auth Middleware] Processed cookie header:", processedCookieHeader.substring(0, 100));
       }
 
-      // Build headers for better-auth (use raw object, not Headers class)
+      // Build headers for better-auth - use original headers but replace cookie
       const headersForAuth: Record<string, string> = {};
       
-      // Copy headers from request
+      // Copy headers from request (preserve original case)
       Object.entries(req.headers).forEach(([key, value]) => {
-        if (value) {
+        if (value && key.toLowerCase() !== 'cookie') {
           const headerValue = Array.isArray(value) ? value[0] : value;
           if (headerValue) {
-            headersForAuth[key.toLowerCase()] = headerValue;
+            headersForAuth[key] = headerValue;
           }
         }
       });
       
-      // Override with processed cookie
+      // Set processed cookie
       if (processedCookieHeader) {
-        headersForAuth['cookie'] = processedCookieHeader;
+        headersForAuth['Cookie'] = processedCookieHeader;
       }
 
       console.log("[Auth Middleware] Headers for auth:", Object.keys(headersForAuth));
+      console.log("[Auth Middleware] Cookie header value:", headersForAuth['Cookie']?.substring(0, 150));
 
-      // Handle session retrieval
-      const session = await betterAuth.api.getSession({
-        headers: headersForAuth,
-      });
+      // Handle session retrieval with better error handling
+      let session = null;
+      try {
+        console.log("[Auth Middleware] Calling betterAuth.api.getSession...");
+        session = await betterAuth.api.getSession({
+          headers: headersForAuth,
+        });
+        console.log("[Auth Middleware] getSession returned:", session ? "session object" : "null");
+        if (session) {
+          console.log("[Auth Middleware] Session user:", session.user ? `id=${session.user.id}` : "no user");
+        }
+      } catch (err: any) {
+        console.error("[Auth Middleware] getSession error:", err.message);
+        console.error("[Auth Middleware] Error stack:", err.stack);
+        session = null;
+      }
 
       console.log("[Auth Middleware] Session found:", !!session?.user);
 
