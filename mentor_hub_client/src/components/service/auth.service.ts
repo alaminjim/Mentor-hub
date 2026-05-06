@@ -10,8 +10,8 @@ export const getSession = async () => {
   try {
     const cookieStore = await cookies();
     
-    // Get better-auth specific cookies
-    const sessionCookie = cookieStore.get("better-auth.session");
+    // Get better-auth specific cookies (correct names)
+    const sessionCookie = cookieStore.get("better-auth.session_token");
     const sessionDataCookie = cookieStore.get("better-auth.session_data");
     
     if (!sessionCookie) {

@@ -82,6 +82,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      redirectURI: `${process.env.BETTER_AUTH_URL || "https://mentor-hub-1.onrender.com"}/api/auth/callback/google`,
     },
   },
   session: {
@@ -92,6 +93,24 @@ export const auth = betterAuth({
     cookie: {
       sameSite: "none",
       secure: true,
+    },
+  },
+  callbacks: {
+    // Handle post-login redirect
+    async redirect(redirectURL: string | undefined, defaultRedirect: string) {
+      // Allow redirects to trusted origins only
+      const allowedOrigins = [
+        process.env.CLIENT_URL,
+        process.env.PROD_CLIENT_URL,
+        "http://localhost:3000",
+        "https://mentor-hub-client.onrender.com",
+      ].filter(Boolean);
+      
+      if (redirectURL && allowedOrigins.some(origin => redirectURL.startsWith(origin || ""))) {
+        return redirectURL;
+      }
+      
+      return defaultRedirect;
     },
   },
 });
