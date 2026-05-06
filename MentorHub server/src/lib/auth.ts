@@ -36,6 +36,10 @@ export const auth = betterAuth({
     crossSubDomainCookies: {
       enabled: false,
     },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+    },
   },
   plugins: [
     emailOTP({
