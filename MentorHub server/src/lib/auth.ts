@@ -34,11 +34,12 @@ export const auth = betterAuth({
     cookiePrefix: "better-auth",
     useSecureCookies: true, // MUST be true for cross-domain (Render to Vercel)
     crossSubDomainCookies: {
-      enabled: false,
+      enabled: true, // Enable for cross-domain cookies
     },
     defaultCookieAttributes: {
       sameSite: "none",
       secure: true,
+      // No domain specified = cookie available to all domains
     },
   },
   plugins: [
@@ -93,6 +94,8 @@ export const auth = betterAuth({
     cookie: {
       sameSite: "none",
       secure: true,
+      httpOnly: true,
+      // No domain specified = cookie available to all domains
     },
   },
   callbacks: {

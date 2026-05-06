@@ -1,18 +1,18 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { env } from "../../../env";
+import { getAuthCookies } from "@/lib/cookies";
 
 const BASE_URL = env.NEXT_PUBLIC_AUTH_URL;
 
 export const getAllUsers = async () => {
   try {
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
 
     const res = await fetch(`${BASE_URL}/admin/users`, {
       method: "GET",
       headers: {
-        Cookie: cookieStore.toString(),
+        Cookie: cookieHeader,
       },
       cache: "no-store",
     });
@@ -28,12 +28,12 @@ export const getAllUsers = async () => {
 
 export const deleteUser = async (userId: string) => {
   try {
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
 
     const res = await fetch(`${BASE_URL}/admin/remove/${userId}`, {
       method: "DELETE",
       headers: {
-        Cookie: cookieStore.toString(),
+        Cookie: cookieHeader,
       },
     });
 

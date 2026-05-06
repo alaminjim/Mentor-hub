@@ -1,20 +1,21 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { CreateBookingInput } from "@/type/bookingType";
 import { env } from "../../../env";
+import { getAuthCookies } from "@/lib/cookies";
 
 const API_URL = env.BACKEND_URL;
 
 export async function createBooking(bookingData: CreateBookingInput) {
   try {
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
+    console.log("[createBooking] Cookie header:", cookieHeader ? "present" : "missing");
 
     const res = await fetch(`${API_URL}/api/booking/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
+        Cookie: cookieHeader,
       },
       body: JSON.stringify(bookingData),
     });
@@ -33,13 +34,13 @@ export async function createBooking(bookingData: CreateBookingInput) {
 
 export async function getAllBookings() {
   try {
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
 
     const response = await fetch(`${API_URL}/api/booking`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
+        Cookie: cookieHeader,
       },
       cache: "no-store",
     });
@@ -66,13 +67,13 @@ export async function updateBookingStatus(bookingId: string, status: string) {
       };
     }
 
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
 
     const response = await fetch(`${API_URL}/api/booking/status/${bookingId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieStore.toString(),
+        Cookie: cookieHeader,
       },
       body: JSON.stringify({ status }),
     });

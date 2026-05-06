@@ -8,9 +8,13 @@ const auth = (...roles: Role[]) => {
     try {
       // Debug: log cookie header
       const cookieHeader = req.headers.cookie;
-      console.log("[Auth Middleware] Cookie header:", cookieHeader ? cookieHeader.substring(0, 100) : "missing");
+      console.log("[Auth Middleware] Cookie header:", cookieHeader ? cookieHeader.substring(0, 200) : "missing");
       console.log("[Auth Middleware] Request path:", req.path);
       console.log("[Auth Middleware] Origin:", req.headers.origin);
+      
+      // Check for better-auth cookies (with or without _Secure- prefix)
+      const hasSessionToken = cookieHeader?.includes("better-auth.session_token") || cookieHeader?.includes("_Secure-better-auth.session_token");
+      console.log("[Auth Middleware] Has session token:", hasSessionToken);
 
       // Build headers object for better-auth
       const headers = new Headers();

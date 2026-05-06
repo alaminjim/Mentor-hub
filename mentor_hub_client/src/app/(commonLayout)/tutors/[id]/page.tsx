@@ -1,7 +1,7 @@
 import BookingForm from "@/components/bookings/page";
 import { tutorService } from "@/components/service/tutor.service";
 import { TutorDataType } from "@/type/tutorDataTyp";
-import { cookies } from "next/headers";
+import { getAuthCookies } from "@/lib/cookies";
 import { env } from "../../../../../env";
 import { BadgeCheck, Star, MapPin, Clock, BookOpen, Quote, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -38,9 +38,9 @@ const TutorDetailsPage = async ({
   let discountPercentage = 0;
 
   try {
-    const cookieStore = await cookies();
+    const cookieHeader = await getAuthCookies();
     const res = await fetch(`${api_url}/api/auth/authMe`, {
-      headers: { Cookie: cookieStore.toString() },
+      headers: { Cookie: cookieHeader },
       cache: "no-store",
     });
 
