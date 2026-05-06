@@ -24,7 +24,8 @@ export default function EventsPage() {
   const fetchEvents = async (currentPage: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/dashboard/events/public?page=${currentPage}&limit=8`).then(r => r.json());
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const res = await fetch(`${baseUrl}/api/dashboard/events/public?page=${currentPage}&limit=8`).then(r => r.json());
       if (res.success) {
         setEvents(res.data);
         setTotalPages(res.totalPages);
