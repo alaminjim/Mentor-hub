@@ -3,7 +3,7 @@
 import { env } from "../../../env";
 import { cookies } from "next/headers";
 
-const AUTH_URL = process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com";
+const AUTH_URL = process.env.BACKEND_URL || "";
 
 export const getSession = async () => {
   try {

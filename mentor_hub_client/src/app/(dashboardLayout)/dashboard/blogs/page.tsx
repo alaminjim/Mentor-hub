@@ -37,7 +37,7 @@ export default function BlogManagementPage() {
 
   const fetchBlogs = async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog`, {
         credentials: "include"
       });
@@ -92,7 +92,7 @@ export default function BlogManagementPage() {
 
     setActionLoading("submit");
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const url = editingBlog ? `${baseUrl}/api/blog/${editingBlog.id}` : `${baseUrl}/api/blog`;
       const method = editingBlog ? "PATCH" : "POST";
 
@@ -129,7 +129,7 @@ export default function BlogManagementPage() {
 
     setActionLoading(`delete-${id}`);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog/${id}`, { 
         method: "DELETE",
         credentials: "include"

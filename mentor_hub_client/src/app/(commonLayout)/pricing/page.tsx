@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 import { motion } from "framer-motion";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 export default function PricingPage() {
   const [tiers, setTiers] = useState<any[]>([]);

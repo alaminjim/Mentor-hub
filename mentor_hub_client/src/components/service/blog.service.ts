@@ -1,7 +1,7 @@
 export const blogService = {
   getBlogs: async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog`, {
         cache: "no-store",
         credentials: "include",
@@ -14,7 +14,7 @@ export const blogService = {
   },
   getBlogsByCategory: async (category: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog/category/${category}`, {
         cache: "no-store",
         credentials: "include",
@@ -27,7 +27,7 @@ export const blogService = {
   },
   searchBlogs: async (searchTerm: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog/search/posts?searchTerm=${searchTerm}`, {
         cache: "no-store",
         credentials: "include",
@@ -40,7 +40,7 @@ export const blogService = {
   },
   getBlogById: async (id: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/blog/${id}`, {
         cache: "no-store",
         credentials: "include",

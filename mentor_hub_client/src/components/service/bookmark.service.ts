@@ -1,7 +1,7 @@
 export const bookmarkService = {
   toggleBookmark: async (tutorId: string) => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/bookmark/toggle`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -18,7 +18,7 @@ export const bookmarkService = {
 
   getMyBookmarks: async (): Promise<{ success: boolean; data: string[] }> => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/bookmark/my-bookmarks`, {
         credentials: "include",
       });

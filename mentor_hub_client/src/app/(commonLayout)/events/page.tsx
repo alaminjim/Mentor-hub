@@ -24,7 +24,7 @@ export default function EventsPage() {
   const fetchEvents = async (currentPage: number) => {
     setLoading(true);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/dashboard/events/public?page=${currentPage}&limit=8`, {
         credentials: "include"
       }).then(r => r.json());

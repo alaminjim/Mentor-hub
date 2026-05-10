@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "");
 
 export const dashboardService = {
   getStats: async () => {

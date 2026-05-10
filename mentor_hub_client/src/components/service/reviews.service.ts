@@ -1,7 +1,7 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
 import { env } from "../../../env";
 
-const app_url = typeof window === 'undefined' ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : "";
+const app_url = typeof window === 'undefined' ? (process.env.BACKEND_URL || "") : "";
 
 export const reviewService = {
   getReviews: async function (
@@ -34,7 +34,7 @@ export const reviewService = {
     error?: string;
   }> {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const response = await fetch(`${baseUrl}/api/review/own`, {
         method: "GET",
         headers: {
@@ -95,7 +95,7 @@ export const reviewService = {
         }),
       };
 
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const response = await fetch(`${baseUrl}/api/review/create`, {
         method: "POST",
         headers: {

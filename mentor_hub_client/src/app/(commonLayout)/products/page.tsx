@@ -47,7 +47,7 @@ export default function PublicProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/dashboard/products`, {
         credentials: "include"
       }).then(r => r.json());
@@ -66,7 +66,7 @@ export default function PublicProductsPage() {
   const handleBuy = async (productId: string) => {
     setActionLoading(`buy-${productId}`);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/dashboard/products/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -93,7 +93,7 @@ export default function PublicProductsPage() {
   const handleBookmark = async (productId: string) => {
     setActionLoading(`bookmark-${productId}`);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
       const res = await fetch(`${baseUrl}/api/dashboard/products/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

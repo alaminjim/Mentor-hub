@@ -5,7 +5,7 @@ import { Calendar, Clock, DollarSign, Brain, Sparkles, Rocket, Loader2 } from "l
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 interface Category {
   id: string;
