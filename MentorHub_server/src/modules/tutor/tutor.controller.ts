@@ -104,6 +104,7 @@ const getAllTutorProfileFilter = async (
       subject: searchBySubjects,
       sortBy: (sortBy as string) || undefined,
       sortOrder: (sortOrder as string) || undefined,
+      currentUserId: req.user?.id,
     });
     res.status(200).json({
       success: true,
@@ -120,7 +121,7 @@ const getAllTutorProfile = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await tutorService.getAllTutorProfile();
+    const result = await tutorService.getAllTutorProfile(req.user?.id);
     res.status(200).json({
       success: true,
       data: result,
@@ -143,7 +144,7 @@ const getAllTutorProfileOwn = async (
         message: "Tutor id is required",
       });
     }
-    const result = await tutorService.getAllTutorProfileOwn(tutorId as string);
+    const result = await tutorService.getAllTutorProfileOwn(tutorId as string, req.user?.id);
     res.status(200).json({
       success: true,
       data: result,

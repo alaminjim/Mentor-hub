@@ -277,17 +277,34 @@ const TutorDetailsPage = async ({
           <div className="lg:col-span-1">
             <div className="sticky top-32">
               <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-2 shadow-2xl border border-slate-200 dark:border-slate-800">
-                <BookingForm
-                  tutorId={data.id}
-                  tutorName={data.name}
-                  hourlyRate={(data.hourlyRate || data.price || 0) as number}
-                  subjects={data.subjects}
-                  userRole={userRole}
-                  userId={userId}
-                  categories={categories}
-                  availability={data.availability || {}}
-                  discountPercentage={discountPercentage}
-                />
+                {data.isBookedByMe ? (
+                  <div className="p-8 text-center space-y-4">
+                    <div className="size-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto text-primary">
+                      <ShieldCheck className="size-10" />
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Already Booked</h3>
+                    <p className="text-sm text-slate-500 font-medium tracking-tight">
+                      You have an active session with {data.name}. You can manage your sessions from the dashboard.
+                    </p>
+                    <div className="pt-4">
+                       <a href="/dashboard" className="inline-block px-8 py-3 rounded-full bg-primary text-white font-black uppercase text-[10px] tracking-widest shadow-lg hover:scale-105 transition-transform">
+                          Go to Dashboard
+                       </a>
+                    </div>
+                  </div>
+                ) : (
+                  <BookingForm
+                    tutorId={data.id}
+                    tutorName={data.name}
+                    hourlyRate={(data.hourlyRate || data.price || 0) as number}
+                    subjects={data.subjects}
+                    userRole={userRole}
+                    userId={userId}
+                    categories={categories}
+                    availability={data.availability || {}}
+                    discountPercentage={discountPercentage}
+                  />
+                )}
               </div>
             </div>
           </div>

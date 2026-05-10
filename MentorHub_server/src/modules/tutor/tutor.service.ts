@@ -137,6 +137,7 @@ const getAllTutorProfileFilter = async (payload: {
   subject: string[];
   sortBy: string | undefined;
   sortOrder: string | undefined;
+  currentUserId?: string;
 }) => {
   const SearchAndFiltering: Prisma.TutorProfileWhereInput[] = [];
 
@@ -148,7 +149,7 @@ const getAllTutorProfileFilter = async (payload: {
     });
   }
 
-  const result = await prisma.tutorProfile.findMany({
+  const tutors = await prisma.tutorProfile.findMany({
     where: {
       AND: SearchAndFiltering,
     },
@@ -172,11 +173,29 @@ const getAllTutorProfileFilter = async (payload: {
       },
     },
   });
-  return result;
+
+  if (!payload.currentUserId) return tutors;
+
+  // Check bookings for the current user
+  const bookings = await prisma.booking.findMany({
+    where: {
+      studentId: payload.currentUserId,
+      tutorId: { in: tutors.map(t => t.id) },
+      status: { in: ["PENDING", "CONFIRMED", "COMPLETED"] }
+    },
+    select: { tutorId: true }
+  });
+
+  const bookedTutorIds = new Set(bookings.map(b => b.tutorId));
+
+  return tutors.map(tutor => ({
+    ...tutor,
+    isBookedByMe: bookedTutorIds.has(tutor.id)
+  }));
 };
 
-const getAllTutorProfile = async () => {
-  const result = await prisma.tutorProfile.findMany({
+const getAllTutorProfile = async (currentUserId?: string) => {
+  const tutors = await prisma.tutorProfile.findMany({
     include: {
       user: {
         select: {
@@ -192,15 +211,39 @@ const getAllTutorProfile = async () => {
       },
     },
   });
-  return result;
+
+  if (!currentUserId) return tutors;
+
+  const bookings = await prisma.booking.findMany({
+    where: {
+      studentId: currentUserId,
+      tutorId: { in: tutors.map(t => t.id) },
+      status: { in: ["PENDING", "CONFIRMED", "COMPLETED"] }
+    },
+    select: { tutorId: true }
+  });
+
+  const bookedTutorIds = new Set(bookings.map(b => b.tutorId));
+
+  return tutors.map(tutor => ({
+    ...tutor,
+    isBookedByMe: bookedTutorIds.has(tutor.id)
+  }));
 };
 
-const getAllTutorProfileOwn = async (tutorId: string) => {
-  const result = await prisma.tutorProfile.findUniqueOrThrow({
+const getAllTutorProfileOwn = async (tutorId: string, currentUserId?: string) => {
+  const tutor = await prisma.tutorProfile.findUniqueOrThrow({
     where: {
       id: tutorId,
     },
     include: {
+      user: {
+        select: {
+          image: true,
+          name: true,
+        }
+      },
+      categories: true,
       reviews: {
         orderBy: {
           createdAt: "desc",
@@ -208,7 +251,21 @@ const getAllTutorProfileOwn = async (tutorId: string) => {
       },
     },
   });
-  return result;
+
+  if (!currentUserId) return tutor;
+
+  const booking = await prisma.booking.findFirst({
+    where: {
+      studentId: currentUserId,
+      tutorId: tutorId,
+      status: { in: ["PENDING", "CONFIRMED", "COMPLETED"] }
+    }
+  });
+
+  return {
+    ...tutor,
+    isBookedByMe: !!booking
+  };
 };
 
 const getTutorDashboard = async (tutorUserId: string) => {

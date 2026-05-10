@@ -121,12 +121,20 @@ export const TutorCard = ({ className, tutor, initialBookmarked = false }: Tutor
       {/* Bottom Actions */}
       <div className="relative z-10 flex gap-4 items-center">
          <Link href={`/tutors/${tutor.id}`} className="flex-grow">
-            <button className="w-full h-16 rounded-full relative group/btn overflow-hidden transition-all duration-500 hover:scale-[1.02]">
+            <button 
+              disabled={tutor.isBookedByMe}
+              className={cn(
+                "w-full h-16 rounded-full relative group/btn overflow-hidden transition-all duration-500",
+                tutor.isBookedByMe ? "opacity-50 grayscale cursor-not-allowed" : "hover:scale-[1.02]"
+              )}>
               {/* Animated Gradient Background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-cyan-500 to-primary bg-[length:200%_auto] animate-shimmer group-hover/btn:bg-[length:100%_auto] transition-all duration-700" />
+              <div className={cn(
+                "absolute inset-0 bg-gradient-to-r from-primary via-cyan-500 to-primary bg-[length:200%_auto] animate-shimmer group-hover/btn:bg-[length:100%_auto] transition-all duration-700",
+                tutor.isBookedByMe && "from-slate-400 to-slate-600"
+              )} />
               <div className="absolute inset-x-0 bottom-0 h-1 bg-white/20 blur-[2px]" />
               <span className="relative z-10 text-white font-black uppercase text-[10px] tracking-[0.2em]">
-                Get in touch
+                {tutor.isBookedByMe ? "Already Booked" : "Get in touch"}
               </span>
             </button>
          </Link>

@@ -25,6 +25,7 @@ export type TutorDataType = {
     image?: string;
     name?: string;
   };
+  isBookedByMe?: boolean;
   createdAt: string;
   updatedAt: string;
 };
