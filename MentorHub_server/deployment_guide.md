@@ -11,9 +11,9 @@ You must set these variables in the Render Dashboard (**Environment** section):
 | `PORT` | The port the server runs on | `5000` |
 | `NODE_ENV` | Environment mode | `production` |
 | `DATABASE_URL` | Your production DB URL | `(Your Neon Connection String)` |
-| `CLIENT_URL` | Your frontend production URL | `https://your-frontend.vercel.app` |
-| `PROD_CLIENT_URL` | Additional frontend URL | `https://your-frontend.vercel.app` |
-| `BETTER_AUTH_URL` | The backend base URL | `https://mentor-hub-server-tov4.onrender.com` |
+| `CLIENT_URL` | Your frontend production URL | `https://mentor-hub2.netlify.app` |
+| `PROD_CLIENT_URL` | Additional frontend URL | `https://mentor-hub2.netlify.app` |
+| `BETTER_AUTH_URL` | The proxied auth URL | `https://mentor-hub2.netlify.app/api/auth` |
 | `BETTER_AUTH_SECRET` | A random secure string | `(Any random long string)` |
 | `GOOGLE_CLIENT_ID` | Google OAuth Client ID | `(Your Google Client ID)` |
 | `GOOGLE_CLIENT_SECRET`| Google OAuth Client Secret | `(Your Google Client Secret)` |
@@ -45,3 +45,4 @@ Configure these settings in the Render **Settings** tab:
 
 *   **Prisma Client Error**: If you see "Prisma Client could not find its binary", ensure `npm run build` is running `prisma generate` (which it currently is in your `package.json`).
 *   **CORS Error**: Ensure your `CLIENT_URL` in Render matches your frontend URL exactly (no trailing slash).
+*   **Cookie Issue**: We are now using a Netlify proxy. Ensure `netlify.toml` has the `[[redirects]]` block for `/api/*` and your frontend `NEXT_PUBLIC_BACKEND_URL` is set to your Netlify domain. This makes the API "same-origin" and fixes cookie blocking.

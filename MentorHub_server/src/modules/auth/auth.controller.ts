@@ -5,13 +5,6 @@ import { Role } from "../../types/role.js";
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Process cookie header - replace __Secure- prefix for better-auth compatibility
-    const cookieHeader = req.headers.cookie;
-    let processedCookieHeader = cookieHeader;
-    if (cookieHeader) {
-      processedCookieHeader = cookieHeader.replace(/__Secure-better-auth/g, "better-auth");
-    }
-
     // Build headers for auth
     const headersForAuth: Record<string, string> = {};
     Object.entries(req.headers).forEach(([key, value]) => {
@@ -22,9 +15,6 @@ const getMe = async (req: Request, res: Response, next: NextFunction) => {
         }
       }
     });
-    if (processedCookieHeader) {
-      headersForAuth['cookie'] = processedCookieHeader;
-    }
 
     const session = await auth.api.getSession({
       headers: headersForAuth,
