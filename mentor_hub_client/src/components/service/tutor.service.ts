@@ -3,10 +3,13 @@ import { TutorDataType } from "@/type/tutorDataTyp";
 const app_url = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 export const tutorService = {
-  getTutors: async function (): Promise<{ data: any[] }> {
+  getTutors: async function (cookieHeader?: string): Promise<{ data: any[] }> {
     try {
       const res = await fetch(`${app_url}/api/tutor`, {
         method: "GET",
+        headers: {
+          Cookie: cookieHeader || "",
+        },
         cache: "no-store",
         credentials: "include",
       });
@@ -25,10 +28,14 @@ export const tutorService = {
 
   getTutorById: async function (
     tutorId: string,
+    cookieHeader?: string,
   ): Promise<{ data: TutorDataType | null }> {
     try {
       const res = await fetch(`${app_url}/api/tutor/${tutorId}`, {
         method: "GET",
+        headers: {
+          Cookie: cookieHeader || "",
+        },
         cache: "no-store",
         credentials: "include",
       });

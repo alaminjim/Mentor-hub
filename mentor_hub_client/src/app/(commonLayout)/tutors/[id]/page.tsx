@@ -21,8 +21,9 @@ const TutorDetailsPage = async ({
 }) => {
   const { id } = await params;
 
+  const cookieHeader = await getAuthCookies();
   const { data }: { data: TutorDataType | null } =
-    await tutorService.getTutorById(id);
+    await tutorService.getTutorById(id, cookieHeader);
 
   if (!data) {
     return (
