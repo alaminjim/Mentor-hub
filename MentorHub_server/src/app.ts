@@ -20,6 +20,9 @@ import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
 
+// Trust proxy is required for secure cookies on Render
+app.set("trust proxy", 1);
+
 app.use(express.json());
 
 const allowedOrigins = [
