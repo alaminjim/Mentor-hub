@@ -33,9 +33,12 @@ const roleConfig: Record<string, { greeting: string; subtitle: string; tableTitl
 async function getStats() {
   try {
     const cookieStore = cookies();
+    const allCookies = cookieStore.getAll();
+    const cookieHeader = allCookies.map(c => `${c.name}=${c.value}`).join("; ");
+    
     const res = await fetch(`${BACKEND_URL}/api/dashboard/stats`, {
       headers: {
-        cookie: cookieStore.toString(),
+        cookie: cookieHeader,
       },
       next: { revalidate: 60 } // Cache for 60 seconds
     });

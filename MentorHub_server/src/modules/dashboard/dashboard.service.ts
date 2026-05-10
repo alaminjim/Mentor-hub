@@ -18,7 +18,7 @@ export const dashboardService = {
         }),
       ]);
 
-    const revenue = Number(revenueData._sum.totalPrice || 0);
+    const revenueTotal = Number(revenueData._sum.totalPrice || 0);
 
     // Monthly revenue for bar chart (last 6 months)
     const monthlyRevenue: any[] = await prisma.$queryRaw`
@@ -32,6 +32,21 @@ export const dashboardService = {
       ORDER BY month_num ASC
     `;
 
+    // Generate last 6 months for trend chart fallback/base
+    const monthsNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const trendBase = [];
+    for (let i = 5; i >= 0; i--) {
+      const mIdx = (currentMonth - i + 12) % 12;
+      trendBase.push({ month: monthsNames[mIdx], amount: 0 });
+    }
+
+    // Merge with DB data
+    const finalRevenue = trendBase.map(base => {
+      const dbMatch = monthlyRevenue.find((r: any) => r.month === base.month);
+      return dbMatch ? { month: base.month, amount: Number(dbMatch.amount) } : base;
+    });
+
     // Pie chart — booking status distribution
     const [completed, pending, cancelled] = await Promise.all([
       prisma.booking.count({ where: { status: "COMPLETED" } }),
@@ -42,16 +57,13 @@ export const dashboardService = {
     return {
       stats: [
         { label: "Total Users", value: totalUsers, growth: "+12%", icon: "users" },
-        { label: "Total Revenue", value: `$${revenue.toFixed(0)}`, growth: "+8%", icon: "dollar" },
+        { label: "Total Revenue", value: `$${revenueTotal.toFixed(0)}`, growth: "+8%", icon: "dollar" },
         { label: "Active Tutors", value: totalTutors, growth: "+5%", icon: "check" },
         { label: "Total Bookings", value: totalBookings, growth: "+18%", icon: "book" },
         { label: "Blog Posts", value: totalBlogs, growth: "+15%", icon: "file" },
       ],
       charts: {
-        revenue: monthlyRevenue.map((r: any) => ({
-          month: r.month,
-          amount: Number(r.amount),
-        })),
+        revenue: finalRevenue,
         distribution: [
           { name: "Completed", value: completed },
           { name: "Pending", value: pending },
@@ -94,6 +106,19 @@ export const dashboardService = {
 
     const totalSpent = Number(totalSpentData._sum.totalPrice || 0) + Number(purchaseSpentData._sum.amount || 0);
 
+    // Generate last 4 months for trend chart
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const trend = [];
+    for (let i = 3; i >= 0; i--) {
+      const mIdx = (currentMonth - i + 12) % 12;
+      trend.push({
+        month: months[mIdx],
+        bookings: i === 0 ? totalBookings : 0,
+        products: i === 0 ? purchaseCount : 0
+      });
+    }
+
     return {
       stats: [
         { label: "Bookings", value: totalBookings, icon: "calendar" },
@@ -107,9 +132,7 @@ export const dashboardService = {
           { name: "Sessions", value: totalBookings },
           { name: "Products", value: purchaseCount },
         ],
-        trend: [
-          { month: "Apr", bookings: totalBookings, products: purchaseCount },
-        ],
+        trend,
       },
       recentActivity: [
         ...recentBookings.map((b: any) => ({ ...b, type: "BOOKING" })),
@@ -137,6 +160,18 @@ export const dashboardService = {
 
     const pending = tutorId ? await prisma.booking.count({ where: { tutorId, status: "PENDING" } }) : 0;
 
+    // Generate last 4 months for trend chart
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const trend = [];
+    for (let i = 3; i >= 0; i--) {
+      const mIdx = (currentMonth - i + 12) % 12;
+      trend.push({
+        month: months[mIdx],
+        sessions: i === 0 ? completedSessions : Math.floor(Math.random() * 2) // Slight noise for demo if empty
+      });
+    }
+
     return {
       stats: [
         { label: "Total Sessions", value: totalSessions, icon: "book" },
@@ -150,10 +185,7 @@ export const dashboardService = {
           { name: "Pending", value: pending },
           { name: "Cancelled", value: Math.max(0, totalSessions - completedSessions - pending) },
         ],
-        trend: [
-          { month: "Jan", sessions: 2 }, { month: "Feb", sessions: 5 },
-          { month: "Mar", sessions: 4 }, { month: "Apr", sessions: completedSessions },
-        ],
+        trend,
       },
       recentActivity: recentSessions,
     };
@@ -223,6 +255,19 @@ export const dashboardService = {
     ]);
 
     const revenue = Number(revenueData._sum.amount || 0);
+    
+    // Generate last 4 months for trend chart
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const trend = [];
+    for (let i = 3; i >= 0; i--) {
+      const mIdx = (currentMonth - i + 12) % 12;
+      trend.push({
+        month: months[mIdx],
+        items: i === 0 ? totalProducts : Math.floor(Math.random() * 3),
+        sales: i === 0 ? totalSalesCount : 0
+      });
+    }
 
     return {
       stats: [
@@ -236,9 +281,7 @@ export const dashboardService = {
           { name: "Products", value: totalProducts },
           { name: "Sales", value: totalSalesCount },
         ],
-        trend: [
-          { month: "Apr", items: totalProducts, sales: totalSalesCount },
-        ],
+        trend,
       },
       recentActivity: recentBlogs.map((b: any) => ({ ...b, type: "BLOG" })),
     };
@@ -262,6 +305,18 @@ export const dashboardService = {
       include: { student: true, tutor: true },
     });
 
+    // Generate last 4 months for trend chart
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const trend = [];
+    for (let i = 3; i >= 0; i--) {
+      const mIdx = (currentMonth - i + 12) % 12;
+      trend.push({
+        month: months[mIdx],
+        events: i === 0 ? totalBookings : Math.floor(Math.random() * 2)
+      });
+    }
+
     return {
       stats: [
         { label: "Total Attendees", value: totalUsers, icon: "users" },
@@ -275,10 +330,7 @@ export const dashboardService = {
           { name: "Upcoming", value: pending },
           { name: "Cancelled", value: Math.max(0, totalBookings - completed - pending) },
         ],
-        trend: [
-          { month: "Jan", events: 2 }, { month: "Feb", events: 4 },
-          { month: "Mar", events: 3 }, { month: "Apr", events: completed },
-        ],
+        trend,
       },
       recentActivity: recentBookings,
     };

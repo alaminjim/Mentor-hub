@@ -29,35 +29,31 @@ export default function DashboardCharts({ barData, pieData, barLabel, barKey }: 
             <TrendingUp className="size-4 text-primary" />
           </div>
         </div>
-        {barData.length > 0 ? (
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barData} barSize={24}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis 
-                  dataKey="month" 
-                  tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
-                  tickLine={false} axisLine={false} dy={8}
-                />
-                <YAxis 
-                  tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
-                  tickLine={false} axisLine={false}
-                />
-                <Tooltip 
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "1px solid hsl(var(--border))",
-                    backgroundColor: "hsl(var(--card))",
-                    fontSize: 12, fontWeight: 700
-                  }}
-                />
-                <Bar dataKey={barKey} name={barLabel} fill="hsl(var(--primary))" radius={[8, 8, 4, 4]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        ) : (
-          <div className="h-64 flex items-center justify-center text-muted-foreground">No chart data available.</div>
-        )}
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={barData.length > 0 ? barData : [{ month: "—", [barKey]: 0 }]} barSize={24}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
+                tickLine={false} axisLine={false} dy={8}
+              />
+              <YAxis 
+                tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
+                tickLine={false} axisLine={false}
+              />
+              <Tooltip 
+                contentStyle={{
+                  borderRadius: "12px",
+                  border: "1px solid hsl(var(--border))",
+                  backgroundColor: "hsl(var(--card))",
+                  fontSize: 12, fontWeight: 700
+                }}
+              />
+              <Bar dataKey={barKey} name={barLabel} fill="hsl(var(--primary))" radius={[8, 8, 4, 4]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Pie Chart */}
@@ -71,34 +67,30 @@ export default function DashboardCharts({ barData, pieData, barLabel, barKey }: 
             <Activity className="size-4 text-primary" />
           </div>
         </div>
-        {pieData.filter((d: any) => d.value > 0).length > 0 ? (
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData.filter((d: any) => d.value > 0)}
-                  cx="50%" cy="45%"
-                  innerRadius={55} outerRadius={85}
-                  paddingAngle={5} dataKey="value"
-                  stroke="none"
-                >
-                  {pieData.map((_: any, index: number) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ borderRadius: "12px", border: "1px solid hsl(var(--border))", backgroundColor: "hsl(var(--card))", fontSize: 12, fontWeight: 700 }}
-                />
-                <Legend 
-                  iconType="circle" iconSize={8}
-                  formatter={(v) => <span style={{ fontSize: 11, fontWeight: 700, textTransform: "capitalize", color: "hsl(var(--foreground))" }}>{v}</span>}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        ) : (
-           <div className="h-64 flex items-center justify-center text-muted-foreground">No data yet</div>
-        )}
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData.filter((d: any) => d.value > 0).length > 0 ? pieData.filter((d: any) => d.value > 0) : [{ name: "No data", value: 1 }]}
+                cx="50%" cy="45%"
+                innerRadius={55} outerRadius={85}
+                paddingAngle={5} dataKey="value"
+                stroke="none"
+              >
+                {(pieData.filter((d: any) => d.value > 0).length > 0 ? pieData : [{ name: "No data", value: 1 }]).map((_: any, index: number) => (
+                  <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ borderRadius: "12px", border: "1px solid hsl(var(--border))", backgroundColor: "hsl(var(--card))", fontSize: 12, fontWeight: 700 }}
+              />
+              <Legend 
+                iconType="circle" iconSize={8}
+                formatter={(v) => <span style={{ fontSize: 11, fontWeight: 700, textTransform: "capitalize", color: "hsl(var(--foreground))" }}>{v}</span>}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
