@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { dashboardController } from "./dashboard.controller.js";
 import auth from "../../middleware/auth.js";
+import { Role } from "../../types/role.js";
 
 const router = Router();
 
@@ -15,8 +16,8 @@ router.post("/organizer/events", auth(), dashboardController.createEvent);
 router.delete("/organizer/events/:id", auth(), dashboardController.deleteEvent);
 
 // Organizer Booking Management
-router.get("/organizer/bookings", auth(), dashboardController.getAllBookings);
-router.patch("/organizer/bookings/:id", auth(), dashboardController.updateBookingStatus);
+router.get("/organizer/bookings", auth(Role.ADMIN, Role.MANAGER, Role.ORGANIZER), dashboardController.getAllBookings);
+router.patch("/organizer/bookings/:id", auth(Role.ADMIN, Role.MANAGER, Role.ORGANIZER), dashboardController.updateBookingStatus);
 
 // Vendor Product Management
 router.get("/vendor/products", auth(), dashboardController.getProducts);

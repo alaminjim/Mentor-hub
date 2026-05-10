@@ -18,7 +18,9 @@ export default function JoinedEventsPage() {
   const fetchData = async () => {
     try {
       const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-      const res = await fetch(`${baseUrl}/api/dashboard/events/joined`).then(r => r.json());
+      const res = await fetch(`${baseUrl}/api/dashboard/events/joined`, {
+        credentials: "include"
+      }).then(r => r.json());
       if (res.success) setData(res.data);
     } catch (err) {
       console.error("Fetch failed");

@@ -281,7 +281,7 @@ const Navbar = () => {
 
                     <div className="p-2">
                       <Link
-                        href={user.role === "ADMIN" ? "/dashboard/admin" : "/dashboard"}
+                        href="/dashboard"
                         className="flex items-center gap-3 w-full p-4 rounded-2xl hover:bg-cyan-50 dark:hover:bg-primary/10 transition-colors group/item"
                       >
                         <LayoutDashboard className="size-4 text-cyan-600 group-hover/item:scale-110 transition-transform" />

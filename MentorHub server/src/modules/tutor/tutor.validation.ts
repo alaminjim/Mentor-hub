@@ -10,6 +10,7 @@ export const TutorProfileValidation = z.object({
     price: z.number(),
     experience: z.number().optional(),
     hourlyRate: z.number(),
+    image: z.string().optional(),
   }),
 });
 
@@ -23,5 +24,6 @@ export const UpdateTutorProfileValidation = z.object({
     price: z.number().optional(),
     experience: z.number().optional(),
     hourlyRate: z.number().optional(),
+    image: z.string().optional(),
   }),
 });

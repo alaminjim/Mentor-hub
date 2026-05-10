@@ -3,24 +3,24 @@
 import {
   BarChart3,
   BookOpen,
+  Calendar,
+  ChevronDown,
   ClipboardList,
   FileText,
+  Heart,
   LayoutDashboard,
   LogOut,
   Search,
+  ShieldAlert,
+  ShoppingBag,
   Star,
   User,
   UserCheck,
   Users,
-  ChevronDown,
-  ShieldAlert,
-  ShoppingBag,
-  Heart,
-  Calendar,
 } from "lucide-react";
-import Link from "next/link";
+import { ReactNode, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
@@ -32,7 +32,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -46,7 +45,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -180,44 +178,17 @@ export default function DashboardShell({
   const searchParams = useSearchParams();
   const router = useRouter();
   const role = rawRole.toLowerCase() as Role;
-  const navGroups = navDataByRole[role] || [];
-  const [userData, setUserData] = useState<any>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const res = await authClient.getSession();
-        if (res?.data?.user) {
-          setUserData(res.data.user);
-          // Sync role from session data if it's different
-          if (res.data.user.role.toLowerCase() !== role) {
-             router.refresh();
-          }
-        } else {
-          router.push("/signin");
-        }
-      } catch (err) {
-        router.push("/signin");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchSession();
-  }, [router, role]);
   
-  // Show loading while checking auth
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const displayUser = useMemo(() => {
+    const u = { ...user };
+    if (u.image && u.image.startsWith("blob:")) {
+      u.image = "";
+    }
+    return u;
+  }, [user]);
+
+  const navGroups = useMemo(() => navDataByRole[role] || [], [role]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -226,9 +197,11 @@ export default function DashboardShell({
     router.refresh();
   };
 
-  const segments = pathname.split("/").filter(Boolean);
-  const currentPage = segments[segments.length - 1] ?? "dashboard";
-  const formattedPage = currentPage.toLowerCase().replace(/-/g, " ");
+  const formattedPage = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    const currentPage = segments[segments.length - 1] ?? "dashboard";
+    return currentPage.toLowerCase().replace(/-/g, " ");
+  }, [pathname]);
 
   return (
     <SidebarProvider suppressHydrationWarning>
@@ -287,13 +260,13 @@ export default function DashboardShell({
             <div className="p-4 rounded-3xl bg-accent border border-border">
               <div className="flex items-center gap-3 mb-4">
                  <Avatar className="size-10 border border-white/20">
-                    <AvatarImage src={user.image} />
+                    <AvatarImage src={displayUser.image} />
                     <AvatarFallback className="bg-primary text-white font-black uppercase text-xs">
-                      {user.name?.[0]}
+                      {displayUser.name?.[0]}
                     </AvatarFallback>
                  </Avatar>
                  <div className="overflow-hidden">
-                    <p className="text-xs font-black uppercase tracking-tight truncate lowercase">{user.name}</p>
+                    <p className="text-xs font-black tracking-tight truncate text-primary/80">{displayUser.name}</p>
                     <p className={cn("text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border w-fit mt-1", roleBadge[role])}>
                       {role}
                     </p>
@@ -334,20 +307,19 @@ export default function DashboardShell({
                   <Search className="size-4 opacity-40" />
                </button>
                
-               {/* Profile Dropdown — JS controlled for proper z-index */}
                <div className="relative">
                   <button 
                     onClick={() => setDropdownOpen(prev => !prev)}
                     className="flex items-center gap-2.5 bg-background pl-2 pr-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-accent transition-all duration-300"
                   >
                     <Avatar className="size-8">
-                        <AvatarImage src={user.image} />
+                        <AvatarImage src={displayUser.image} />
                         <AvatarFallback className="bg-primary text-primary-foreground font-black uppercase text-[10px]">
-                            {user.name?.[0]}
+                            {displayUser.name?.[0]}
                         </AvatarFallback>
                     </Avatar>
                     <div className="text-left hidden md:block">
-                        <p className="text-[10px] font-black uppercase tracking-tight leading-none text-foreground">{user.name}</p>
+                        <p className="text-[10px] font-black tracking-tight leading-none text-foreground">{displayUser.name}</p>
                         <p className="text-[8px] font-bold text-primary uppercase tracking-widest mt-1">{role}</p>
                     </div>
                     <ChevronDown className={cn("size-3 text-muted-foreground transition-transform duration-300", dropdownOpen && "rotate-180")} />
@@ -355,14 +327,12 @@ export default function DashboardShell({
 
                   {dropdownOpen && (
                     <>
-                      {/* Overlay to close on click outside */}
                       <div className="fixed inset-0" style={{ zIndex: 998 }} onClick={() => setDropdownOpen(false)} />
-                      {/* Dropdown panel */}
                       <div className="absolute top-full right-0 mt-2 w-64" style={{ zIndex: 999 }}>
                         <div className="bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
                             <div className="px-5 py-4 border-b border-border bg-muted/60">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-0.5">Signed in as</p>
-                                <p className="text-sm font-bold text-foreground truncate">{user.email}</p>
+                                <p className="text-sm font-bold text-foreground truncate">{displayUser.email}</p>
                             </div>
                             <div className="p-2">
                                 <Link href="/dashboard/profile" onClick={() => setDropdownOpen(false)} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl hover:bg-accent transition-colors">
@@ -394,3 +364,4 @@ export default function DashboardShell({
     </SidebarProvider>
   );
 }
+

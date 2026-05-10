@@ -5,7 +5,7 @@ import { Role } from "../../types/role.js";
 
 const router = express.Router();
 
-router.post("/create", auth(Role.ADMIN), categoryController.createCategory);
+router.post("/create", auth(Role.ADMIN, Role.MANAGER), categoryController.createCategory);
 
 router.get("/", categoryController.getCategory);
 

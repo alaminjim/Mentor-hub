@@ -9,13 +9,13 @@ const router = express.Router();
 
 router.get(
   "/",
-  auth(Role.ADMIN, Role.STUDENT, Role.TUTOR),
+  auth(Role.ADMIN, Role.MANAGER, Role.STUDENT, Role.TUTOR),
   bookingsController.getBookings,
 );
 
 router.get(
   "/:id",
-  auth(Role.ADMIN, Role.STUDENT, Role.TUTOR),
+  auth(Role.ADMIN, Role.MANAGER, Role.STUDENT, Role.TUTOR),
   bookingsController.getBookingById,
 );
 

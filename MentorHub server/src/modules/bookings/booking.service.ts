@@ -87,7 +87,7 @@ const getBookings = async (
 ) => {
   const include = { tutor: true, student: true, category: true };
 
-  if (role === "ADMIN") {
+  if (role === "ADMIN" || role === "MANAGER") {
     return await prisma.booking.findMany({ include });
   }
 

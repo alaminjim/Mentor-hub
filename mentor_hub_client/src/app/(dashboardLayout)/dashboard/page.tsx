@@ -1,22 +1,11 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  Users, BookOpen, DollarSign, TrendingUp, Star, Clock,
-  CheckCircle, ArrowRight, Loader2, Activity, FileText, Calendar,
-  ShoppingBag
-} from "lucide-react";
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend, LineChart, Line,
-} from "recharts";
-import { dashboardService } from "@/components/service/dashboard.service";
-import { authClient } from "@/lib/auth-client";
+import { Users, BookOpen, DollarSign, TrendingUp, Star, Clock, CheckCircle, ArrowRight, Activity, ShoppingBag, FileText, Calendar } from "lucide-react";
+import { getSession } from "@/components/service/auth.service";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import DashboardCharts from "./DashboardCharts";
+import { cookies } from "next/headers";
 
-// Project theme colors from CSS variables
-const PIE_COLORS = ["#0ea5e9", "#22d3ee", "#64748b", "#f59e0b", "#10b981"];
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com");
 
 const iconMap: Record<string, any> = {
   users: Users, book: BookOpen, dollar: DollarSign,
@@ -41,40 +30,33 @@ const roleConfig: Record<string, { greeting: string; subtitle: string; tableTitl
   organizer: { greeting: "Event Control Room", subtitle: "Schedule and track platform events.", tableTitle: "Recent Events", barKey: "events", barLabel: "Events" },
 };
 
-export default function UniversalDashboard() {
-  const [data, setData] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+async function getStats() {
+  try {
+    const cookieStore = cookies();
+    const res = await fetch(`${BACKEND_URL}/api/dashboard/stats`, {
+      headers: {
+        cookie: cookieStore.toString(),
+      },
+      next: { revalidate: 60 } // Cache for 60 seconds
+    });
+    return await res.json();
+  } catch (error) {
+    return { success: false, data: null };
+  }
+}
 
-  useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      const [statsRes, sessionRes] = await Promise.all([
-        dashboardService.getStats(),
-        authClient.getSession(),
-      ]);
-      if (statsRes?.success) setData(statsRes.data);
-      else if (statsRes?.message?.includes("Tutor profile not found") || statsRes?.error?.includes("not found")) {
-        setData({ isMissingProfile: true });
-      }
-      if (sessionRes?.data?.user) setUser(sessionRes.data.user);
-      setLoading(false);
-    };
-    load();
-  }, []);
+export default async function UniversalDashboard() {
+  const [statsRes, sessionRes] = await Promise.all([
+    getStats(),
+    getSession(),
+  ]);
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="text-center space-y-4">
-        <div className="relative">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto">
-            <Loader2 className="size-8 animate-spin text-primary" />
-          </div>
-        </div>
-        <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Loading your workspace...</p>
-      </div>
-    </div>
-  );
+  const user = sessionRes?.data?.user;
+  let data = statsRes?.data;
+
+  if (!statsRes?.success && (statsRes?.message?.includes("Tutor profile not found") || statsRes?.error?.includes("not found"))) {
+    data = { isMissingProfile: true };
+  }
 
   const role = (user?.role || "student").toLowerCase();
   const config = roleConfig[role] || roleConfig.student;
@@ -172,118 +154,14 @@ export default function UniversalDashboard() {
         })}
       </div>
 
-      {/* ── Charts ─────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      {/* ── Charts ─────────────────────────────────────────────────────── */}[ignoring loop detection]
+      <DashboardCharts 
+        barData={barData} 
+        pieData={pieData} 
+        barLabel={config.barLabel} 
+        barKey={config.barKey} 
+      />
 
-        {/* Bar / Line Chart — col-span 3 */}
-        <div className="lg:col-span-3 rounded-2xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-base font-black tracking-tighter text-foreground">
-                {config.barLabel} Trend
-              </h2>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Monthly overview</p>
-            </div>
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <TrendingUp className="size-4 text-primary" />
-            </div>
-          </div>
-          {barData.length > 0 ? (
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barData} barSize={24} barGap={4}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis
-                    dataKey="month"
-                    tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
-                    tickLine={false} axisLine={false} dy={8}
-                  />
-                  <YAxis
-                    tick={{ fontSize: 11, fontWeight: 700, fill: "hsl(var(--muted-foreground))" }}
-                    tickLine={false} axisLine={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: "12px",
-                      border: "1px solid hsl(var(--border))",
-                      backgroundColor: "hsl(var(--card))",
-                      color: "hsl(var(--foreground))",
-                      fontSize: 12, fontWeight: 700, boxShadow: "0 8px 32px rgba(0,0,0,0.08)"
-                    }}
-                    cursor={{ fill: "hsl(var(--primary)/0.04)" }}
-                  />
-                  <Bar
-                    dataKey={config.barKey}
-                    name={config.barLabel}
-                    fill="hsl(var(--primary))"
-                    radius={[8, 8, 4, 4]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          ) : (
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
-              <p className="text-sm font-medium">No chart data available yet.</p>
-            </div>
-          )}
-        </div>
-
-        {/* Pie / Donut Chart — col-span 2 */}
-        <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-base font-black tracking-tighter text-foreground">Distribution</h2>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Status breakdown</p>
-            </div>
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Activity className="size-4 text-primary" />
-            </div>
-          </div>
-          {pieData.filter((d: any) => d.value > 0).length > 0 ? (
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData.filter((d: any) => d.value > 0)}
-                    cx="50%" cy="45%"
-                    innerRadius={55} outerRadius={85}
-                    paddingAngle={5} dataKey="value"
-                    stroke="none"
-                  >
-                    {pieData.map((_: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: "12px",
-                      border: "1px solid hsl(var(--border))",
-                      backgroundColor: "hsl(var(--card))",
-                      color: "hsl(var(--foreground))",
-                      fontSize: 12, fontWeight: 700
-                    }}
-                  />
-                  <Legend
-                    iconType="circle" iconSize={8}
-                    formatter={(v) => (
-                      <span style={{ fontSize: 11, fontWeight: 700, textTransform: "capitalize", color: "hsl(var(--foreground))" }}>
-                        {v}
-                      </span>
-                    )}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          ) : (
-            <div className="h-64 flex flex-col items-center justify-center gap-3">
-              <div className="w-20 h-20 rounded-full border-4 border-dashed border-border flex items-center justify-center">
-                <Activity className="size-8 text-muted-foreground opacity-30" />
-              </div>
-              <p className="text-sm font-medium text-muted-foreground">No data yet</p>
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* ── Dynamic Table ──────────────────────────────────────────────── */}
       <div className="rounded-2xl border border-border bg-card overflow-hidden">

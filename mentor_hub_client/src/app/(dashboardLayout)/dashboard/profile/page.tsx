@@ -8,8 +8,10 @@ import { authClient } from "@/lib/auth-client";
 import { dashboardService } from "@/components/service/dashboard.service";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,12 +30,17 @@ export default function ProfilePage() {
   }, []);
 
   const handleSave = async () => {
+    if (formData.image.startsWith("blob:")) {
+      toast.error("Cannot save temporary image. Please use a permanent URL or upload to a service like ImgBB.");
+      return;
+    }
     setSaving(true);
     const res = await dashboardService.updateProfile(formData);
     if (res?.success) {
       toast.success("Profile updated successfully!");
       setUser({ ...user, ...formData });
       setIsEditing(false);
+      router.refresh();
     } else {
       toast.error(res?.message || "Update failed.");
     }

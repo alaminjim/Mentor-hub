@@ -20,12 +20,30 @@ const tutorProfile = async (
     throw new Error("Only Tutor can create this profile");
   }
 
-  const result = await prisma.tutorProfile.create({
-    data: {
-      ...data,
-      userId,
-      availability: data.availability ?? (Prisma.DbNull as any),
-    },
+  const result = await prisma.$transaction(async (tx) => {
+    const { image, ...tutorData } = data as any;
+    
+    const profile = await tx.tutorProfile.create({
+      data: {
+        ...tutorData,
+        userId,
+        availability: tutorData.availability ?? (Prisma.DbNull as any),
+      },
+    });
+
+    if (tutorData.name || image || tutorData.bio || tutorData.phone) {
+      await tx.user.update({
+        where: { id: userId },
+        data: { 
+          ...(tutorData.name && { name: tutorData.name }),
+          ...(image && { image }),
+          ...(tutorData.bio && { bio: tutorData.bio }),
+          ...(tutorData.phone && { phone: tutorData.phone })
+        },
+      });
+    }
+    
+    return profile;
   });
   return result;
 };
@@ -249,6 +267,7 @@ const ownProfile = async (id: string, role: Role) => {
       userId: id,
     },
     include: {
+      categories: true,
       reviews: {
         orderBy: {
           createdAt: "desc",
@@ -275,15 +294,38 @@ const ownProfileUpdate = async (id: string, role: Role, data: TutorProfile) => {
     throw new Error("Only This can update own Profile");
   }
 
-  return await prisma.tutorProfile.update({
-    where: {
-      id,
-    },
-    data: {
-      ...data,
-      availability: data.availability ?? (Prisma.DbNull as any),
-    },
+  const existingProfile = await prisma.tutorProfile.findUnique({ where: { id } });
+  if (!existingProfile) throw new Error("Profile not found");
+
+  const result = await prisma.$transaction(async (tx) => {
+    const { image, ...tutorData } = data as any;
+
+    const profile = await tx.tutorProfile.update({
+      where: {
+        id,
+      },
+      data: {
+        ...tutorData,
+        availability: tutorData.availability ?? (Prisma.DbNull as any),
+      },
+    });
+
+    if (tutorData.name || image || tutorData.bio || tutorData.phone) {
+      await tx.user.update({
+        where: { id: existingProfile.userId },
+        data: { 
+          ...(tutorData.name && { name: tutorData.name }),
+          ...(image && { image }),
+          ...(tutorData.bio && { bio: tutorData.bio }),
+          ...(tutorData.phone && { phone: tutorData.phone })
+        },
+      });
+    }
+
+    return profile;
   });
+
+  return result;
 };
 
 export const tutorService = {

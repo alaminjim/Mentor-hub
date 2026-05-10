@@ -13,7 +13,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 function TutorSkeleton() {
   return (
-    <div className="rounded-[4rem] bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 space-y-8 h-[520px] animate-pulse">
+    <div suppressHydrationWarning className="rounded-[4rem] bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 space-y-8 h-[520px] animate-pulse">
       <div className="size-24 rounded-full bg-slate-200 dark:bg-slate-800 mx-auto" />
       <div className="space-y-4">
         <div className="h-8 w-2/3 bg-slate-200 dark:bg-slate-800 rounded-xl mx-auto" />
@@ -50,7 +50,10 @@ export default function TutorsPage({ isFeatured = false }: { isFeatured?: boolea
     const fetchData = async () => {
       setLoading(true);
       try {
-        const tutorsRes = await fetch(`${BACKEND_URL}/api/tutor`, { cache: "no-store" });
+        const tutorsRes = await fetch(`${BACKEND_URL}/api/tutor`, { 
+          cache: "no-store",
+          credentials: "include"
+        });
         if (!tutorsRes.ok) throw new Error("Could not fetch tutors");
         const json = await tutorsRes.json();
         

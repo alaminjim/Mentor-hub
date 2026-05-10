@@ -18,26 +18,24 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  baseURL: process.env.BETTER_AUTH_URL || process.env.APP_URL || "https://mentor-hub-1.onrender.com",
+  baseURL: process.env.BETTER_AUTH_URL || process.env.APP_URL || "http://localhost:5000",
   trustedOrigins: [
     process.env.BETTER_AUTH_URL,
     process.env.APP_URL,
     process.env.CLIENT_URL,
     process.env.PROD_APP_URL,
     process.env.PROD_CLIENT_URL,
-    "https://mentor-hub-client.onrender.com",
-    "https://mentor-hub-1.onrender.com",
     "http://localhost:3000",
     "http://localhost:5000",
   ].filter(Boolean) as string[],
   advanced: {
-    useSecureCookies: true, // MUST be true for cross-domain (Render to Vercel)
+    useSecureCookies: process.env.NODE_ENV === "production", // MUST be true for cross-domain (Render to Vercel)
     crossSubDomainCookies: {
       enabled: true, // Enable for cross-domain cookies
     },
     defaultCookieAttributes: {
-      sameSite: "none",
-      secure: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     },
   },
   plugins: [
@@ -72,6 +70,12 @@ export const auth = betterAuth({
         type: "string",
         defaultValue: "UnBAN",
       },
+      bio: {
+        type: "string",
+      },
+      phone: {
+        type: "string",
+      },
     },
   },
   emailAndPassword: {
@@ -81,7 +85,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirectURI: `${process.env.BETTER_AUTH_URL || "https://mentor-hub-1.onrender.com"}/api/auth/callback/google`,
+      redirectURI: `${process.env.BETTER_AUTH_URL || "http://localhost:5000"}/api/auth/callback/google`,
     },
   },
   session: {
@@ -89,8 +93,8 @@ export const auth = betterAuth({
       enabled: false, // Disable cache to ensure DB sync across domains
     },
     cookie: {
-      sameSite: "none",
-      secure: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
     },
   },
@@ -102,7 +106,6 @@ export const auth = betterAuth({
         process.env.CLIENT_URL,
         process.env.PROD_CLIENT_URL,
         "http://localhost:3000",
-        "https://mentor-hub-client.onrender.com",
       ].filter(Boolean);
       
       if (redirectURL && allowedOrigins.some(origin => redirectURL.startsWith(origin || ""))) {

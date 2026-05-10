@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { tutorService } from "@/components/service/tutor.service";
-import { Loader2, Plus, Trash2, Sparkles, Zap, Shield, Globe, Star, Quote, Camera, UploadCloud } from "lucide-react";
+import { getCategories, Category } from "@/components/service/category.service";
+import { aiService } from "@/components/service/ai.service";
+import { Loader2, Plus, Trash2, Sparkles, Zap, Shield, Globe, Star, Quote, Camera, UploadCloud, BrainCircuit } from "lucide-react";
 import toast from "react-hot-toast";
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
@@ -16,6 +18,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
+import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { useEffect } from "react";
 
@@ -25,6 +28,7 @@ const formSchema = z.object({
   phone: z.string().min(10, "phone number required"),
   bio: z.string().min(10, "bio needs more substance"),
   subjects: z.string().min(1, "define your expertise"),
+  categoryId: z.string().min(1, "category context required"),
   experience: z.number().min(0, "experience must be positive"),
   hourlyRate: z.string().min(1, "define your value"),
   image: z.string(),
@@ -40,6 +44,8 @@ export default function CreateTutorProfileForm() {
   const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([{ day: "", timeSlot: "" }]);
   const [profileId, setProfileId] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const fileInputRef = useState<HTMLInputElement | null>(null);
 
   const form = useForm({
@@ -49,6 +55,7 @@ export default function CreateTutorProfileForm() {
       phone: "",
       bio: "",
       subjects: "",
+      categoryId: "",
       experience: 0,
       hourlyRate: "",
       image: "",
@@ -77,6 +84,7 @@ export default function CreateTutorProfileForm() {
         const profilePayload = {
           ...value,
           subjects: subjectsArray,
+          categoryId: [value.categoryId],
           price: rate,
           hourlyRate: rate,
           availability,
@@ -102,13 +110,33 @@ export default function CreateTutorProfileForm() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Revoke old preview if it exists and is a blob
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+      
       const preview = URL.createObjectURL(file);
       setImagePreview(preview);
       // In a real app, we would upload to ImgBB here and set the resulting URL.
       // For now, we use the local blob URL for preview and form data consistency.
       form.setFieldValue('image', preview); 
+      toast.custom((t) => (
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl shadow-lg flex flex-col gap-2 max-w-sm">
+          <p className="text-xs font-black uppercase text-amber-600">Temporary Image Alert</p>
+          <p className="text-xs font-medium text-amber-700">This preview is temporary. Please use a permanent image URL if you want it to persist after refresh.</p>
+        </div>
+      ), { duration: 6000 });
     }
   };
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview.startsWith("blob:")) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
   const addSlot = () => setAvailabilitySlots([...availabilitySlots, { day: "", timeSlot: "" }]);
   const removeSlot = (i: number) => availabilitySlots.length > 1 && setAvailabilitySlots(availabilitySlots.filter((_, idx) => idx !== i));
@@ -121,13 +149,17 @@ export default function CreateTutorProfileForm() {
   useEffect(() => {
     const init = async () => {
       // 1. Get Session for defaults
+      let userEmail = "";
+      let userImage = "";
       const session = await authClient.getSession();
       if (session?.data?.user) {
         const u = session.data.user;
+        userEmail = u.email;
+        userImage = u.image || "";
         form.setFieldValue('name', u.name);
-        form.setFieldValue('email', u.email);
-        form.setFieldValue('image', u.image || "");
-        if (u.image) setImagePreview(u.image);
+        form.setFieldValue('email', userEmail);
+        form.setFieldValue('image', userImage);
+        if (userImage) setImagePreview(userImage);
       }
 
       // 2. Get existing profile if any
@@ -135,15 +167,16 @@ export default function CreateTutorProfileForm() {
       if (existing?.data) {
         const p = existing.data;
         setProfileId(p.id);
-        form.setFieldValue('name', p.name);
-        form.setFieldValue('email', p.email || "");
+        form.setFieldValue('name', p.name || form.state.values.name);
+        form.setFieldValue('email', p.email || userEmail);
         form.setFieldValue('phone', p.phone || "");
         form.setFieldValue('bio', p.bio || "");
         form.setFieldValue('subjects', p.subjects.join(", "));
+        form.setFieldValue('categoryId', p.categories?.[0]?.id || "");
         form.setFieldValue('experience', p.experience);
         form.setFieldValue('hourlyRate', (p.hourlyRate || p.price || 0).toString());
-        form.setFieldValue('image', p.user?.image || p.email || "");
-        if (p.user?.image) setImagePreview(p.user.image);
+        form.setFieldValue('image', p.user?.image || userImage);
+        if (p.user?.image || userImage) setImagePreview(p.user?.image || userImage);
 
         if (p.availability) {
           const slots: AvailabilitySlot[] = [];
@@ -153,6 +186,10 @@ export default function CreateTutorProfileForm() {
           if (slots.length > 0) setAvailabilitySlots(slots);
         }
       }
+
+      // 3. Load Categories
+      const cats = await getCategories();
+      setCategories(cats);
     };
     init();
   }, []);
@@ -168,6 +205,12 @@ export default function CreateTutorProfileForm() {
            {profileId ? "Maintain your presence within the global network." : "Launch your career as a professional mentor."}
         </p>
       </div>
+
+      <form.Subscribe selector={(s) => s.values.subjects}>
+        {(subjects) => (
+           <CategoryAnalyzer subjects={subjects} onSuggest={(id) => form.setFieldValue('categoryId', id)} setIsAnalyzing={setIsAnalyzing} />
+        )}
+      </form.Subscribe>
 
       <div className="bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-10 relative overflow-hidden shadow-2xl">
         <form onSubmit={(e) => { e.preventDefault(); form.handleSubmit(); }} className="relative z-10">
@@ -291,6 +334,32 @@ export default function CreateTutorProfileForm() {
                     </Field>
                   )} />
 
+                  <form.Field name="categoryId" children={(field) => (
+                    <Field>
+                      <div className="flex items-center justify-between mb-3">
+                        <FieldLabel className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white block">Industry Category</FieldLabel>
+                        <div className={cn(
+                          "flex items-center gap-1.5 px-3 py-1 rounded-full border text-[8px] font-black uppercase tracking-widest transition-all",
+                          isAnalyzing ? "bg-primary/5 border-primary/20 text-primary animate-pulse" : "bg-sky-500/5 border-sky-500/20 text-sky-500"
+                        )}>
+                           {isAnalyzing ? <Loader2 className="size-2.5 animate-spin" /> : <Zap className="size-2.5" />}
+                           {isAnalyzing ? "AI Analyzing..." : "AI Optimized"}
+                        </div>
+                      </div>
+                      <select 
+                        value={field.state.value} 
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-slate-100 dark:border-slate-800 h-14 px-6 rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/10 text-base font-bold text-slate-900 dark:text-white transition-all"
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </select>
+                      <FieldError errors={field.state.meta.errors} />
+                    </Field>
+                  )} />
+
                   <form.Field name="hourlyRate" children={(field) => (
                     <Field>
                       <FieldLabel className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white mb-3 block">Hourly Rate ($)</FieldLabel>
@@ -402,4 +471,39 @@ export default function CreateTutorProfileForm() {
       </div>
     </div>
   );
+}
+
+// ── AI Helper Components ─────────────────────────────────────────────
+
+function CategoryAnalyzer({ 
+  subjects, 
+  onSuggest, 
+  setIsAnalyzing 
+}: { 
+  subjects: string; 
+  onSuggest: (id: string) => void; 
+  setIsAnalyzing: (v: boolean) => void; 
+}) {
+  useEffect(() => {
+    if (!subjects || subjects.length < 3) return;
+
+    const timeoutId = setTimeout(async () => {
+      setIsAnalyzing(true);
+      try {
+        const res = await aiService.suggestCategory(subjects);
+        if (res?.success && res.data?.id) {
+          onSuggest(res.data.id);
+          toast.success(`AI optimized category to: ${res.data.name}`, { id: "ai-suggest" });
+        }
+      } catch (err) {
+        console.error("AI Suggestion error");
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }, 1500);
+
+    return () => clearTimeout(timeoutId);
+  }, [subjects, onSuggest, setIsAnalyzing]);
+
+  return null;
 }

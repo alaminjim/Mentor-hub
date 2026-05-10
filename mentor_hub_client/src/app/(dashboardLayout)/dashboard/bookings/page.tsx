@@ -60,6 +60,7 @@ function ReviewModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subject, tutorName }),
+        credentials: "include"
       });
       const result = await res.json();
       if (result.success) {
@@ -255,6 +256,7 @@ export default function StudentBookingsPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ bookingId }),
+          credentials: "include"
         });
         const result = await res.json();
         
@@ -504,7 +506,7 @@ export default function StudentBookingsPage() {
                               onClick={async () => {
                                 try {
                                   const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
-                                  const res = await fetch(`${baseUrl}/api/booking/pay/${bookingId}`);
+                                  const res = await fetch(`${baseUrl}/api/booking/pay/${bookingId}`, { credentials: "include" });
                                   const result = await res.json();
                                   if (result.success && result.data.url) {
                                     window.location.href = result.data.url;

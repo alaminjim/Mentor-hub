@@ -6,7 +6,7 @@ A comprehensive online platform connecting students with experienced tutors for 
 
 **Frontend:** https://mentor-hub-client-chi.vercel.app
 
-**Backend API:** https://mentor-hub-1.onrender.com
+**Backend API:** http://localhost:5000
 
 ### 🔑 Demo Credentials
 

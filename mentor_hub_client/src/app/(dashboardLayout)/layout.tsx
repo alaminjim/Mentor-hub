@@ -64,8 +64,8 @@ export default async function DashboardLayout({
         {role === "admin" && admin}
         {role === "student" && student}
         {role === "tutor" && tutor}
-        {/* For other roles like Manager, Vendor, Organizer, we use the default children */}
-        {(role === "manager" || role === "vendor" || role === "organizer") && children}
+        {/* Render base tree children for all roles so shared routes like /dashboard/profile work */}
+        {children}
       </DashboardShell>
     </div>
   );

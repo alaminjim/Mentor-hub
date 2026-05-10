@@ -286,12 +286,35 @@ export const dashboardService = {
 
   // ─── PROFILE UPDATE ──────────────────────────────────────────────────────────
   updateProfile: async (userId: string, data: { name?: string; image?: string; bio?: string; phone?: string }) => {
-    return await prisma.user.update({
-      where: { id: userId },
-      data: {
-        ...(data.name && { name: data.name }),
-        ...(data.image && { image: data.image }),
-      },
+    console.log("[DashboardService] Updating profile for user:", userId, "with data:", data);
+    return await prisma.$transaction(async (tx) => {
+      const updatedUser = await tx.user.update({
+        where: { id: userId },
+        data: {
+          ...(data.name && { name: data.name }),
+          ...(data.image && { image: data.image }),
+          ...(data.bio && { bio: data.bio }),
+          ...(data.phone && { phone: data.phone }),
+        },
+      });
+
+      console.log("[DashboardService] User record updated successfully");
+
+      // Sync to TutorProfile if it exists
+      const tutorProfile = await tx.tutorProfile.findUnique({ where: { userId } });
+      if (tutorProfile) {
+        console.log("[DashboardService] Syncing to TutorProfile:", tutorProfile.id);
+        await tx.tutorProfile.update({
+          where: { id: tutorProfile.id },
+          data: {
+            ...(data.name && { name: data.name }),
+            ...(data.bio && { bio: data.bio }),
+            ...(data.phone && { phone: data.phone }),
+          },
+        });
+      }
+
+      return updatedUser;
     });
   },
 

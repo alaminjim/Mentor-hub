@@ -49,6 +49,7 @@ const auth = (...roles: Role[]) => {
       }
 
       if (roles.length && !roles.includes(req.user.role as Role)) {
+        console.log(`[Auth Middleware] Forbidden: User role "${req.user.role}" not in permitted roles [${roles.join(", ")}] for path "${req.path}"`);
         return res.status(403).json({
           success: false,
           message:

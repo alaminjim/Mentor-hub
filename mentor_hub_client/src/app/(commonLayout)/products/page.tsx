@@ -74,7 +74,8 @@ export default function PublicProductsPage() {
           productId,
           successUrl: `${window.location.origin}/dashboard/browse-products?success=true&productId=${productId}`,
           cancelUrl: `${window.location.origin}/products?cancel=true`
-        })
+        }),
+        credentials: "include"
       }).then(r => r.json());
 
       if (res?.success && res.data?.url) {
@@ -96,7 +97,8 @@ export default function PublicProductsPage() {
       const res = await fetch(`${baseUrl}/api/dashboard/products/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId })
+        body: JSON.stringify({ productId }),
+        credentials: "include"
       }).then(r => r.json());
 
       if (res?.success) {

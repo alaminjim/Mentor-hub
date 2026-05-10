@@ -27,12 +27,12 @@ async function seedingOrganizer() {
     }
 
     const createData = await fetch(
-      "https://mentor-hub-1.onrender.com/api/auth/sign-up/email",
+      "http://localhost:5000/api/auth/sign-up/email",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Origin: "https://mentor-hub-client.onrender.com",
+          Origin: "http://localhost:3000",
         },
         body: JSON.stringify(storeData),
       },

@@ -32,6 +32,9 @@ model User {
   role   String @default("STUDENT")
   status Status @default(UnBAN)
 
+  bio   String?
+  phone String?
+
   isSubscribed     Boolean  @default(false)
   subscriptionType String?  // e.g. "Monthly", "Annual"
   discountPercentage Float   @default(0)

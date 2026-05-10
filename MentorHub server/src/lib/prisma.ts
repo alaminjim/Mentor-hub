@@ -17,7 +17,8 @@ const pool = connectionString
     connectionString,
     max: 10, // max concurrent connections
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000,
+    connectionTimeoutMillis: 30000, // 30s for Neon cold starts
+    ssl: { rejectUnauthorized: false },
   })
   : null;
 

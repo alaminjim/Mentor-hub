@@ -13,6 +13,7 @@ import { statsRouter } from "./modules/stats/stats.route.js";
 import { dashboardRoutes } from "./modules/dashboard/dashboard.routes.js";
 import { bookmarkRouter } from "./modules/bookmark/bookmark.route.js";
 import { pricingRouter } from "./modules/pricing/pricing.route.js";
+import { aiRouter } from "./modules/ai/ai.route.js";
 import testRouter from "./modules/test/test.route.js";
 import { notFound } from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
@@ -25,13 +26,11 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.PROD_CLIENT_URL,
   "http://localhost:3000",
-  "https://mentor-hub-client.onrender.com",
 ].filter(Boolean) as string[];
 
 app.use(
   cors({
     origin: [
-      "https://mentor-hub-client.onrender.com",
       "http://localhost:3000",
       process.env.CLIENT_URL,
       process.env.PROD_CLIENT_URL,
@@ -53,6 +52,7 @@ app.use("/api/stats", statsRouter);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/bookmark", bookmarkRouter);
 app.use("/api/pricing", pricingRouter);
+app.use("/api/ai", aiRouter);
 app.use("/api/test", testRouter);
 
 app.all("/api/auth/*splat", toNodeHandler(auth));

@@ -14,5 +14,21 @@ export const aiService = {
       console.error("Frontend AI Service Error:", e);
       return { success: false, data: "offline: could not connect to mentor_bot." };
     }
-  }
+  },
+
+  suggestCategory: async (subject: string) => {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/ai/suggest-category`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject }),
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("AI suggestion failed");
+      return await res.json();
+    } catch (e) {
+      console.error("AI Service Suggest Category Error:", e);
+      return { success: false };
+    }
+  },
 };
