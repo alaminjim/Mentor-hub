@@ -56,6 +56,7 @@ export const dashboardController = {
       const role = user.role as string;
       let stats;
 
+      console.log(`[DashboardController] Fetching stats for user ${user.id} with role ${role}`);
       if (role === "ADMIN") stats = await dashboardService.getAdminStats();
       else if (role === "TUTOR") stats = await dashboardService.getTutorStats(user.id);
       else if (role === "MANAGER") stats = await dashboardService.getManagerStats();
@@ -63,8 +64,10 @@ export const dashboardController = {
       else if (role === "ORGANIZER") stats = await dashboardService.getOrganizerStats();
       else stats = await dashboardService.getUserStats(user.id); // STUDENT
 
+      console.log(`[DashboardController] Stats fetched successfully for ${user.id}`);
       return res.status(200).json({ success: true, data: stats });
     } catch (error: any) {
+      console.error(`[DashboardController] Error for user ${req.user?.id}:`, error);
       res.status(500).json({ success: false, message: error.message });
     }
   },

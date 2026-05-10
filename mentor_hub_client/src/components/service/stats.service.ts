@@ -1,6 +1,6 @@
 import { StatsDataType } from "@/type/statsType";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "");
+const API_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 export const statsService = {
   getStats: async (): Promise<{ data: StatsDataType | null }> => {
