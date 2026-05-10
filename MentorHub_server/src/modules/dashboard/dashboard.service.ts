@@ -6,16 +6,16 @@ export const dashboardService = {
   getAdminStats: async () => {
     const [totalUsers, totalTutors, totalBlogs, totalBookings, revenueData, recentBookings] =
       await Promise.all([
-        prisma.user.count(),
-        prisma.tutorProfile.count(),
-        prisma.blog.count(),
-        prisma.booking.count(),
-        prisma.booking.aggregate({ where: { status: "COMPLETED" }, _sum: { totalPrice: true } }),
+        prisma.user.count().catch(() => 0),
+        prisma.tutorProfile.count().catch(() => 0),
+        prisma.blog.count().catch(() => 0),
+        prisma.booking.count().catch(() => 0),
+        prisma.booking.aggregate({ where: { status: "COMPLETED" }, _sum: { totalPrice: true } }).catch(() => ({ _sum: { totalPrice: 0 } })),
         prisma.booking.findMany({
           take: 8,
           orderBy: { createdAt: "desc" },
           include: { student: true, tutor: true },
-        }),
+        }).catch(() => []),
       ]);
 
     const revenueTotal = Number(revenueData._sum.totalPrice || 0);
@@ -77,31 +77,31 @@ export const dashboardService = {
   // ─── STUDENT ─────────────────────────────────────────────────────────────────
   getUserStats: async (userId: string) => {
     const [totalBookings, completedBookings, totalSpentData, purchaseCount, purchaseSpentData, recentBookings, recentPurchases, joinedCount, savedCount] = await Promise.all([
-      prisma.booking.count({ where: { studentId: userId } }),
-      prisma.booking.count({ where: { studentId: userId, status: "COMPLETED" } }),
+      prisma.booking.count({ where: { studentId: userId } }).catch(() => 0),
+      prisma.booking.count({ where: { studentId: userId, status: "COMPLETED" } }).catch(() => 0),
       prisma.booking.aggregate({
         where: { studentId: userId, status: "COMPLETED" },
         _sum: { totalPrice: true },
-      }),
-      (prisma as any).purchase.count({ where: { userId } }),
+      }).catch(() => ({ _sum: { totalPrice: 0 } })),
+      (prisma as any).purchase.count({ where: { userId } }).catch(() => 0),
       (prisma as any).purchase.aggregate({
         where: { userId, status: "COMPLETED" },
         _sum: { amount: true },
-      }),
+      }).catch(() => ({ _sum: { amount: 0 } })),
       prisma.booking.findMany({
         where: { studentId: userId },
         take: 5,
         orderBy: { createdAt: "desc" },
         include: { tutor: true },
-      }),
+      }).catch(() => []),
       (prisma as any).purchase.findMany({
         where: { userId },
         take: 5,
         orderBy: { createdAt: "desc" },
         include: { product: true }
-      }),
-      (prisma as any).eventRegistration.count({ where: { userId } }),
-      (prisma as any).eventBookmark.count({ where: { userId } }),
+      }).catch(() => []),
+      (prisma as any).eventRegistration.count({ where: { userId } }).catch(() => 0),
+      (prisma as any).eventBookmark.count({ where: { userId } }).catch(() => 0),
     ]);
 
     const totalSpent = Number(totalSpentData._sum.totalPrice || 0) + Number(purchaseSpentData._sum.amount || 0);
@@ -147,11 +147,11 @@ export const dashboardService = {
     const tutorId = tutorProfile?.id;
 
     const [totalSessions, completedSessions, earnedData, reviews, recentSessions] = await Promise.all([
-      tutorId ? prisma.booking.count({ where: { tutorId } }) : Promise.resolve(0),
-      tutorId ? prisma.booking.count({ where: { tutorId, status: "COMPLETED" } }) : Promise.resolve(0),
-      tutorId ? prisma.booking.aggregate({ where: { tutorId, status: "COMPLETED" }, _sum: { totalPrice: true } }) : Promise.resolve({ _sum: { totalPrice: 0 } }),
-      tutorId ? prisma.review.findMany({ where: { tutorId }, take: 5, orderBy: { createdAt: "desc" } }) : Promise.resolve([]),
-      tutorId ? prisma.booking.findMany({ where: { tutorId }, take: 8, orderBy: { createdAt: "desc" }, include: { student: true } }) : Promise.resolve([]),
+      tutorId ? prisma.booking.count({ where: { tutorId } }).catch(() => 0) : Promise.resolve(0),
+      tutorId ? prisma.booking.count({ where: { tutorId, status: "COMPLETED" } }).catch(() => 0) : Promise.resolve(0),
+      tutorId ? prisma.booking.aggregate({ where: { tutorId, status: "COMPLETED" }, _sum: { totalPrice: true } }).catch(() => ({ _sum: { totalPrice: 0 } })) : Promise.resolve({ _sum: { totalPrice: 0 } }),
+      tutorId ? prisma.review.findMany({ where: { tutorId }, take: 5, orderBy: { createdAt: "desc" } }).catch(() => []) : Promise.resolve([]),
+      tutorId ? prisma.booking.findMany({ where: { tutorId }, take: 8, orderBy: { createdAt: "desc" }, include: { student: true } }).catch(() => []) : Promise.resolve([]),
     ]);
 
     const avgRating = reviews.length > 0

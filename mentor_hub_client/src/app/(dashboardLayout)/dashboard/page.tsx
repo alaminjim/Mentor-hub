@@ -40,7 +40,7 @@ async function getStats() {
       headers: {
         cookie: cookieHeader,
       },
-      next: { revalidate: 60 } // Cache for 60 seconds
+      cache: "no-store"
     });
     return await res.json();
   } catch (error) {
