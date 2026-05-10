@@ -6,17 +6,17 @@ This guide outlines the steps to prepare and deploy your Express/Prisma backend 
 
 You must set these variables in the Render Dashboard (**Environment** section):
 
-| Variable | Description | Example Value |
+| Variable | Description | Value for Render |
 | :--- | :--- | :--- |
 | `PORT` | The port the server runs on | `5000` |
 | `NODE_ENV` | Environment mode | `production` |
-| `DATABASE_URL` | Your production DB URL (Neon/Postgres) | `postgres://user:pass@host/db?sslmode=require` |
-| `CLIENT_URL` | Your frontend production URL | `https://your-app.vercel.app` |
-| `PROD_CLIENT_URL` | Additional frontend URL (if any) | `https://your-app.vercel.app` |
-| `BETTER_AUTH_URL` | The backend base URL | `https://mentor-hub-server.onrender.com` |
-| `BETTER_AUTH_SECRET` | A random secure string | `generate_a_random_string` |
-| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | `your_google_client_id` |
-| `GOOGLE_CLIENT_SECRET`| Google OAuth Client Secret | `your_google_client_secret` |
+| `DATABASE_URL` | Your production DB URL | `(Your Neon Connection String)` |
+| `CLIENT_URL` | Your frontend production URL | `https://your-frontend.vercel.app` |
+| `PROD_CLIENT_URL` | Additional frontend URL | `https://your-frontend.vercel.app` |
+| `BETTER_AUTH_URL` | The backend base URL | `https://mentor-hub-server-tov4.onrender.com` |
+| `BETTER_AUTH_SECRET` | A random secure string | `(Any random long string)` |
+| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | `(Your Google Client ID)` |
+| `GOOGLE_CLIENT_SECRET`| Google OAuth Client Secret | `(Your Google Client Secret)` |
 
 > [!IMPORTANT]
 > Ensure your `DATABASE_URL` includes `?sslmode=require` if you encounter connection issues on Render.

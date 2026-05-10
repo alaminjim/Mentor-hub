@@ -1,6 +1,6 @@
 import { TutorDataType } from "@/type/tutorDataTyp";
 
-const app_url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+const app_url = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com";
 
 export const tutorService = {
   getTutors: async function (): Promise<{ data: any[] }> {
