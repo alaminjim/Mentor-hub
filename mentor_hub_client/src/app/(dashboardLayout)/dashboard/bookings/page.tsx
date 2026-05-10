@@ -55,7 +55,7 @@ function ReviewModal({
   const handleAiReview = async () => {
     setAiGenerating(true);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/ai/generate-review`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -251,7 +251,7 @@ export default function StudentBookingsPage() {
       router.replace("/dashboard/bookings");
       
       try {
-        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
         const res = await fetch(`${baseUrl}/api/ai/confirm-payment`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -505,7 +505,7 @@ export default function StudentBookingsPage() {
                             <button 
                               onClick={async () => {
                                 try {
-                                  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+                                  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
                                   const res = await fetch(`${baseUrl}/api/booking/pay/${bookingId}`, { credentials: "include" });
                                   const result = await res.json();
                                   if (result.success && result.data.url) {
@@ -544,3 +544,4 @@ export default function StudentBookingsPage() {
     </>
   );
 }
+

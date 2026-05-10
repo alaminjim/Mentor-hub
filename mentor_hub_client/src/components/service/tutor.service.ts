@@ -8,6 +8,7 @@ export const tutorService = {
       const res = await fetch(`${app_url}/api/tutor`, {
         method: "GET",
         cache: "no-store",
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -29,6 +30,7 @@ export const tutorService = {
       const res = await fetch(`${app_url}/api/tutor/${tutorId}`, {
         method: "GET",
         cache: "no-store",
+        credentials: "include",
       });
 
       if (!res.ok) {

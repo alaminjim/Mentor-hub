@@ -18,7 +18,7 @@ export interface UpdateCategoryData {
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
-    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : "";
+    const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : "";
     const res = await fetch(`${baseUrl}/api/category`, {
       credentials: "include",
       cache: "no-store",
@@ -37,7 +37,7 @@ export const getCategories = async (): Promise<Category[]> => {
 export const createCategory = async (
   data: CreateCategoryData,
 ): Promise<Category> => {
-  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : "";
+  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : "";
   const res = await fetch(`${baseUrl}/api/category/create`, {
     method: "POST",
     headers: {
@@ -60,7 +60,7 @@ export const updateCategory = async (
   id: string,
   data: UpdateCategoryData,
 ): Promise<Category> => {
-  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
   const res = await fetch(`${baseUrl}/api/category/update/${id}`, {
     method: "PUT",
     headers: {
@@ -80,7 +80,7 @@ export const updateCategory = async (
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {
-  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+  const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
   const res = await fetch(`${baseUrl}/api/category/delete/${id}`, {
     method: "DELETE",
     credentials: "include",

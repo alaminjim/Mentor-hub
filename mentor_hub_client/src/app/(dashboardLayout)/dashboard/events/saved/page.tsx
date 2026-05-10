@@ -17,7 +17,7 @@ export default function SavedEventsPage() {
 
   const fetchData = async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/events/saved`, {
         credentials: "include"
       }).then(r => r.json());
@@ -127,3 +127,4 @@ function Loader({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       )} />
    );
 }
+

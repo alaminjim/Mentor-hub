@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import DashboardCharts from "./DashboardCharts";
 import { cookies } from "next/headers";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com");
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
 
 const iconMap: Record<string, any> = {
   users: Users, book: BookOpen, dollar: DollarSign,
@@ -255,3 +255,4 @@ export default async function UniversalDashboard() {
     </div>
   );
 }
+

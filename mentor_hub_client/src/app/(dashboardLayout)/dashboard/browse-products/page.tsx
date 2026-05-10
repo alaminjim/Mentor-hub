@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com";
 
 export default function BrowseProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -159,3 +159,4 @@ export default function BrowseProductsPage() {
     </div>
   );
 }
+

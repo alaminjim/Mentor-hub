@@ -25,6 +25,7 @@ export const auth = betterAuth({
     process.env.CLIENT_URL,
     process.env.PROD_APP_URL,
     process.env.PROD_CLIENT_URL,
+    "https://mentor-hub2.netlify.app",
     "http://localhost:3000",
     "http://localhost:5000",
   ].filter(Boolean) as string[],
@@ -34,8 +35,8 @@ export const auth = betterAuth({
       enabled: true, // Enable for cross-domain cookies
     },
     defaultCookieAttributes: {
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      secure: true,
     },
   },
   plugins: [
@@ -93,8 +94,8 @@ export const auth = betterAuth({
       enabled: false, // Disable cache to ensure DB sync across domains
     },
     cookie: {
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      secure: true,
       httpOnly: true,
     },
   },

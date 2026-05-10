@@ -13,7 +13,7 @@ export default function ManageBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/organizer/bookings`, {
         credentials: "include"
       }).then(r => r.json());
@@ -32,7 +32,7 @@ export default function ManageBookingsPage() {
   const handleUpdateStatus = async (id: string, status: string) => {
     setActionLoading(id);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/organizer/bookings/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -178,3 +178,4 @@ export default function ManageBookingsPage() {
     </div>
   );
 }
+

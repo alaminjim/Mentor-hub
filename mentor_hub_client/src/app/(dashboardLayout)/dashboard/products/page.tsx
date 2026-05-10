@@ -48,7 +48,7 @@ export default function VendorProductsPage() {
     
     setIsGenerating(true);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/ai/generate-description`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -89,7 +89,7 @@ export default function VendorProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/vendor/products`, {
         credentials: "include"
       }).then(r => r.json());
@@ -113,7 +113,7 @@ export default function VendorProductsPage() {
     }
     setActionLoading("save");
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const method = editingProduct ? "PATCH" : "POST";
       const url = editingProduct ? `${baseUrl}/api/dashboard/vendor/products/${editingProduct.id}` : `${baseUrl}/api/dashboard/vendor/products`;
       
@@ -152,7 +152,7 @@ export default function VendorProductsPage() {
     if (!confirm("Are you sure you want to remove this product?")) return;
     setActionLoading(id);
     try {
-      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+      const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
       const res = await fetch(`${baseUrl}/api/dashboard/vendor/products/${id}`, {
         method: "DELETE",
         credentials: "include"
@@ -416,3 +416,4 @@ export default function VendorProductsPage() {
     </div>
   );
 }
+

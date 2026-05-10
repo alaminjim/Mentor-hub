@@ -97,7 +97,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-1.onrender.com");
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : (process.env.NEXT_PUBLIC_BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com");
         const res = await fetch(`${baseUrl}/api/dashboard/events/public`).then(r => r.json());
         if (res.success) setEvents(res.data);
       } catch (err) {
@@ -429,3 +429,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

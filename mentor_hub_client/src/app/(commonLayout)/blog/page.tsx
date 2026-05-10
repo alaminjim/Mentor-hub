@@ -130,7 +130,7 @@ export default function BlogPage() {
       setLoading(true);
       setError(null);
       try {
-        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-1.onrender.com") : "";
+        const baseUrl = typeof window === "undefined" ? (process.env.BACKEND_URL || "https://mentor-hub-server-tov4.onrender.com") : "";
         const res = await fetch(`${baseUrl}/api/blog`, {
           next: { revalidate: 3600 }, // Cache but revalidate every hour
         });
@@ -372,3 +372,4 @@ export default function BlogPage() {
     </div>
   );
 }
+
