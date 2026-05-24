@@ -16,6 +16,7 @@ export const getSession = async () => {
         Cookie: cookieHeader,
       },
       cache: "no-store",
+      signal: AbortSignal.timeout(8000),
     });
 
     if (!res.ok) {

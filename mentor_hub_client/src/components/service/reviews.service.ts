@@ -1,7 +1,7 @@
 import { CreateReviewData, ReviewDataType } from "@/type/reviewType";
 import { env } from "../../../env";
 
-const app_url = typeof window === 'undefined' ? (process.env.BACKEND_URL || "") : "";
+const app_url = typeof window === 'undefined' ? (process.env.BACKEND_URL || "") : (process.env.NEXT_PUBLIC_BACKEND_URL || "");
 
 export const reviewService = {
   getReviews: async function (

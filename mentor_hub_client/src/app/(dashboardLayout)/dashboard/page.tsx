@@ -40,7 +40,8 @@ async function getStats() {
       headers: {
         cookie: cookieHeader,
       },
-      cache: "no-store"
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000)
     });
     return await res.json();
   } catch (error) {
