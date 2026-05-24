@@ -4,9 +4,9 @@ A comprehensive online platform connecting students with experienced tutors for 
 
 ## 🔗 Live Demo
 
-**Frontend:** https://mentor-hub-client-chi.vercel.app
+**Frontend:** https://mentor-hub2.netlify.app
 
-**Backend API:** http://localhost:5000
+**Backend API:** https://mentor-hub-server-tov4.onrender.com
 
 ### 🔑 Demo Credentials
 
