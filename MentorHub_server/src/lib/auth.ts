@@ -25,6 +25,7 @@ export const auth = betterAuth({
     process.env.CLIENT_URL,
     process.env.PROD_APP_URL,
     process.env.PROD_CLIENT_URL,
+    "https://mentor-hub-server.vercel.app",
     "https://mentor-hub2.netlify.app",
     "http://localhost:3000",
     "http://localhost:5000",

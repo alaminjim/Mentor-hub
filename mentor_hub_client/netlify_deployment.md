@@ -8,10 +8,10 @@ You must set these variables in the Netlify Dashboard (**Site Settings > Build &
 
 | Variable | Description | Value |
 | :--- | :--- | :--- |
-| `NEXT_PUBLIC_BACKEND_URL` | Your live Render backend URL | `https://mentor-hub-server-tov4.onrender.com` |
-| `NEXT_PUBLIC_AUTH_URL` | Your backend auth endpoint | `https://mentor-hub-server-tov4.onrender.com/api/auth` |
+| `NEXT_PUBLIC_BACKEND_URL` | Your live Vercel backend URL | `https://mentor-hub-server.vercel.app` |
+| `NEXT_PUBLIC_AUTH_URL` | Your backend auth endpoint | `https://mentor-hub-server.vercel.app/api/auth` |
 | `NEXT_PUBLIC_APP_URL` | Your live Netlify frontend URL | `https://your-app.netlify.app` |
-| `BETTER_AUTH_URL` | The backend auth base URL | `https://mentor-hub-server-tov4.onrender.com` |
+| `BETTER_AUTH_URL` | The backend auth base URL | `https://mentor-hub-server.vercel.app` |
 
 ## 2. Build Settings
 

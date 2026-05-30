@@ -6,7 +6,7 @@ A comprehensive online platform connecting students with experienced tutors for 
 
 **Frontend:** https://mentor-hub2.netlify.app
 
-**Backend API:** https://mentor-hub-server-tov4.onrender.com
+**Backend API:** https://mentor-hub-server.vercel.app
 
 ### 🔑 Demo Credentials
 
