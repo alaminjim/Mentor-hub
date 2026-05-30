@@ -6,14 +6,20 @@ const PORT = process.env.PORT || 5000;
 
 async function main() {
   try {
-    await prisma.$connect();
-    console.log("Database connected successfully");
+    console.log("[Server] Starting initialization...");
+    if (!process.env.DATABASE_URL) {
+      console.warn("[Server] WARNING: DATABASE_URL is not set!");
+    }
 
-    app.listen(PORT, () => {
-      console.log(`server is running on port ${PORT}`);
+    await prisma.$connect();
+    console.log("[Server] Database connected successfully");
+
+    app.listen(Number(PORT), "0.0.0.0", () => {
+      console.log(`[Server] Success: Server is running on port ${PORT}`);
+      console.log(`[Server] Environment: ${process.env.NODE_ENV || "development"}`);
     });
   } catch (error) {
-    console.log("Error on server: ", error);
+    console.error("[Server] FATAL ERROR during startup:", error);
     await prisma.$disconnect();
     process.exit(1);
   }
