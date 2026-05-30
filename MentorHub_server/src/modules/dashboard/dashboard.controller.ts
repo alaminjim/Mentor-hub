@@ -2,9 +2,19 @@ import { Request, Response } from "express";
 import { dashboardService } from "./dashboard.service.js";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2025-01-27.acacia" as any,
-});
+let stripe: Stripe;
+
+const getStripe = () => {
+  if (!stripe) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY is not defined in environment variables");
+    }
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-01-27.acacia" as any,
+    });
+  }
+  return stripe;
+};
 
 export const dashboardController = {
   createProductCheckout: async (req: Request, res: Response) => {
@@ -19,7 +29,7 @@ export const dashboardController = {
 
       if (!product) return res.status(404).json({ success: false, message: "Product not found" });
 
-      const session = await stripe.checkout.sessions.create({
+      const session = await getStripe().checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
           {

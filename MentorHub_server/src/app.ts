@@ -58,13 +58,12 @@ app.use("/api/pricing", pricingRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/test", testRouter);
 
-app.all("/api/auth/(.*)", toNodeHandler(auth));
+app.all(/^\/api\/auth\/.*/, toNodeHandler(auth));
 
 app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({ 
+  res.json({ 
     success: true,
     message: "MentorHub API Running",
-    timestamp: new Date().toISOString()
   });
 });
 
