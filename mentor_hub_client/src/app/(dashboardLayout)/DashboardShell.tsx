@@ -18,7 +18,7 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useMemo, useState, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -171,21 +171,43 @@ interface DashboardShellProps {
 
 export default function DashboardShell({
   role: rawRole,
-  user,
+  user: serverUser,
   children,
 }: DashboardShellProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const role = rawRole.toLowerCase() as Role;
-  
+
+  // Client-side role/user state — overrides server defaults when Bearer token is available
+  const [clientRole, setClientRole] = useState<Role>(rawRole.toLowerCase() as Role);
+  const [clientUser, setClientUser] = useState<SessionUser>(serverUser);
+
+  useEffect(() => {
+    // Re-fetch session client-side to get the real role (works with Bearer token)
+    authClient.getSession().then((res) => {
+      const u = res?.data?.user as any;
+      if (u?.role) {
+        setClientRole(u.role.toLowerCase() as Role);
+        setClientUser({
+          id: u.id || "",
+          name: u.name || "",
+          email: u.email || "",
+          role: u.role,
+          image: u.image || "",
+        });
+      }
+    }).catch(() => {});
+  }, []);
+
+  const role = clientRole;
+
   const displayUser = useMemo(() => {
-    const u = { ...user };
+    const u = { ...clientUser };
     if (u.image && u.image.startsWith("blob:")) {
       u.image = "";
     }
     return u;
-  }, [user]);
+  }, [clientUser]);
 
   const navGroups = useMemo(() => navDataByRole[role] || [], [role]);
   const [dropdownOpen, setDropdownOpen] = useState(false);

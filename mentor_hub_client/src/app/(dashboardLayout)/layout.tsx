@@ -18,22 +18,22 @@ export default async function DashboardLayout({
   tutor,
   children,
 }: DashboardLayoutProps) {
-  // Try to get session server-side, but don't redirect if it fails
-  // Client-side will handle auth check and redirect if needed
+  // Try to get session server-side using cookies
+  // Client-side dashboard page handles auth via Bearer token if this fails
   let response;
   try {
     response = await getSession();
   } catch (e) {
     console.log("[DashboardLayout] Server session fetch failed, letting client handle");
   }
-  
-  const session = response?.data;
-  const rawRole = session?.user?.role || "STUDENT";
-  const role = rawRole.toLowerCase() as Role;
-  const user = session?.user || { id: "", name: "", email: "", role: "STUDENT", image: "" };
 
-  // Handle Banned Users dynamically
-  if (user.status === "BANNED") {
+  const session = response?.data;
+  const rawRole = (session?.user?.role || "STUDENT").toUpperCase();
+  const role = rawRole.toLowerCase() as Role;
+  const user = session?.user || { id: "", name: "User", email: "", role: "STUDENT", image: "" };
+
+  // Handle Banned Users
+  if ((user as any).status === "BANNED") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
         <div className="max-w-md w-full p-8 rounded-3xl bg-card border border-destructive/20 shadow-2xl text-center relative overflow-hidden">
@@ -46,12 +46,12 @@ export default async function DashboardLayout({
             Your access to the MentorHub workspace has been revoked due to a violation of our terms of service or security policies.
           </p>
           <div className="pt-6 border-t border-border">
-             <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-4">Contact our support team for an appeal.</p>
-             <form action="/api/auth/signout" method="POST">
-                <button type="submit" className="w-full py-4 rounded-xl bg-destructive/10 text-destructive font-black uppercase tracking-widest text-[10px] hover:bg-destructive/20 transition-all border border-destructive/20 shadow-inner">
-                   Sign Out to Continue
-                </button>
-             </form>
+            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-4">Contact our support team for an appeal.</p>
+            <form action="/api/auth/signout" method="POST">
+              <button type="submit" className="w-full py-4 rounded-xl bg-destructive/10 text-destructive font-black uppercase tracking-widest text-[10px] hover:bg-destructive/20 transition-all border border-destructive/20 shadow-inner">
+                Sign Out to Continue
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -60,11 +60,17 @@ export default async function DashboardLayout({
 
   return (
     <div key={rawRole}>
+      {/* DashboardShell reads role from user prop and shows the right sidebar nav */}
       <DashboardShell role={rawRole} user={user}>
+        {/* Parallel route slots — only shown for matching role */}
         {role === "admin" && admin}
         {role === "student" && student}
         {role === "tutor" && tutor}
-        {/* Render base tree children for all roles so shared routes like /dashboard/profile work */}
+        {/* 
+          manager, vendor, organizer don't have parallel routes.
+          children = the shared /dashboard/page.tsx (now client component)
+          which fetches role via Bearer token and renders role-specific content.
+        */}
         {children}
       </DashboardShell>
     </div>
