@@ -19,7 +19,14 @@ export const authClient = createAuthClient({
           document.cookie = `better-auth.session_token=${authToken}; path=/; max-age=31536000; SameSite=Lax${secureFlag}`;
         }
       }
-      if (ctx.request.url.includes("/sign-out")) {
+      const requestUrl = ctx.request?.url;
+      const urlString = typeof requestUrl === "string" 
+        ? requestUrl 
+        : (requestUrl instanceof URL 
+            ? requestUrl.href 
+            : String(requestUrl || ""));
+
+      if (urlString.includes("/sign-out")) {
         if (typeof window !== "undefined") {
           localStorage.removeItem("bearer_token");
           document.cookie = "better-auth.session_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax";
