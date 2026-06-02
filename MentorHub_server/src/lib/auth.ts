@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
-import { emailOTP } from "better-auth/plugins";
+import { emailOTP, bearer } from "better-auth/plugins";
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -41,6 +41,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    bearer(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
           await transporter.sendMail({

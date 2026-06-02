@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import AuthInitializer from "@/components/shared/AuthInitializer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,6 +30,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-white text-gray-900 selection:bg-sky-100 selection:text-sky-900`}
       >
+        <AuthInitializer />
         {children}
         <Toaster position="top-center" />
       </body>
