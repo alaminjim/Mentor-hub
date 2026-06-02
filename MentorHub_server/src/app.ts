@@ -58,7 +58,7 @@ app.use("/api/pricing", pricingRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/test", testRouter);
 
-app.all(/^\/api\/auth\/.*/, toNodeHandler(auth));
+app.all("/api/auth/*path", toNodeHandler(auth));
 
 app.get("/", (req: Request, res: Response) => {
   res.json({ 
