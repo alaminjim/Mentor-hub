@@ -137,7 +137,7 @@ const getAllTutorProfileFilter = async (payload: {
   subject: string[];
   sortBy: string | undefined;
   sortOrder: string | undefined;
-  currentUserId?: string;
+  currentUserId?: string | undefined;
 }) => {
   const SearchAndFiltering: Prisma.TutorProfileWhereInput[] = [];
 

@@ -161,7 +161,7 @@ const getPaymentUrl = async (userId: string, bookingId: string) => {
   if (booking.status === BookingStatus.CANCELLED)
     throw new Error("Cannot pay for a cancelled booking");
 
-  const session = await getStripe().checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
       {
@@ -222,7 +222,6 @@ const getBookedSlots = async (tutorId: string, date: string) => {
 
   return bookings.map((b) => b.time);
 };
-
 export const bookingsService = {
   createBookings,
   getBookings,
@@ -231,18 +230,4 @@ export const bookingsService = {
   getBookingById,
   getBookedSlots,
 };
-   time: true,
-    },
-  });
 
-  return bookings.map((b) => b.time);
-};
-
-export const bookingsService = {
-  createBookings,
-  getBookings,
-  moderateStatus,
-  getPaymentUrl,
-  getBookingById,
-  getBookedSlots,
-};

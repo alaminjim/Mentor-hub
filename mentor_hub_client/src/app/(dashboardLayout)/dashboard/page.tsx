@@ -32,9 +32,9 @@ const roleConfig: Record<string, { greeting: string; subtitle: string; tableTitl
 
 async function getStats() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const allCookies = cookieStore.getAll();
-    const cookieHeader = allCookies.map(c => `${c.name}=${c.value}`).join("; ");
+    const cookieHeader = allCookies.map((c: any) => `${c.name}=${c.value}`).join("; ");
     
     const res = await fetch(`${BACKEND_URL}/api/dashboard/stats`, {
       headers: {
